@@ -1,6 +1,12 @@
 # SingularSight
 
-A new Flutter project.
+Make a clone of [Pluralsight](https://www.pluralsight.com/)
+
+## General
+
+Advance mobile development - 2017_03
+
+Nguyễn Mạnh Tuấn - 1712875
 
 ## Getting Started
 
