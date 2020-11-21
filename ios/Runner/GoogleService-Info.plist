@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>745863976230-6lbqch6hhjh8fc76u1a6uisuh5vuno10.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.745863976230-6lbqch6hhjh8fc76u1a6uisuh5vuno10</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAvP-JYU1KEbGXRjXcIvIBe84LcikWL9rQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>745863976230</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.SingularSight</string>
+	<key>PROJECT_ID</key>
+	<string>singularsight</string>
+	<key>STORAGE_BUCKET</key>
+	<string>singularsight.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:745863976230:ios:a42114d1c21e8342705de7</string>
+	<key>DATABASE_URL</key>
+	<string>https://singularsight.firebaseio.com</string>
+</dict>
+</plist>
