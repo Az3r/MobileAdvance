@@ -3,6 +3,7 @@ import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'components/animations/page_routes.dart';
+import 'pages/initialize_app.dart';
 import 'pages/login.dart';
 
 void main() {
@@ -24,9 +25,9 @@ class _MainAppState extends State<MainApp> {
         textTheme: TextTheme(),
       ),
       themeMode: ThemeMode.dark,
-      initialRoute: RouteNames.login,
+      initialRoute: '/',
       routes: {
-        '/': (context) => Splash(),
+        '/': (context) => const InitializeApp(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == RouteNames.login) return loginRoute;

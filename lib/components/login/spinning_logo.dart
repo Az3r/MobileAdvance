@@ -19,7 +19,7 @@ class _SpinningLogoState extends State<SpinningLogo>
     _animation = AnimationController(
       upperBound: 2 * pi,
       lowerBound: 0.0,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
       vsync: this,
     )..repeat();
   }
@@ -28,12 +28,12 @@ class _SpinningLogoState extends State<SpinningLogo>
   Widget build(BuildContext context) {
     return AnimatedOpacity(
       opacity: widget.submitting ? 1 : 0,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeOutSine,
       child: AnimatedAlign(
         alignment:
             widget.submitting ? Alignment.topCenter : Alignment.bottomCenter,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         child: AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
@@ -42,7 +42,7 @@ class _SpinningLogoState extends State<SpinningLogo>
               child: child,
             );
           },
-          child: ClipOval(
+          child: const ClipOval(
             child: Logo(
               width: 48,
               height: 48,

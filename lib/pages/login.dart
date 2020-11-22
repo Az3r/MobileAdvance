@@ -5,6 +5,7 @@ import 'package:SingularSight/components/login/username.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
+  const Login();
   @override
   _LoginState createState() => _LoginState();
 }
@@ -24,7 +25,7 @@ class _LoginState extends State<Login> {
         decoration: BoxDecoration(
           image: DecorationImage(
             colorFilter: ColorFilter.mode(Colors.blue[700], BlendMode.darken),
-            image: AssetImage('assets/images/background.jpg'),
+            image: const AssetImage('assets/images/background.jpg'),
             fit: BoxFit.fill,
           ),
         ),
@@ -38,13 +39,13 @@ class _LoginState extends State<Login> {
               children: [
                 Flexible(flex: 20, child: banner),
                 username,
-                Spacer(flex: 1),
+                const Spacer(flex: 1),
                 password,
-                Spacer(flex: 1),
+                const Spacer(flex: 1),
                 rememberMe,
-                Spacer(flex: 2),
+                const Spacer(flex: 2),
                 loginButton,
-                Spacer(flex: 1),
+                const Spacer(flex: 1),
                 registerButton,
                 Flexible(flex: 12, child: loading),
               ],
@@ -79,7 +80,7 @@ class _LoginState extends State<Login> {
           }
         }
       },
-      child: Text("LET'S GO"),
+      child: const Text("LET'S GO"),
     );
   }
 
@@ -87,7 +88,7 @@ class _LoginState extends State<Login> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(primary: Colors.grey),
       onPressed: () {},
-      child: Text('REGISTER'),
+      child: const Text('REGISTER'),
     );
   }
 

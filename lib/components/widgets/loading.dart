@@ -1,7 +1,7 @@
-import 'package:SingularSight/utilities/globals.dart';
 import 'package:flutter/material.dart';
 
 class Loading extends StatefulWidget {
+  const Loading();
   @override
   _LoadingState createState() => _LoadingState();
 }
@@ -18,7 +18,7 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _animation = AnimationController(
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       vsync: this,
     )..addStatusListener((status) {
         if (status == AnimationStatus.reverse) {
@@ -49,7 +49,7 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
               child: child,
             );
           },
-          duration: Duration(milliseconds: 600),
+          duration: const Duration(milliseconds: 600),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 32.0),

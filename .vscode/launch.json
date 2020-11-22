@@ -5,7 +5,22 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "SingularSight",
+      "name": "profile",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "release",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "release"
+    },
+
+    {
+      "name": "debug",
       "request": "launch",
       "type": "dart"
     }
