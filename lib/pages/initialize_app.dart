@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'splash.dart';
 
+import '../services/user_service.dart';
+
 class InitializeApp extends StatelessWidget {
   final Widget loading;
   final Widget completed;
@@ -57,6 +59,7 @@ class InitializeApp extends StatelessWidget {
         sslEnabled: false,
       );
       FirebaseFunctions.instance.useFunctionsEmulator(origin: localhost(5001));
+      await UserService().add();
     }
   }
 
