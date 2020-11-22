@@ -1,39 +1,47 @@
+import 'package:SingularSight/pages/splash.dart';
+import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
-import 'components/navigation.dart';
-import 'pages/browse_page.dart';
-import 'pages/home_page.dart';
+
+import 'components/animations/page_routes.dart';
+import 'pages/login.dart';
 
 void main() {
   runApp(MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
+  @override
+  _MainAppState createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PageNavigator(pages: pages),
-      theme: ThemeData(
+      darkTheme: ThemeData(
         brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        scaffoldBackgroundColor: Color(0xFF111111),
       ),
+      themeMode: ThemeMode.dark,
+      initialRoute: RouteNames.dashboard,
+      routes: {
+        '/': (context) => Splash(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == RouteNames.login) return loginRoute;
+        throw ArgumentError.value(
+          settings.name,
+          'settings',
+          'Unknown route named',
+        );
+      },
+    );
+  }
+
+  Route<dynamic> get loginRoute {
+    return LongerMaterialPageRoute(
+      builder: (context) => Login(),
+      duration: Duration(seconds: 1),
     );
   }
 }
-
-final pages = const [
-  NavItem(
-    navbar: BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: 'Home',
-    ),
-    content: HomePage(),
-  ),
-  NavItem(
-    navbar: BottomNavigationBarItem(
-      icon: Icon(Icons.apps),
-      label: 'Browse',
-    ),
-    content: BrowsePage(),
-  )
-];

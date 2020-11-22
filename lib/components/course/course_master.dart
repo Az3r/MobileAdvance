@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:random_string/random_string.dart';
-import 'package:SingularSight/globals.dart' show log;
+import 'package:SingularSight/utilities/globals.dart' show log;
 
 /// A widget that display brief information about a specific course
 class CourseMaster extends StatelessWidget {
