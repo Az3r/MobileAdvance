@@ -28,12 +28,12 @@ class _SpinningLogoState extends State<SpinningLogo>
   Widget build(BuildContext context) {
     return AnimatedOpacity(
       opacity: widget.submitting ? 1 : 0,
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 300),
       curve: Curves.easeOutSine,
       child: AnimatedAlign(
         alignment:
             widget.submitting ? Alignment.topCenter : Alignment.bottomCenter,
-        duration: Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 300),
         child: AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
@@ -44,8 +44,8 @@ class _SpinningLogoState extends State<SpinningLogo>
           },
           child: ClipOval(
             child: Logo(
-              width: 64,
-              height: 64,
+              width: 48,
+              height: 48,
             ),
           ),
         ),

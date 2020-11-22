@@ -18,37 +18,54 @@ class _LoginState extends State<Login> {
   var _submitting = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          colorFilter: ColorFilter.mode(Colors.black54, BlendMode.softLight),
-          image: AssetImage('assets/images/background.jpg'),
-          fit: BoxFit.fill,
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        padding: EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(Colors.blue[700], BlendMode.darken),
+            image: AssetImage('assets/images/background.jpg'),
+            fit: BoxFit.fill,
+          ),
         ),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: SafeArea(
-          child: AbsorbPointer(
-            absorbing: _submitting,
-            child: Form(
-              key: _form,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  username,
-                  password,
-                  rememberMe,
-                  loginButton,
-                  registerButton,
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: SpinningLogo(submitting: _submitting),
-                    ),
-                  ),
-                ],
-              ),
+        child: AbsorbPointer(
+          absorbing: _submitting,
+          child: Form(
+            key: _form,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Flexible(
+                    flex: 20,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'SingularSight',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            'You request, we provide',
+                            style: Theme.of(context).textTheme.overline,
+                          ),
+                        )
+                      ],
+                    )),
+                username,
+                Spacer(flex: 1),
+                password,
+                Spacer(flex: 1),
+                rememberMe,
+                Spacer(flex: 2),
+                loginButton,
+                Spacer(flex: 1),
+                registerButton,
+                Flexible(flex: 12, child: loading),
+              ],
             ),
           ),
         ),
@@ -86,8 +103,16 @@ class _LoginState extends State<Login> {
 
   Widget get registerButton {
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(primary: Colors.grey),
-        onPressed: () {},
-        child: Text('REGISTER'));
+      style: ElevatedButton.styleFrom(primary: Colors.grey),
+      onPressed: () {},
+      child: Text('REGISTER'),
+    );
+  }
+
+  Widget get loading {
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: SpinningLogo(submitting: _submitting),
+    );
   }
 }
