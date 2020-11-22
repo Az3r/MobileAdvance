@@ -2,6 +2,8 @@ import 'package:SingularSight/components/login/password.dart';
 import 'package:SingularSight/components/login/remember_me.dart';
 import 'package:SingularSight/components/login/spinning_logo.dart';
 import 'package:SingularSight/components/login/username.dart';
+import 'package:SingularSight/services/locator_service.dart';
+import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -60,7 +62,17 @@ class _LoginState extends State<Login> {
     String username,
     String password,
   }) async {
-    return await Future.delayed(Duration(seconds: 5), () => false);
+    final users = await LocatorService().users;
+    final id = await users.validate(username: username, password: password);
+    if (id != null) {
+      users.loggedUserId = id;
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RouteNames.dashboard,
+        (route) => false,
+      );
+    }
+    return id != null;
   }
 
   Widget get username => Username(key: _username, enabled: !_submitting);
@@ -68,18 +80,20 @@ class _LoginState extends State<Login> {
   Widget get rememberMe => RememberMe(key: _remember);
   Widget get loginButton {
     return ElevatedButton(
-      onPressed: () async {
-        if (_form.currentState.validate()) {
-          setState(() => _submitting = true);
-          if (await _submit(
-            username: _username.currentState.username,
-            password: _password.currentState.password,
-          )) {
-          } else {
-            setState(() => _submitting = false);
-          }
-        }
-      },
+      onPressed: _submitting
+          ? null
+          : () async {
+              if (_form.currentState.validate()) {
+                setState(() => _submitting = true);
+                if (await _submit(
+                  username: _username.currentState.username,
+                  password: _password.currentState.password,
+                )) {
+                } else {
+                  setState(() => _submitting = false);
+                }
+              }
+            },
       child: const Text("LET'S GO"),
     );
   }
@@ -87,7 +101,7 @@ class _LoginState extends State<Login> {
   Widget get registerButton {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(primary: Colors.grey),
-      onPressed: () {},
+      onPressed: _submitting ? null : () {},
       child: const Text('REGISTER'),
     );
   }
@@ -116,5 +130,14 @@ class _LoginState extends State<Login> {
         )
       ],
     );
+  }
+
+  void snackbar(String msg) {
+    Future.value(Scaffold.of(context)).then((scaffold) {
+      scaffold.removeCurrentSnackBar();
+      scaffold.showSnackBar(SnackBar(
+        content: Text(msg),
+      ));
+    });
   }
 }

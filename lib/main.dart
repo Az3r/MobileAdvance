@@ -3,6 +3,7 @@ import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'components/animations/page_routes.dart';
+import 'pages/dashboard.dart';
 import 'pages/initialize_app.dart';
 import 'pages/login.dart';
 
@@ -28,6 +29,7 @@ class _MainAppState extends State<MainApp> {
       initialRoute: '/',
       routes: {
         '/': (context) => const InitializeApp(emulator: true,),
+        RouteNames.dashboard: (context) => const Dashboard(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == RouteNames.login) return loginRoute;

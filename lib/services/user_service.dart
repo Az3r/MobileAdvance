@@ -6,18 +6,33 @@ class UserService {
   UserService();
 
   final FirebaseFirestore store = FirebaseFirestore.instance;
+  String loggedUserId = null;
+  dynamic loggedUser = null;
 
-  Future<bool> validate({
+  Future<String> validate({
     String username,
     String password,
   }) async {
-    final snapshot = await store
+    username = username.trim();
+    password = password.trim();
+    return store
         .collection('users')
-        .where('name', isEqualTo: username)
+        .where('username', isEqualTo: username)
         .where('password', isEqualTo: password.hash())
         .limit(1)
-        .get();
-    return snapshot.size > 0;
+        .get()
+        .then((value) {
+      return value.docs.first.id;
+    }).catchError((error) {
+      log.i({
+        'result': 'user does not exist in database',
+        'params': {
+          'username': username,
+          'password': password,
+        }
+      });
+      return null;
+    });
   }
 
   Future<void> add() async {

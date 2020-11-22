@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:SingularSight/services/locator_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,7 +31,9 @@ class InitializeApp extends StatelessWidget {
               error: snapshot.error,
               message: 'Unable to initialize Firebase app',
             );
-          final widget = snapshot.hasData ? completed : loading;
+          final widget = snapshot.connectionState == ConnectionState.done
+              ? completed
+              : loading;
           return AnimatedSwitcher(
             switchInCurve: Curves.easeOut,
             switchOutCurve: Threshold(0),
@@ -52,15 +55,19 @@ class InitializeApp extends StatelessWidget {
   }
 
   Future<void> _initialize() async {
+    // initialize firebase app.
     await Firebase.initializeApp();
     if (emulator) {
       FirebaseFirestore.instance.settings = Settings(
         host: localhost(8080),
         sslEnabled: false,
+        persistenceEnabled: true,
       );
       FirebaseFunctions.instance.useFunctionsEmulator(origin: localhost(5001));
-      await UserService().add();
     }
+
+    // initialize singleton services
+    await LocatorService.instance.register();
   }
 
   String localhost(int port) =>
