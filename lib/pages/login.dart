@@ -85,12 +85,13 @@ class _LoginState extends State<Login> {
           : () async {
               if (_form.currentState.validate()) {
                 setState(() => _submitting = true);
-                if (await _submit(
+                final failure = await _submit(
                   username: _username.currentState.username,
                   password: _password.currentState.password,
-                )) {
-                } else {
+                );
+                if (failure) {
                   setState(() => _submitting = false);
+                  snackbar('Invalid username or password');
                 }
               }
             },
