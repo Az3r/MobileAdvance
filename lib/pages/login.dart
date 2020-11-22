@@ -2,7 +2,6 @@ import 'package:SingularSight/components/login/password.dart';
 import 'package:SingularSight/components/login/remember_me.dart';
 import 'package:SingularSight/components/login/spinning_logo.dart';
 import 'package:SingularSight/components/login/username.dart';
-import 'package:SingularSight/components/widgets/logo.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -37,24 +36,7 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Flexible(
-                    flex: 20,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'SingularSight',
-                          style: Theme.of(context).textTheme.headline3,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'You request, we provide',
-                            style: Theme.of(context).textTheme.overline,
-                          ),
-                        )
-                      ],
-                    )),
+                Flexible(flex: 20, child: banner),
                 username,
                 Spacer(flex: 1),
                 password,
@@ -113,6 +95,25 @@ class _LoginState extends State<Login> {
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: SpinningLogo(submitting: _submitting),
+    );
+  }
+
+  Widget get banner {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'SingularSight',
+          style: Theme.of(context).textTheme.headline3,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text(
+            'You request, we provide',
+            style: Theme.of(context).textTheme.overline,
+          ),
+        )
+      ],
     );
   }
 }

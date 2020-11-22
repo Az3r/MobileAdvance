@@ -23,6 +23,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # annotations
+  meta: ^1.2.4
+
   # firebase plugins
   firebase_core: ^0.5.2
   firebase_analytics: ^6.2.0
