@@ -21,9 +21,10 @@ class _MainAppState extends State<MainApp> {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: Color(0xFF111111),
+        textTheme: TextTheme(),
       ),
       themeMode: ThemeMode.dark,
-      initialRoute: RouteNames.dashboard,
+      initialRoute: RouteNames.login,
       routes: {
         '/': (context) => Splash(),
       },
