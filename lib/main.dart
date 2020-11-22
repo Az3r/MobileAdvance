@@ -27,7 +27,7 @@ class _MainAppState extends State<MainApp> {
       themeMode: ThemeMode.dark,
       initialRoute: '/',
       routes: {
-        '/': (context) => const InitializeApp(),
+        '/': (context) => const InitializeApp(emulator: true,),
       },
       onGenerateRoute: (settings) {
         if (settings.name == RouteNames.login) return loginRoute;
