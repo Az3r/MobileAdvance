@@ -1,8 +1,6 @@
-import 'package:SingularSight/utilities/keys.dart' as keys;
 import 'package:get_it/get_it.dart';
-import 'package:googleapis/youtube/v3.dart' show YoutubeApi;
-import 'package:googleapis_auth/auth_io.dart' show clientViaApiKey;
 import 'user_service.dart';
+import 'video_service.dart';
 
 class LocatorService {
   LocatorService._();
@@ -19,12 +17,12 @@ class LocatorService {
       _unregistered = false;
       locator.registerSingletonAsync(() async => UserService());
       locator.registerSingletonAsync(
-          () async => YoutubeApi(clientViaApiKey(keys.youtube)));
+          () async => VideoService());
 
       return locator.allReady();
     }
   }
 
   Future<UserService> get users => locator.getAsync<UserService>();
-  Future<YoutubeApi> get youtube => locator.getAsync<YoutubeApi>();
+  Future<VideoService> get youtube => locator.getAsync<VideoService>();
 }

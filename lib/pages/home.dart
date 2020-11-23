@@ -1,8 +1,10 @@
 import 'package:SingularSight/components/video/video_thumbnail.dart';
+import 'package:SingularSight/components/widgets/loading.dart';
 import 'package:SingularSight/models/user.dart';
+import 'package:SingularSight/models/video.dart';
 import 'package:SingularSight/services/locator_service.dart';
+import 'package:SingularSight/services/video_service.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/youtube/v3.dart';
 import '../services/locator_service.dart';
 
 class Home extends StatefulWidget {
@@ -13,8 +15,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  YoutubeApi _youtube;
-  User _user;
+  VideoService _youtube;
+  UserModel _user;
   @override
   void initState() {
     super.initState();
@@ -25,12 +27,40 @@ class _HomeState extends State<Home> {
     });
   }
 
-
   void test() async {}
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: VideoThumbnail());
+    return Container(
+      child: StreamBuilder<VideoModel>(
+        stream: _youtube.find('UC7eAfUjR9gdIjoaoQaS0W-A'),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final widget = Container(child: Text(snapshot.data.title));
+            return AnimatedList(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index, animation) {
+                return FadeTransition(
+                  opacity: Tween(begin: 0.0, end: 1)
+                      .chain(CurveTween(curve: Curves.easeOut))
+                      .animate(animation),
+                  child: ScaleTransition(
+                      scale: Tween(begin: 0.0, end: 1)
+                          .chain(CurveTween(curve: Curves.easeOut))
+                          .animate(animation),
+                      child: widget),
+                );
+              },
+            );
+          }
+          return SizedBox(
+            child: CircularProgressIndicator(),
+            width: 64,
+            height: 64,
+          );
+        },
+      ),
+    );
   }
 
   @override
