@@ -8,9 +8,9 @@ class UserService {
 
   final FirebaseFirestore store = FirebaseFirestore.instance;
   String get loggedUserId => loggedUser?.id;
-  User loggedUser = null;
+  UserModel loggedUser = null;
 
-  Future<User> validate({
+  Future<UserModel> validate({
     String username,
     String password,
   }) async {
@@ -24,7 +24,7 @@ class UserService {
         .get()
         .then((value) {
       if (value.docs.length > 0) {
-        loggedUser = User.fromJson(value.docs.first.data());
+        loggedUser = UserModel.fromJson(value.docs.first.data());
         return loggedUser;
       }
       return null;

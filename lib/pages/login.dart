@@ -1,10 +1,4 @@
 import 'package:SingularSight/components/login/login_form.dart';
-import 'package:SingularSight/components/login/password.dart';
-import 'package:SingularSight/components/login/remember_me.dart';
-import 'package:SingularSight/components/login/spinning_logo.dart';
-import 'package:SingularSight/components/login/username.dart';
-import 'package:SingularSight/services/locator_service.dart';
-import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {

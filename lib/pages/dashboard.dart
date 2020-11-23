@@ -3,7 +3,6 @@ import 'package:SingularSight/pages/artists.dart';
 import 'package:SingularSight/pages/home.dart';
 import 'package:SingularSight/pages/search.dart';
 import 'package:flutter/material.dart';
-import '../components/course/course_master.dart';
 
 /// First page to open, displays app goals and a list of popular courses
 /// seperated by type.

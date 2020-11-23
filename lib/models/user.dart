@@ -1,19 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class UserModel {
   final String name;
   final String id;
   final String password;
   final Timestamp createdOn;
 
-  User({
+  UserModel({
     this.name,
     this.id,
     this.password,
     this.createdOn,
   });
 
-  User.fromJson(Map<String, dynamic> json)
+  UserModel.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         id = json['id'],
         password = json['password'],

@@ -1,5 +1,3 @@
-import 'package:SingularSight/components/video/video_thumbnail.dart';
-import 'package:SingularSight/components/widgets/loading.dart';
 import 'package:SingularSight/models/user.dart';
 import 'package:SingularSight/models/video.dart';
 import 'package:SingularSight/services/locator_service.dart';

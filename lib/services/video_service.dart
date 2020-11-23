@@ -1,6 +1,6 @@
 import 'package:SingularSight/models/video.dart';
 import 'package:googleapis/youtube/v3.dart';
-import 'package:googleapis_auth/auth_browser.dart';
+import 'package:googleapis_auth/auth_io.dart';
 
 import '../utilities/keys.dart' as keys;
 
