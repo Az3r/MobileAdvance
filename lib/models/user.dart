@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
   final String name;
   final String id;
   final String password;
-  final DateTime createdOn;
+  final Timestamp createdOn;
 
   User({
     this.name,

@@ -22,7 +22,7 @@ class _LoginState extends State<Login> {
         padding: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           image: DecorationImage(
-            colorFilter: ColorFilter.mode(Colors.blue[700], BlendMode.darken),
+            colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
             image: const AssetImage('assets/images/background.jpg'),
             fit: BoxFit.fill,
           ),

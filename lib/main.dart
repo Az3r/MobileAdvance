@@ -24,11 +24,20 @@ class _MainAppState extends State<MainApp> {
         brightness: Brightness.dark,
         scaffoldBackgroundColor: Color(0xFF111111),
         textTheme: TextTheme(),
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: Color(0xFF232323),
+          contentTextStyle: TextStyle(
+            color: Colors.white70,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       themeMode: ThemeMode.dark,
       initialRoute: '/',
       routes: {
-        '/': (context) => const InitializeApp(emulator: true,),
+        '/': (context) => const InitializeApp(
+              emulator: true,
+            ),
         RouteNames.dashboard: (context) => const Dashboard(),
       },
       onGenerateRoute: (settings) {
