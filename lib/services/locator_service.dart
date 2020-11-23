@@ -17,7 +17,9 @@ class LocatorService {
       _unregistered = false;
       locator.registerSingletonAsync(() async => UserService());
       locator.registerSingletonAsync(
-          () async => VideoService());
+        () async => VideoService(),
+        dispose: (param) => param.dispose(),
+      );
 
       return locator.allReady();
     }

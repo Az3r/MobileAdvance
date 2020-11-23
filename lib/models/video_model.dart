@@ -1,9 +1,13 @@
 import 'package:googleapis/youtube/v3.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'video_model.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class VideoModel {
   final String id;
   final ThumbnailDetails thumbnails;
-  final DateTime duration;
+  final Duration duration;
   final String title;
   final String description;
   final DateTime publishedAt;
@@ -24,4 +28,8 @@ class VideoModel {
     this.description,
     this.publishedAt,
   });
+
+  factory VideoModel.fromJson(Map<String, dynamic> json) =>
+      _$VideoModelFromJson(json);
+  Map<String, dynamic> toJson() => _$VideoModelToJson(this);
 }

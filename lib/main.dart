@@ -1,3 +1,4 @@
+import 'package:SingularSight/pages/home.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -32,10 +33,11 @@ class _MainAppState extends State<MainApp> {
         ),
       ),
       themeMode: ThemeMode.dark,
-      initialRoute: RouteNames.dashboard,
+      initialRoute: '/',
       routes: {
         '/': (context) => const InitializeApp(
               emulator: true,
+              completed: const Dashboard(),
             ),
         RouteNames.dashboard: (context) => const Dashboard(),
       },
