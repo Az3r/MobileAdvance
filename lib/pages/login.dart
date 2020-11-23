@@ -1,3 +1,4 @@
+import 'package:SingularSight/components/login/login_form.dart';
 import 'package:SingularSight/components/login/password.dart';
 import 'package:SingularSight/components/login/remember_me.dart';
 import 'package:SingularSight/components/login/spinning_logo.dart';
@@ -13,11 +14,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final _remember = GlobalKey<RememberMeState>();
-  final _username = GlobalKey<UsernameState>();
-  final _password = GlobalKey<PasswordState>();
-  final _form = GlobalKey<FormState>();
-  var _submitting = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,114 +27,9 @@ class _LoginState extends State<Login> {
             fit: BoxFit.fill,
           ),
         ),
-        child: AbsorbPointer(
-          absorbing: _submitting,
-          child: Form(
-            key: _form,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Flexible(flex: 20, child: banner),
-                username,
-                const Spacer(flex: 1),
-                password,
-                const Spacer(flex: 1),
-                rememberMe,
-                const Spacer(flex: 2),
-                loginButton,
-                const Spacer(flex: 1),
-                registerButton,
-                Flexible(flex: 12, child: loading),
-              ],
-            ),
-          ),
-        ),
+        child: const LoginForm(),
       ),
     );
   }
 
-  Future<bool> _submit({
-    String username,
-    String password,
-  }) async {
-    final users = await LocatorService().users;
-    final id = await users.validate(username: username, password: password);
-    if (id != null) {
-      users.loggedUserId = id;
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        RouteNames.dashboard,
-        (route) => false,
-      );
-    }
-    return id != null;
-  }
-
-  Widget get username => Username(key: _username, enabled: !_submitting);
-  Widget get password => Password(key: _password, enabled: !_submitting);
-  Widget get rememberMe => RememberMe(key: _remember);
-  Widget get loginButton {
-    return ElevatedButton(
-      onPressed: _submitting
-          ? null
-          : () async {
-              if (_form.currentState.validate()) {
-                setState(() => _submitting = true);
-                final failure = await _submit(
-                  username: _username.currentState.username,
-                  password: _password.currentState.password,
-                );
-                if (failure) {
-                  setState(() => _submitting = false);
-                  snackbar('Invalid username or password');
-                }
-              }
-            },
-      child: const Text("LET'S GO"),
-    );
-  }
-
-  Widget get registerButton {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(primary: Colors.grey),
-      onPressed: _submitting ? null : () {},
-      child: const Text('REGISTER'),
-    );
-  }
-
-  Widget get loading {
-    return Padding(
-      padding: const EdgeInsets.all(32.0),
-      child: SpinningLogo(submitting: _submitting),
-    );
-  }
-
-  Widget get banner {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'SingularSight',
-          style: Theme.of(context).textTheme.headline3,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Text(
-            'You request, we provide',
-            style: Theme.of(context).textTheme.overline,
-          ),
-        )
-      ],
-    );
-  }
-
-  void snackbar(String msg) {
-    Future.value(Scaffold.of(context)).then((scaffold) {
-      scaffold.removeCurrentSnackBar();
-      scaffold.showSnackBar(SnackBar(
-        content: Text(msg),
-      ));
-    });
-  }
 }
