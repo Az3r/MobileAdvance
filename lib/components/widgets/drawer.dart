@@ -33,18 +33,18 @@ class _UserDrawerState extends State<UserDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(Icons.close),
-          color: Theme.of(context).colorScheme.onPrimary,
-          onPressed: () => Navigator.pop(context),
+    return Drawer(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          leading: IconButton(
+            icon: Icon(Icons.close),
+            color: Theme.of(context).colorScheme.onPrimary,
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
-      ),
-      body: Drawer(
-        child: ListView(
+        body: ListView(
           children: [
             UserAccountsDrawerHeader(
               accountName: Text('Az3r'),
@@ -88,6 +88,33 @@ class _UserDrawerState extends State<UserDrawer> {
                     }),
               ],
             ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Logout'),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Logging out'),
+                    content: Text('Are you sure?'),
+                    actions: [
+                      TextButton(
+                        child: Text('Not really'),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      ElevatedButton(
+                        child: Text('Log me out'),
+                        onPressed: () =>
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                          RouteNames.login,
+                          (route) => false,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            )
           ],
         ),
       ),
