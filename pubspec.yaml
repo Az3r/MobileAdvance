@@ -33,6 +33,10 @@ dependencies:
   firebase_auth: ^0.18.3
   cloud_firestore: ^0.14.3
 
+  # package info
+  package_info: ^0.4.3+2
+  url_launcher: ^5.7.10
+
   # singleton
   get_it: ^5.0.1
 
