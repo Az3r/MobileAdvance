@@ -1,3 +1,4 @@
+import 'package:SingularSight/components/widgets/drawer.dart';
 import 'package:SingularSight/pages/browse.dart';
 import 'package:SingularSight/pages/home.dart';
 import 'package:SingularSight/pages/search.dart';
@@ -30,6 +31,7 @@ class _DashboardState extends State<Dashboard> {
         title: Text(pages[_index]),
         centerTitle: true,
       ),
+      drawer: const UserDrawer(),
       body: PageView(
         controller: _controller,
         onPageChanged: (i) => setState(() => _index = i),
