@@ -65,6 +65,11 @@ class _UserDrawerState extends State<UserDrawer> {
               title: Text('My channels'),
               onTap: () => Navigator.of(context).pushNamed(RouteNames.channels),
             ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+              onTap: () => Navigator.of(context).pushNamed(RouteNames.settings),
+            ),
             AboutListTile(
               child: Text('About me'),
               icon: Icon(Icons.info),

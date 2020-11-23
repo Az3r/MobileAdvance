@@ -3,6 +3,8 @@ class RouteNames {
 
   static String channels;
 
+  static String settings;
+
   RouteNames._();
   static const String login = 'login';
   static const String dashboard = 'dashboard';
