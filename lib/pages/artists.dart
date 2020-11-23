@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Browse extends StatelessWidget {
-  const Browse();
+class Artists extends StatelessWidget {
+  const Artists();
   @override
   Widget build(BuildContext context) {
     return Container();
