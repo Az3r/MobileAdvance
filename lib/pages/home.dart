@@ -1,7 +1,7 @@
-import 'package:SingularSight/utilities/globals.dart';
+import 'package:SingularSight/services/locator_service.dart';
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:googleapis/youtube/v3.dart';
+import '../services/locator_service.dart';
 
 class Home extends StatefulWidget {
   const Home();
@@ -11,10 +11,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
+  YoutubeApi _youtube;
   @override
   void initState() {
     super.initState();
+    LocatorService().youtube.then((value) {
+      _youtube = value;
+      test();
+    });
+  }
+
+  void test() async {
   }
 
   @override

@@ -1,15 +1,16 @@
 import 'package:SingularSight/utilities/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
 import '../utilities/string_utils.dart' show StringUtilities;
+import '../models/user.dart';
 
 class UserService {
   UserService();
 
   final FirebaseFirestore store = FirebaseFirestore.instance;
-  String loggedUserId = null;
-  dynamic loggedUser = null;
+  String get loggedUserId => loggedUser?.id;
+  User loggedUser = null;
 
-  Future<String> validate({
+  Future<User> validate({
     String username,
     String password,
   }) async {
@@ -17,20 +18,18 @@ class UserService {
     password = password.trim();
     return store
         .collection('users')
-        .where('username', isEqualTo: username)
+        .where('name', isEqualTo: username)
         .where('password', isEqualTo: password.hash())
         .limit(1)
         .get()
         .then((value) {
-      return value.docs.first.id;
+      if (value.docs.length > 0) {
+        loggedUser = User.fromJson(value.docs.first.data());
+        return loggedUser;
+      }
+      return null;
     }).catchError((error) {
-      log.i({
-        'result': 'user does not exist in database',
-        'params': {
-          'username': username,
-          'password': password,
-        }
-      });
+      log.e('Failed to validate user', error);
       return null;
     });
   }

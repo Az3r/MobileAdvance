@@ -26,7 +26,7 @@ class _MainAppState extends State<MainApp> {
         textTheme: TextTheme(),
       ),
       themeMode: ThemeMode.dark,
-      initialRoute: RouteNames.dashboard,
+      initialRoute: '/',
       routes: {
         '/': (context) => const InitializeApp(emulator: true,),
         RouteNames.dashboard: (context) => const Dashboard(),

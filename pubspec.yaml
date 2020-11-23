@@ -47,7 +47,6 @@ dependencies:
   googleapis_auth: ^0.2.12
   googleapis: ^0.53.0
   youtube_player_flutter: ^6.0.3+2
-  youtube_data_v3: ^0.0.1+1
 
 
 

@@ -52,4 +52,6 @@ app.*.map.json
 .runtimeconfig.json
 .firebase/
 
+# firebase emulator data
+.data/
 # End of https://www.toptal.com/developers/gitignore/api/firebase
