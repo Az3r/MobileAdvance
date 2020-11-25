@@ -5,7 +5,6 @@ import 'video_service.dart';
 class LocatorService {
   LocatorService._();
   static final LocatorService instance = LocatorService._();
-  bool _unregistered = true;
   factory LocatorService() => instance;
 
   final locator = GetIt.instance;
@@ -13,18 +12,15 @@ class LocatorService {
   /// register all singleton services.
   /// calling this again does nothing
   Future<void> register() async {
-    if (_unregistered) {
-      _unregistered = false;
-      locator.registerSingletonAsync(() async => UserService());
-      locator.registerSingletonAsync(
-        () async => VideoService(),
-        dispose: (param) => param.dispose(),
-      );
+    locator.registerSingletonAsync(() async => UserService());
+    locator.registerSingletonAsync(
+      () async => VideoService(),
+      dispose: (param) => param.dispose(),
+    );
 
-      return locator.allReady();
-    }
+    return locator.allReady();
   }
 
-  Future<UserService> get users => locator.getAsync<UserService>();
-  Future<VideoService> get youtube => locator.getAsync<VideoService>();
+  UserService get users => locator.get<UserService>();
+  VideoService get youtube => locator.get<VideoService>();
 }

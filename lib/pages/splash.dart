@@ -1,4 +1,5 @@
 import 'package:SingularSight/utilities/constants.dart';
+import 'package:SingularSight/utilities/globals.dart';
 import 'package:flutter/material.dart';
 
 import '../components/widgets/loading.dart';
@@ -17,6 +18,7 @@ class Splash extends StatelessWidget {
 
   Future<void> load(BuildContext context) async {
     await Future.delayed(Duration(seconds: 3));
-    return Navigator.of(context).pushReplacementNamed(RouteNames.login);
+    if (ModalRoute.of(context).isCurrent)
+      return Navigator.of(context).pushReplacementNamed(RouteNames.login);
   }
 }

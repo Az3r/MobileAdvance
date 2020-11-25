@@ -1,5 +1,6 @@
 import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/utilities/duration_utils.dart';
+import 'package:SingularSight/utilities/globals.dart';
 import 'package:googleapis/youtube/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 
@@ -21,7 +22,7 @@ class VideoService {
     for (final item in res.items) {
       final snippet = item.snippet;
       final video = await _detail(item.id.videoId);
-      yield VideoModel(
+      final model = VideoModel(
         creator: snippet.channelTitle,
         description: snippet.description,
         id: item.id.videoId,
@@ -33,6 +34,8 @@ class VideoService {
         dislikeCount: video['dislike'],
         viewCount: video['view'],
       );
+      log.v(model.toJson());
+      yield model;
     }
   }
 
