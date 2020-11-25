@@ -19,7 +19,10 @@ class _DashboardState extends State<Dashboard> {
   PageController _controller;
   @override
   void initState() {
-    _controller = PageController(initialPage: _index);
+    _controller = PageController(
+      initialPage: _index,
+      keepPage: true,
+    );
     super.initState();
   }
 
@@ -42,10 +45,7 @@ class _DashboardState extends State<Dashboard> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
-        onTap: (i) {
-          _index = i;
-          _controller.jumpToPage(_index);
-        },
+        onTap: (i) => _controller.jumpToPage(i),
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),

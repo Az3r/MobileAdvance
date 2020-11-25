@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:SingularSight/pages/home.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,7 +23,7 @@ Future<void> initialize([debug = false]) async {
   await Firebase.initializeApp();
 
   // initialize services
-  await LocatorService().register();
+  await LocatorService().register(samples: true);
 
   // setup cloud firestore
   FirebaseFirestore.instance.settings = Settings(

@@ -11,22 +11,63 @@ class VideoThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Row(
+    return InkWell(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        height: 128,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Colors.white10),
+          ),
+        ),
+        child: Row(
           children: [
-            Image.network(
-              video.thumbnails.default_.url,
-              width: video.thumbnails.default_.width.toDouble(),
-              height: video.thumbnails.default_.height.toDouble(),
-            ),
-            Container(
-              child: Text(
-                video.title,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
+            SizedBox(
+              width: 128,
+              child: Image.network(
+                video.thumbnails.default_.url,
+                width: video.thumbnails.default_.width.toDouble(),
+                height: video.thumbnails.default_.height.toDouble(),
+                fit: BoxFit.contain,
               ),
             ),
-          ]),
+            SizedBox(width: 4),
+            Expanded(
+              child: SizedBox(
+                height: video.thumbnails.default_.height.toDouble(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      video.title,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      video.creator,
+                      style: TextStyle(color: Colors.white54),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '${video.viewCount} views - ${video.publishedAt.toLocal()}',
+                          style: TextStyle(color: Colors.white54),
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

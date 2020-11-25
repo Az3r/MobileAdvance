@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/utilities/duration_utils.dart';
 import 'package:SingularSight/utilities/globals.dart';
+import 'package:flutter/foundation.dart';
 import 'package:googleapis/youtube/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 
@@ -23,12 +26,12 @@ class VideoService {
       final snippet = item.snippet;
       final video = await _detail(item.id.videoId);
       final model = VideoModel(
-        creator: snippet.channelTitle,
-        description: snippet.description,
+        creator: htmlUnEscape.convert(snippet.channelTitle),
+        description: htmlUnEscape.convert(snippet.description),
         id: item.id.videoId,
         publishedAt: snippet.publishedAt,
         thumbnails: snippet.thumbnails,
-        title: snippet.title,
+        title: htmlUnEscape.convert(snippet.title),
         duration: video['duration'],
         likeCount: video['like'],
         dislikeCount: video['dislike'],

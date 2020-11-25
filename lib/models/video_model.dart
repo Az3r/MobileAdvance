@@ -10,6 +10,7 @@ class VideoModel {
   final Duration duration;
   final String title;
   final String description;
+  /// store in UTC time
   final DateTime publishedAt;
   final int viewCount;
   final String creator;
