@@ -33,4 +33,5 @@ class VideoModel {
   factory VideoModel.fromJson(Map<String, dynamic> json) =>
       _$VideoModelFromJson(json);
   Map<String, dynamic> toJson() => _$VideoModelToJson(this);
+
 }

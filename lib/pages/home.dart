@@ -1,4 +1,4 @@
-import 'package:SingularSight/components/video/video_thumbnail.dart';
+import 'package:SingularSight/components/video/v_video_thumbnail.dart';
 import 'package:SingularSight/models/user_model.dart';
 import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
   VideoService _youtube;
   final _list = GlobalKey<AnimatedListState>();
   UserModel _user;
-  final videos = <VideoThumbnail>[];
+  final videos = <VVideoThumbnail>[];
   @override
   void initState() {
     super.initState();
@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
     _youtube = await LocatorService().youtube;
     _user = (await LocatorService().users).loggedUser;
     _youtube.find('UC7eAfUjR9gdIjoaoQaS0W-A').forEach((value) {
-      videos.add(VideoThumbnail(video: value));
+      videos.add(VVideoThumbnail(video: value));
       _list.currentState.insertItem(videos.length - 1);
     });
   }
@@ -41,10 +41,20 @@ class _HomeState extends State<Home> {
         scrollDirection: Axis.vertical,
         itemBuilder: (context, index, animation) {
           return ScaleTransition(
-              scale: Tween(begin: 0.0, end: 1.0)
-                  .chain(CurveTween(curve: Curves.easeOut))
-                  .animate(animation),
-              child: videos[index]);
+            scale: Tween(begin: 0.0, end: 1.0)
+                .chain(CurveTween(curve: Curves.easeOut))
+                .animate(animation),
+            child: Container(
+              height: 480,
+              child: Center(
+                child: SizedBox(
+                  height: 256,
+                  width: 256,
+                  child: videos[index],
+                ),
+              ),
+            ),
+          );
         },
       ),
     );
