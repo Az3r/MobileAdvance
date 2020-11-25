@@ -1,7 +1,7 @@
 import 'package:SingularSight/utilities/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
 import '../utilities/string_utils.dart' show StringUtilities;
-import '../models/user.dart';
+import '../models/user_model.dart';
 
 class UserService {
   UserService();

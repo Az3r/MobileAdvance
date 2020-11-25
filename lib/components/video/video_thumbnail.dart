@@ -11,9 +11,22 @@ class VideoThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 128,
-      color: Colors.red,
-      child: Text(video.title));
+    return Center(
+      child: Row(
+          children: [
+            Image.network(
+              video.thumbnails.default_.url,
+              width: video.thumbnails.default_.width.toDouble(),
+              height: video.thumbnails.default_.height.toDouble(),
+            ),
+            Container(
+              child: Text(
+                video.title,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ]),
+    );
   }
 }

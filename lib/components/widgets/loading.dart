@@ -20,12 +20,14 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
     _animation = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
-    )..addStatusListener((status) {
-        if (status == AnimationStatus.reverse) {
-          final next = _index + 1;
-          setState((() => _index = next >= images.length ? 0 : next));
-        }
-      });
+    )..addStatusListener(
+        (status) {
+          if (status == AnimationStatus.reverse) {
+            final next = _index + 1;
+            setState((() => _index = next >= images.length ? 0 : next));
+          }
+        },
+      );
     _play();
   }
 
@@ -36,7 +38,6 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AnimatedSwitcher(
@@ -51,14 +52,16 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
           },
           duration: const Duration(milliseconds: 600),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 32.0),
-          child: LinearProgressIndicator(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            minHeight: 8,
-            valueColor: _animation.drive(_loadingColor),
-          ),
-        ),
+        SizedBox(height: 16),
+        LayoutBuilder(builder: (context, constraints) {
+          return Container(
+            width: constraints.maxWidth / 2,
+            child: LinearProgressIndicator(
+              minHeight: 8,
+              valueColor: _animation.drive(_loadingColor),
+            ),
+          );
+        }),
       ],
     );
   }
