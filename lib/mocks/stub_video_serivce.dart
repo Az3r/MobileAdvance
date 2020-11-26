@@ -14,7 +14,6 @@ class StubVideoService implements VideoService {
 
   @override
   Stream<VideoModel> find(String channelId) async* {
-    for (final item in await LocatorService().videos)
-      yield VideoModel.fromJson(item);
+    for (final item in await LocatorService().videos) yield item;
   }
 }

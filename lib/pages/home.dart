@@ -1,6 +1,5 @@
 import 'package:SingularSight/components/video/v_video_thumbnail.dart';
 import 'package:SingularSight/models/user_model.dart';
-import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/services/video_service.dart';
 import 'package:flutter/material.dart';
