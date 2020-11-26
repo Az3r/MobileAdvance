@@ -43,7 +43,7 @@ class HVideoThumbnail extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      video.creator,
+                      video.channelTitle,
                       style: TextStyle(color: Colors.white54),
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,

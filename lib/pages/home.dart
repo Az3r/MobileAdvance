@@ -1,6 +1,7 @@
 import 'package:SingularSight/components/video/v_video_thumbnail.dart';
 import 'package:SingularSight/models/user_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
+import 'package:SingularSight/services/user_service.dart';
 import 'package:SingularSight/services/video_service.dart';
 import 'package:flutter/material.dart';
 import '../services/locator_service.dart';
@@ -13,10 +14,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  VideoService _youtube;
+  final youtube = LocatorService().youtube;
+  final users = LocatorService().users;
+
   final _list = GlobalKey<AnimatedListState>();
-  UserModel _user;
-  final videos = <VVideoThumbnail>[];
+  final videos = const <VVideoThumbnail>[];
+
   @override
   void initState() {
     super.initState();
@@ -24,9 +27,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> load() async {
-    _youtube = await LocatorService().youtube;
-    _user = (await LocatorService().users).loggedUser;
-    _youtube.find('UC7eAfUjR9gdIjoaoQaS0W-A').forEach((value) {
+    youtube.findVideosByChannel('UC7eAfUjR9gdIjoaoQaS0W-A').forEach((value) {
       videos.add(VVideoThumbnail(video: value));
       _list.currentState.insertItem(videos.length - 1);
     });

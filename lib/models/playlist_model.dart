@@ -1,3 +1,4 @@
+import 'package:googleapis/youtube/v3.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'video_model.dart';
@@ -6,15 +7,29 @@ part 'playlist_model.g.dart';
 
 @JsonSerializable()
 class PlaylistModel {
+  final String id;
   final String title;
-  final String creator;
+  final String channelId;
+  final String channelTitle;
   final int videoCount;
-  final int viewCount;
-  final DateTime lastUpdated;
-  final List<VideoModel> videos;
+  final ThumbnailDetails thumbnails;
 
-  PlaylistModel({this.title, this.creator, this.videoCount, this.viewCount, this.lastUpdated, this.videos,});
+  List<VideoModel> _videos;
+  @JsonKey(ignore: true)
+  List<VideoModel> get videos {
+    return _videos;
+  }
 
-  factory PlaylistModel.fromJson(Map<String,dynamic> json) => _$PlaylistModelFromJson(json);
-  Map<String,dynamic> toJson() => _$PlaylistModelToJson(this);
+  PlaylistModel({
+    this.id,
+    this.title,
+    this.channelId,
+    this.channelTitle,
+    this.videoCount,
+    this.thumbnails,
+  });
+
+  factory PlaylistModel.fromJson(Map<String, dynamic> json) =>
+      _$PlaylistModelFromJson(json);
+  Map<String, dynamic> toJson() => _$PlaylistModelToJson(this);
 }

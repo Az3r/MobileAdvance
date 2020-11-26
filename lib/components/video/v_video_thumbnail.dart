@@ -37,7 +37,7 @@ class VVideoThumbnail extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  video.creator,
+                  video.channelTitle,
                   style: TextStyle(color: Colors.white54),
                 ),
                 Row(
