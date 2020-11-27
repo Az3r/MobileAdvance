@@ -1,5 +1,5 @@
 import 'package:SingularSight/components/widgets/drawer.dart';
-import 'package:SingularSight/pages/artists.dart';
+import 'package:SingularSight/pages/featured_channels.dart';
 import 'package:SingularSight/pages/home.dart';
 import 'package:SingularSight/pages/search.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class _DashboardState extends State<Dashboard> {
         onPageChanged: (i) => setState(() => _index = i),
         children: [
           const Home(),
-          const Artists(),
+          const FeaturedChannels(),
           const Search(),
         ],
       ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Artists extends StatelessWidget {
-  const Artists();
+class ChannelDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container();

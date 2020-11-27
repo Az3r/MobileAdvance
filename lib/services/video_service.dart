@@ -6,7 +6,7 @@ import 'package:SingularSight/utilities/duration_utils.dart';
 import 'package:SingularSight/utilities/globals.dart';
 import 'package:googleapis/youtube/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
-
+import 'package:http/http.dart' as http;
 import '../utilities/keys.dart' as keys;
 
 class VideoService {
@@ -17,7 +17,7 @@ class VideoService {
   static const String orderRelevance = 'relevance';
   static const String regionVN = 'vn';
 
-  final client;
+  final http.Client client;
   YoutubeApi _youtube;
   VideoService([String apiKey = keys.youtube])
       : client = clientViaApiKey(keys.youtube) {
