@@ -4,6 +4,6 @@ class FeaturedChannels extends StatelessWidget {
   const FeaturedChannels();
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SizedBox();
   }
 }

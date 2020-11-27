@@ -88,7 +88,7 @@ class VideoService {
     );
 
     final item = res.items.first;
-    return ChannelModel(
+    final channel = ChannelModel(
       id: channelId,
       description: item.snippet.description,
       profileColor: item.brandingSettings.channel.profileColor,
@@ -96,8 +96,31 @@ class VideoService {
       thumbnails: item.snippet.thumbnails,
       title: item.brandingSettings.channel.title,
       unsubscribedTrailer: item.brandingSettings.channel.unsubscribedTrailer,
-
     );
+    log.v(channel.toJson());
+    return channel;
+  }
+
+  Stream<ChannelModel> findChannels(List<String> channelIds) async* {
+    final res = await _youtube.channels.list(
+      '$partSnippet, $partId, $partStatistics',
+      maxResults: channelIds.length,
+      id: channelIds.join(','),
+    );
+
+    for (final item in res.items) {
+      final channel = ChannelModel(
+        id: item.id,
+        description: item.snippet.description,
+        profileColor: item.brandingSettings.channel.profileColor,
+        subscriberCount: int.parse(item.statistics.subscriberCount),
+        thumbnails: item.snippet.thumbnails,
+        title: item.brandingSettings.channel.title,
+        unsubscribedTrailer: item.brandingSettings.channel.unsubscribedTrailer,
+      );
+      log.v(channel.toJson());
+      yield channel;
+    }
   }
 
   Stream<ChannelModel> findFeaturedChannels(String channelId) async* {}

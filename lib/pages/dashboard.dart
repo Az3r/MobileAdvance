@@ -55,7 +55,7 @@ class _DashboardState extends State<Dashboard> {
           BottomNavigationBarItem(
             icon: Icon(Icons.grid_on_outlined),
             activeIcon: Icon(Icons.grid_on),
-            label: 'Browse',
+            label: 'Channels',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search_outlined),
