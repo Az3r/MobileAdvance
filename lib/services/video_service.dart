@@ -1,10 +1,10 @@
-import 'dart:convert';
 
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/utilities/duration_utils.dart';
 import 'package:SingularSight/utilities/globals.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:googleapis/youtube/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
@@ -78,6 +78,13 @@ class VideoService {
       log.v(playlist.toJson());
       yield playlist;
     }
+  }
+
+  /// Get all channels stored in cloud firestore
+  Stream<ChannelModel> getAllChannels() async* {
+    final query = await FirebaseFirestore.instance.collection('channels').get();
+    final ids = query.docs.map((e) => e.id).toList();
+    await for (final channel in findChannels(ids)) yield channel;
   }
 
   Future<ChannelModel> findChannelById(String channelId) async {

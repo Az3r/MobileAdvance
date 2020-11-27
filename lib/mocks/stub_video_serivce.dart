@@ -42,4 +42,10 @@ class StubVideoService implements VideoService {
     // TODO: implement findChannels
     throw UnimplementedError();
   }
+
+  @override
+  Stream<ChannelModel> getAllChannels() {
+    // TODO: implement getAllChannels
+    throw UnimplementedError();
+  }
 }
