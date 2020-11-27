@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/utilities/duration_utils.dart';
@@ -14,6 +15,7 @@ class VideoService {
   static const String partId = 'id';
   static const String partContentDetails = 'contentDetails';
   static const String partStatistics = 'statistics';
+  static const String partBrandingSettings = 'brandingSettings';
   static const String orderRelevance = 'relevance';
   static const String regionVN = 'vn';
 
@@ -77,6 +79,28 @@ class VideoService {
       yield playlist;
     }
   }
+
+  Future<ChannelModel> findChannelById(String channelId) async {
+    final res = await _youtube.channels.list(
+      '$partSnippet, $partId, $partStatistics',
+      maxResults: 1,
+      id: channelId,
+    );
+
+    final item = res.items.first;
+    return ChannelModel(
+      id: channelId,
+      description: item.snippet.description,
+      profileColor: item.brandingSettings.channel.profileColor,
+      subscriberCount: int.parse(item.statistics.subscriberCount),
+      thumbnails: item.snippet.thumbnails,
+      title: item.brandingSettings.channel.title,
+      unsubscribedTrailer: item.brandingSettings.channel.unsubscribedTrailer,
+
+    );
+  }
+
+  Stream<ChannelModel> findFeaturedChannels(String channelId) async* {}
 
   Future<Map<String, dynamic>> _getVideoDetails(String videoId) async {
     final res = await _youtube.videos.list(

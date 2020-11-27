@@ -23,7 +23,7 @@ Future<void> initialize([debug = false]) async {
   await Firebase.initializeApp();
 
   // initialize services
-  await LocatorService().register(samples: true);
+  await LocatorService().register();
 
   // setup cloud firestore
   FirebaseFirestore.instance.settings = Settings(

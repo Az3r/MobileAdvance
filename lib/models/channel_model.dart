@@ -1,7 +1,7 @@
 import 'package:googleapis/youtube/v3.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'channel_model.g.dart';
+part '../generated/channel_model.g.dart';
 
 @JsonSerializable()
 class ChannelModel {
@@ -15,6 +15,9 @@ class ChannelModel {
 
   @JsonKey(ignore: true)
   List<String> featuredChannelIds;
+
+  @JsonKey(ignore: true)
+  List<ChannelModel> featuredChannels;
 
   ChannelModel({
     this.id,

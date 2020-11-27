@@ -1,7 +1,7 @@
 import 'package:googleapis/youtube/v3.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'video_model.g.dart';
+part '../generated/video_model.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class VideoModel {

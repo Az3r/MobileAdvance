@@ -20,7 +20,7 @@ class LocatorService {
   /// register all singleton services.
   ///
   /// set [samples] to true if you want to load all the sample data for testing
-  Future<void> register({bool samples = false}) async {
+  Future<void> register() async {
     locator.registerSingletonAsync(() async => UserService());
     locator.registerSingletonAsync<VideoService>(
       () async => StubVideoService(),

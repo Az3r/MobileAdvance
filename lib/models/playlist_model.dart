@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'video_model.dart';
 
-part 'playlist_model.g.dart';
+part '../generated/playlist_model.g.dart';
 
 @JsonSerializable()
 class PlaylistModel {
