@@ -7,15 +7,16 @@ class ChannelThumbnail extends StatelessWidget {
   const ChannelThumbnail({Key key, this.channel}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, children: [
-      FadeInImage.assetNetwork(
-        image: channel.thumbnails.default_.url,
-        placeholder: 'assets/icons/icon.jpeg',
-        placeholderCacheHeight: channel.thumbnails.default_.height,
-        placeholderCacheWidth: channel.thumbnails.default_.width,
-      ),
-      Text(channel.title),
-      Text('${channel.subscriberCount} subscribers'),
-    ]);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CircleAvatar(
+          radius: 48,
+          backgroundImage: NetworkImage(channel.thumbnails.medium.url),
+        ),
+        Text(channel.title),
+        Text('${channel.subscriberCount} subscribers'),
+      ],
+    );
   }
 }

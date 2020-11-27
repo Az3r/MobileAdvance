@@ -110,7 +110,7 @@ class VideoService {
 
   Stream<ChannelModel> findChannels(List<String> channelIds) async* {
     final res = await _youtube.channels.list(
-      '$partSnippet, $partId, $partStatistics',
+      '$partSnippet, $partBrandingSettings, $partId, $partStatistics',
       maxResults: channelIds.length,
       id: channelIds.join(','),
     );
@@ -118,7 +118,7 @@ class VideoService {
     for (final item in res.items) {
       final channel = ChannelModel(
         id: item.id,
-        description: item.snippet.description,
+        description: item.brandingSettings.channel.description,
         profileColor: item.brandingSettings.channel.profileColor,
         subscriberCount: int.parse(item.statistics.subscriberCount),
         thumbnails: item.snippet.thumbnails,

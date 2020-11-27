@@ -23,7 +23,7 @@ class LocatorService {
   Future<void> register() async {
     locator.registerSingletonAsync(() async => UserService());
     locator.registerSingletonAsync<VideoService>(
-      () async => StubVideoService(),
+      () async => VideoService(),
       dispose: (param) => param.dispose(),
     );
 

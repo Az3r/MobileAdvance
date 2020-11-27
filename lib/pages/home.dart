@@ -1,8 +1,5 @@
 import 'package:SingularSight/components/video/v_video_thumbnail.dart';
-import 'package:SingularSight/models/user_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
-import 'package:SingularSight/services/user_service.dart';
-import 'package:SingularSight/services/video_service.dart';
 import 'package:flutter/material.dart';
 import '../services/locator_service.dart';
 
@@ -18,7 +15,7 @@ class _HomeState extends State<Home> {
   final users = LocatorService().users;
 
   final _list = GlobalKey<AnimatedListState>();
-  final videos = const <VVideoThumbnail>[];
+  final videos = <VVideoThumbnail>[];
 
   @override
   void initState() {
