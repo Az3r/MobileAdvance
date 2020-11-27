@@ -1,8 +1,7 @@
-
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
-import 'package:SingularSight/utilities/duration_utils.dart';
+import 'package:SingularSight/utilities/string_utils.dart';
 import 'package:SingularSight/utilities/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:googleapis/youtube/v3.dart';
@@ -35,25 +34,8 @@ class VideoService {
       order: orderRelevance,
     );
 
-    for (final item in res.items) {
-      final snippet = item.snippet;
-      final details = await _getVideoDetails(item.id.videoId);
-      final model = VideoModel(
-        channelId: snippet.channelId,
-        channelTitle: htmlUnEscape.convert(snippet.channelTitle),
-        description: htmlUnEscape.convert(snippet.description),
-        id: item.id.videoId,
-        publishedAt: snippet.publishedAt,
-        thumbnails: snippet.thumbnails,
-        title: htmlUnEscape.convert(snippet.title),
-        duration: details['duration'],
-        likeCount: details['like'],
-        dislikeCount: details['dislike'],
-        viewCount: details['view'],
-      );
-      log.v(model.toJson());
-      yield model;
-    }
+    final stream = getVideoDetails(res.items.map((e) => e.id.videoId).toList());
+    await for (final item in stream) yield item;
   }
 
   /// search all playlists using the [query] for query term
@@ -132,19 +114,30 @@ class VideoService {
 
   Stream<ChannelModel> findFeaturedChannels(String channelId) async* {}
 
-  Future<Map<String, dynamic>> _getVideoDetails(String videoId) async {
+  Stream<VideoModel> getVideoDetails(List<String> videoIds) async* {
     final res = await _youtube.videos.list(
-      '$partContentDetails, $partStatistics',
-      id: videoId,
-      maxResults: 1,
+      '$partSnippet, $partContentDetails, $partStatistics',
+      id: videoIds.join(','),
+      maxResults: videoIds.length,
     );
-    final video = res.items.first;
-    return {
-      'duration': fromISO8601(video.contentDetails.duration),
-      'like': int.parse(video.statistics.likeCount),
-      'dislike': int.parse(video.statistics.dislikeCount),
-      'view': int.parse(video.statistics.viewCount),
-    };
+    for (final item in res.items) {
+      final snippet = item.snippet;
+      final model = VideoModel(
+        channelId: snippet.channelId,
+        channelTitle: htmlUnEscape.convert(snippet.channelTitle),
+        description: htmlUnEscape.convert(snippet.description),
+        id: item.id,
+        publishedAt: snippet.publishedAt,
+        thumbnails: snippet.thumbnails,
+        title: htmlUnEscape.convert(snippet.title),
+        duration: item.contentDetails.duration.toISO8601(),
+        likeCount: int.parse(item.statistics.likeCount),
+        dislikeCount: int.parse(item.statistics.dislikeCount),
+        viewCount: int.parse(item.statistics.viewCount),
+      );
+      log.v(model.toJson());
+      yield model;
+    }
   }
 
   Future<Map<String, dynamic>> _getPlaylistDetails(String playlistId) async {

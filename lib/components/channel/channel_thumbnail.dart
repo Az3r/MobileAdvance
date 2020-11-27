@@ -1,4 +1,5 @@
 import 'package:SingularSight/models/channel_model.dart';
+import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
 class ChannelThumbnail extends StatelessWidget {
@@ -10,9 +11,22 @@ class ChannelThumbnail extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CircleAvatar(
-          radius: 48,
-          backgroundImage: NetworkImage(channel.thumbnails.medium.url),
+        ClipOval(
+          child: Material(
+            child: InkWell(
+              onTap: () => Navigator.of(context).pushNamed(
+                RouteNames.channelDetails,
+                arguments: channel,
+              ),
+              child: Hero(
+                tag: channel.id,
+                child: CircleAvatar(
+                  radius: 24,
+                  backgroundImage: NetworkImage(channel.thumbnails.medium.url),
+                ),
+              ),
+            ),
+          ),
         ),
         Text(channel.title),
         Text('${channel.subscriberCount} subscribers'),

@@ -1,12 +1,10 @@
 class RouteNames {
-  static String bookmarks;
-
-  static String channels;
-
-  static String settings;
-
   RouteNames._();
-  static const String login = 'login';
+  static const String bookmarks = '/bookmarks';
+  static const String channels = '/channels';
+  static const String settings = '/settings';
+  static const String channelDetails = '/channels/details';
+  static const String login = '/login';
   static const String dashboard = '/dashboard';
 }
 

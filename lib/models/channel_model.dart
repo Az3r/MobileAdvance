@@ -8,7 +8,6 @@ class ChannelModel {
   final String id;
   final String title;
   final String description;
-  final String banner;
   final int subscriberCount;
   final ThumbnailDetails thumbnails;
   final String profileColor;
@@ -23,7 +22,6 @@ class ChannelModel {
   ChannelModel({
     this.id,
     this.title,
-    this.banner,
     this.description,
     this.subscriberCount,
     this.thumbnails,

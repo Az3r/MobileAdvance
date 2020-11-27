@@ -13,54 +13,29 @@ class HVideoThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        height: 128,
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Colors.white10),
-          ),
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: 128,
+              width: video.thumbnails.default_.width.toDouble(),
+              height: video.thumbnails.default_.height.toDouble(),
               child: Image.network(
                 video.thumbnails.default_.url,
-                fit: BoxFit.contain,
               ),
             ),
-            SizedBox(width: 4),
+            SizedBox(width: 8),
             Expanded(
-              child: SizedBox(
-                height: video.thumbnails.default_.height.toDouble(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      video.title,
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      video.channelTitle,
-                      style: TextStyle(color: Colors.white54),
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '${video.viewCount} views - ${video.publishedAt.toLocal()}',
-                          style: TextStyle(color: Colors.white54),
-                          softWrap: true,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ],
+              child: ListTile(
+                isThreeLine: true,
+                contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                title: Text(
+                  video.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
+                subtitle:
+                    Text('${video.channelTitle}\n${video.viewCount} views'),
               ),
             ),
           ],

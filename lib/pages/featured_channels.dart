@@ -40,14 +40,10 @@ class _FeaturedChannelsState extends State<FeaturedChannels> {
             scale: Tween(begin: 0.0, end: 1.0)
                 .chain(CurveTween(curve: Curves.easeOut))
                 .animate(animation),
-            child: Container(
-              height: 480,
-              child: Center(
-                child: SizedBox(
-                  height: 256,
-                  width: 256,
-                  child: videos[index],
-                ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 64),
+              child: Container(
+                child: videos[index],
               ),
             ),
           );

@@ -7,7 +7,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'components/animations/page_routes.dart';
+import 'components/routings.dart';
 import 'pages/dashboard.dart';
 import 'pages/login.dart';
 import 'pages/splash.dart';
@@ -68,20 +68,20 @@ class _MainAppState extends State<MainApp> {
         RouteNames.dashboard: (context) => const Dashboard(),
       },
       onGenerateRoute: (settings) {
-        if (settings.name == RouteNames.login) return loginRoute;
+        switch (settings.name) {
+          case RouteNames.login:
+            return Routings.login();
+          case RouteNames.channelDetails:
+            return Routings.channelDetails(settings.arguments);
+        }
+
+        if (settings.name == RouteNames.login) return Routings.login();
         throw ArgumentError.value(
           settings.name,
           'settings',
           'Unknown route named',
         );
       },
-    );
-  }
-
-  Route<dynamic> get loginRoute {
-    return LongerMaterialPageRoute(
-      builder: (context) => Login(),
-      duration: Duration(seconds: 1),
     );
   }
 }

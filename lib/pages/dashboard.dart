@@ -15,7 +15,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  var _index = 0;
+  var _index = 1;
   PageController _controller;
   @override
   void initState() {
