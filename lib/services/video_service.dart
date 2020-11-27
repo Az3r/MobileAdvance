@@ -10,12 +10,26 @@ import 'package:http/http.dart' as http;
 import '../utilities/keys.dart' as keys;
 
 class VideoService {
+  ///////////////////////////////////////////////////////////
+  ///
+  /// part paramaters
+  ///
+  ///////////////////////////////////////////////////////////
   static const String partSnippet = 'snippet';
   static const String partId = 'id';
   static const String partContentDetails = 'contentDetails';
   static const String partStatistics = 'statistics';
   static const String partBrandingSettings = 'brandingSettings';
+
+  ///////////////////////////////////////////////////////////
+  ///
+  /// order paramaters
+  ///
+  ///////////////////////////////////////////////////////////
   static const String orderRelevance = 'relevance';
+  static const String orderViewCount = 'viewCount';
+
+  static const String typePlaylist = 'playlist';
   static const String regionVN = 'vn';
 
   final http.Client client;
@@ -38,24 +52,57 @@ class VideoService {
     await for (final item in stream) yield item;
   }
 
+  Stream<PlaylistModel> findPlaylistByChannel(String channelId) async* {
+    final res = await _youtube.playlists.list(
+      '$partId,$partSnippet,$partContentDetails',
+      channelId: channelId,
+    );
+    for (final item in res.items) {
+      final playlist = PlaylistModel(
+        channelId: channelId,
+        channelTitle: item.snippet.channelTitle,
+        id: item.id,
+        thumbnails: item.snippet.thumbnails,
+        title: item.snippet.title,
+        videoCount: item.contentDetails.itemCount,
+      );
+      log.v(playlist.toJson());
+      yield playlist;
+    }
+  }
+
   /// search all playlists using the [query] for query term
   Stream<PlaylistModel> searchPlaylists(String query) async* {
+    Future<int> getViewCount(String channelId, String playlistId) async {
+      final res = await _youtube.playlists.list(
+        partContentDetails,
+        channelId: channelId,
+        id: playlistId,
+        maxResults: 1,
+      );
+      return res.items.first.contentDetails.itemCount;
+    }
+
     final res = await _youtube.search.list(
-      '$partSnippet, $partId',
+      '$partSnippet,$partId,$partContentDetails',
       q: query,
       order: orderRelevance,
+      type: typePlaylist,
       regionCode: regionVN,
     );
 
     for (final item in res.items) {
-      final details = await _getPlaylistDetails(item.id.playlistId);
+      int viewCount = await getViewCount(
+        item.id.channelId,
+        item.id.playlistId,
+      );
       final playlist = PlaylistModel(
+        channelId: item.id.channelId,
         channelTitle: item.snippet.channelTitle,
-        channelId: item.snippet.channelId,
         id: item.id.playlistId,
         thumbnails: item.snippet.thumbnails,
         title: item.snippet.title,
-        videoCount: details['videoCount'],
+        videoCount: viewCount,
       );
       log.v(playlist.toJson());
       yield playlist;
@@ -138,17 +185,6 @@ class VideoService {
       log.v(model.toJson());
       yield model;
     }
-  }
-
-  Future<Map<String, dynamic>> _getPlaylistDetails(String playlistId) async {
-    final res = await _youtube.playlists.list(
-      '$partContentDetails',
-      id: playlistId,
-      maxResults: 1,
-    );
-
-    final playlist = res.items.first;
-    return {'videoCount': playlist.contentDetails.itemCount};
   }
 
   void dispose() {

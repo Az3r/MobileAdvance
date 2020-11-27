@@ -19,7 +19,7 @@ class _ChannelHeaderState extends State<ChannelHeader> {
           child: Row(
             children: [
               avatar,
-              SizedBox(width: 8),
+              SizedBox(width: 16),
               info,
             ],
           ),

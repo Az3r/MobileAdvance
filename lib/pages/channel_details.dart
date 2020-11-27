@@ -12,7 +12,7 @@ class ChannelDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: profileColor,
-        title: Text('Channel'),
+        title: Text(channel.title),
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(

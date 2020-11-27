@@ -54,4 +54,11 @@ class StubVideoService implements VideoService {
     // TODO: implement getVideoDetails
     throw UnimplementedError();
   }
+
+  @override
+  Stream<PlaylistModel> findPlaylistByChannel(String channelId) {
+    // TODO: implement findPlaylistByChannel
+    throw UnimplementedError();
+  }
+
 }

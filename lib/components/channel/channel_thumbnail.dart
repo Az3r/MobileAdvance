@@ -21,7 +21,7 @@ class ChannelThumbnail extends StatelessWidget {
               child: Hero(
                 tag: channel.id,
                 child: CircleAvatar(
-                  radius: 24,
+                  radius: 32,
                   backgroundImage: NetworkImage(channel.thumbnails.medium.url),
                 ),
               ),
