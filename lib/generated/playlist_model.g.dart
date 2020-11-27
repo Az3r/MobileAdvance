@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'playlist_model.dart';
+part of '../models/playlist_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
