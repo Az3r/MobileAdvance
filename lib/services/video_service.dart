@@ -56,6 +56,7 @@ class VideoService {
     final res = await _youtube.playlists.list(
       '$partId,$partSnippet,$partContentDetails',
       channelId: channelId,
+      maxResults: 50,
     );
     for (final item in res.items) {
       final playlist = PlaylistModel(

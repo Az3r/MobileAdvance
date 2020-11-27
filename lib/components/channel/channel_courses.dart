@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 
 class SliverChannelCourses extends StatefulWidget {
   final String channelId;
+  final int initialCount;
 
-  const SliverChannelCourses({Key key, this.channelId}) : super(key: key);
+  const SliverChannelCourses({
+    Key key,
+    this.channelId,
+    this.initialCount = 10,
+  }) : super(key: key);
 
   @override
   _SliverChannelCoursesState createState() => _SliverChannelCoursesState();
@@ -70,5 +75,11 @@ class _SliverChannelCoursesState extends State<SliverChannelCourses> {
         ],
       ),
     );
+  }
+
+  /// load [count] more videos,
+  /// ususally called when user has scrolled to end of list
+  void next(int count) {
+
   }
 }
