@@ -1,7 +1,6 @@
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
-import 'package:SingularSight/utilities/string_utils.dart';
 import 'package:SingularSight/utilities/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:googleapis/youtube/v3.dart';

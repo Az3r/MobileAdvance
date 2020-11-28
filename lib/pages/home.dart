@@ -55,21 +55,21 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  Widget _buildItem(PlaylistModel model) {
-    final subtitle = model.channelSubscribers == null
-        ? model.channelTitle
-        : '${model.channelTitle}\n${model.channelSubscribers} subscribers';
+  Widget _buildItem(PlaylistModel playlist) {
+    final subtitle = playlist.channelSubscribers == null
+        ? playlist.channelTitle
+        : '${playlist.channelTitle}\n${playlist.channelSubscribers} subscribers';
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Column(
         children: [
           Container(
-            height: model.thumbnails.high.height.toDouble() - 64,
+            height: playlist.thumbnails.high.height.toDouble() - 64,
             child: Stack(
               fit: StackFit.expand,
               children: [
                 Image.network(
-                  model.thumbnails.high.url,
+                  playlist.thumbnails.high.url,
                   fit: BoxFit.cover,
                 ),
                 Align(
@@ -78,7 +78,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     alignment: Alignment.center,
                     width: 128,
                     color: Colors.black.withOpacity(0.5),
-                    child: Text('${model.videoCount} videos'),
+                    child: Text('${playlist.videoCount} videos'),
                   ),
                 )
               ],
@@ -90,7 +90,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               CircleAvatar(
                 radius: 24,
                 backgroundImage: NetworkImage(
-                  model.channelThumbnails.default_.url,
+                  playlist.channelThumbnails.default_.url,
                 ),
               ),
               SizedBox(width: 8),
@@ -99,7 +99,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                   contentPadding: EdgeInsets.zero,
                   isThreeLine: true,
                   title: Text(
-                    model.title,
+                    playlist.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

@@ -26,14 +26,16 @@ Future<void> initialize([debug = false]) async {
   await LocatorService().register();
 
   // setup cloud firestore
-  FirebaseFirestore.instance.settings = Settings(
-    host: localhost(8080),
-    sslEnabled: false,
-    persistenceEnabled: true,
-  );
+  if (debug) {
+    FirebaseFirestore.instance.settings = Settings(
+      host: localhost(8080),
+      sslEnabled: false,
+      persistenceEnabled: true,
+    );
 
-  // setup clould functions
-  FirebaseFunctions.instance.useFunctionsEmulator(origin: localhost(5001));
+    // setup clould functions
+    FirebaseFunctions.instance.useFunctionsEmulator(origin: localhost(5001));
+  }
 }
 
 String localhost(int port) =>
