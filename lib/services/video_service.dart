@@ -116,15 +116,7 @@ class VideoService {
     );
 
     final item = res.items.first;
-    final channel = ChannelModel(
-      id: channelId,
-      description: item.snippet.description,
-      profileColor: item.brandingSettings.channel.profileColor,
-      subscriberCount: int.parse(item.statistics.subscriberCount),
-      thumbnails: item.snippet.thumbnails,
-      title: item.brandingSettings.channel.title,
-      unsubscribedTrailer: item.brandingSettings.channel.unsubscribedTrailer,
-    );
+    final channel = ChannelModel.fromChannel(item);
     log.v(channel.toJson());
     return channel;
   }

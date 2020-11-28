@@ -1,5 +1,6 @@
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
+import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import '../services/locator_service.dart';
 
@@ -56,9 +57,6 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _buildItem(PlaylistModel playlist) {
-    final subtitle = playlist.channel.subscriberCount == null
-        ? playlist.channel.title
-        : '${playlist.channel.title}\n${playlist.channel.subscriberCount} subscribers';
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Column(
@@ -85,28 +83,40 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
             ),
           ),
           SizedBox(height: 8),
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 24,
-                backgroundImage: NetworkImage(
-                  playlist.channel.thumbnails.default_.url,
-                ),
-              ),
-              SizedBox(width: 8),
-              Expanded(
-                child: ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  isThreeLine: true,
-                  title: Text(
-                    playlist.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+          InkWell(
+            onTap: () => Navigator.of(context).pushNamed(
+              RouteNames.channelDetails,
+              arguments: playlist.channel,
+            ),
+            child: Row(
+              children: [
+                Hero(
+                  tag: playlist.channel.id,
+                  child: CircleAvatar(
+                    radius: 24,
+                    backgroundImage: NetworkImage(
+                      playlist.channel.thumbnails.default_.url,
+                    ),
                   ),
-                  subtitle: Text(subtitle),
                 ),
-              ),
-            ],
+                SizedBox(width: 8),
+                Expanded(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    isThreeLine: true,
+                    title: Text(
+                      playlist.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(playlist.channel.title +
+                        (playlist.channel.subscriberCount == null
+                            ? ''
+                            : '${playlist.channel.subscriberCount} subscribers')),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -123,14 +133,14 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
   Future<void> _refreshList() async {
     while (widgets.isNotEmpty) {
+      final item = widgets.removeAt(0);
       _list.currentState.removeItem(
         0,
         (context, animation) => FadeTransition(
           opacity: Tween(begin: 0.0, end: 0.0).animate(animation),
-          child: widgets[0],
+          child: item,
         ),
       );
-      widgets.removeAt(0);
     }
     await load();
   }

@@ -34,7 +34,7 @@ class ChannelModel {
       id: item.id,
       description: item.snippet.description,
       profileColor: item.brandingSettings.channel.profileColor,
-      subscriberCount: int.parse(item.statistics.subscriberCount ?? ''),
+      subscriberCount: int.tryParse(item.statistics.subscriberCount ?? ''),
       thumbnails: item.snippet.thumbnails,
       title: item.brandingSettings.channel.title,
       unsubscribedTrailer: item.brandingSettings.channel.unsubscribedTrailer,
