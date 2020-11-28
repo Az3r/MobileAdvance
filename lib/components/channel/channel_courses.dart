@@ -63,8 +63,4 @@ class _SliverChannelCoursesState extends State<SliverChannelCourses> {
       ),
     );
   }
-
-  /// load [count] more videos,
-  /// ususally called when user has scrolled to end of list
-  void next(int count) {}
 }
