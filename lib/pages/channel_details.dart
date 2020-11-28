@@ -1,7 +1,6 @@
+import 'package:SingularSight/components/channel.dart';
 import 'package:SingularSight/components/channel/channel_courses.dart';
-import 'package:SingularSight/components/channel/channel_header.dart';
 import 'package:SingularSight/models/channel_model.dart';
-import 'package:SingularSight/utilities/globals.dart';
 import 'package:flutter/material.dart';
 
 class ChannelDetails extends StatefulWidget {
@@ -14,16 +13,9 @@ class ChannelDetails extends StatefulWidget {
 }
 
 class _ChannelDetailsState extends State<ChannelDetails> {
-  final _controller = ScrollController();
-
   @override
   void initState() {
     super.initState();
-    _controller.addListener(() {
-      if (isScrolledToEnd()) {
-        log.i('end of views');
-      }
-    });
   }
 
   @override
@@ -40,38 +32,41 @@ class _ChannelDetailsState extends State<ChannelDetails> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       body: CustomScrollView(
-        controller: _controller,
         slivers: [
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 32.0,
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 16,
+            ),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  ChannelThumbnail(
+                    isSubscribed: false,
+                    onSubscribed: null,
+                    showSubscribeButton: true,
+                    subscribers: widget.channel.subscriberCount,
+                    thumbnail: widget.channel.thumbnails.medium,
+                    thumbnailRadius: 40,
+                    title: widget.channel.title,
+                    vertical: false,
                   ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.white12,
-                        width: 1,
-                      ),
-                    ),
-                  ),
-                  child: ChannelHeader(channel: widget.channel),
-                ),
-              ],
+                  SizedBox(height: 16),
+                  Text(widget.channel.description),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Divider(
+              thickness: 1,
+              color: Colors.white24,
             ),
           ),
           SliverChannelCourses(channelId: widget.channel.id),
         ],
       ),
     );
-  }
-
-  bool isScrolledToEnd() {
-    return _controller.hasClients &&
-        _controller.offset == _controller.position.maxScrollExtent;
   }
 
   Color get profileColor {
