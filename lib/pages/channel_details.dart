@@ -1,4 +1,4 @@
-import 'package:SingularSight/components/channel.dart';
+import 'package:SingularSight/components/thumbnails.dart';
 import 'package:SingularSight/components/channel/channel_courses.dart';
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:flutter/material.dart';

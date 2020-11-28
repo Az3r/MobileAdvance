@@ -2,6 +2,8 @@ import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:flutter/material.dart';
 
+import '../thumbnails.dart';
+
 class SliverChannelCourses extends StatefulWidget {
   final String channelId;
   final int initialCount;
@@ -50,36 +52,19 @@ class _SliverChannelCoursesState extends State<SliverChannelCourses> {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
-        vertical: 8,
+        vertical: 16,
       ),
-      child: Row(
-        children: [
-          SizedBox(
-              width: playlist.thumbnails.default_.width.toDouble(),
-              height: playlist.thumbnails.default_.height.toDouble(),
-              child: Image.network(playlist.thumbnails.default_.url)),
-          SizedBox(width: 8),
-          Expanded(
-            child: ListTile(
-              isThreeLine: true,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                playlist.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              subtitle: Text(
-                  '${playlist.channel.title}\n${playlist.videoCount} videos'),
-            ),
-          ),
-        ],
+      child: PlaylistThumbnail(
+        channelThumbnail: playlist.channel.thumbnails?.default_,
+        channelTitle: playlist.channel.title,
+        thumbnail: playlist.thumbnails.default_,
+        title: playlist.title,
+        videoCount: playlist.videoCount,
       ),
     );
   }
 
   /// load [count] more videos,
   /// ususally called when user has scrolled to end of list
-  void next(int count) {
-
-  }
+  void next(int count) {}
 }

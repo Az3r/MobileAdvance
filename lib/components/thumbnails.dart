@@ -1,4 +1,5 @@
 import 'package:SingularSight/utilities/constants.dart';
+import '../styles/texts.dart' as styles;
 import 'package:flutter/material.dart';
 import 'package:googleapis/youtube/v3.dart';
 
@@ -49,20 +50,10 @@ class _ChannelThumbnailState extends State<ChannelThumbnail> {
   Widget _buildVertical() {
     return Column(
       children: [
-        avatar,
-        SizedBox(height: 8),
-        Text(
-          widget.title,
-          style: TextStyle(
-            fontSize: Theme.of(context).textTheme.subtitle1.fontSize,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        if (widget.subscribers != null)
-          Text(
-            '${widget.subscribers} subscribers',
-            style: TextStyle(color: Colors.white54),
-          ),
+        if (widget.thumbnail != null) avatar,
+        if (widget.thumbnail != null) SizedBox(height: 8),
+        title,
+        if (widget.subscribers != null) subtitle,
         if (widget.showSubscribeButton) button
       ],
     );
@@ -71,19 +62,34 @@ class _ChannelThumbnailState extends State<ChannelThumbnail> {
   Widget _buildHorizontal() {
     return Row(
       children: [
-        avatar,
-        SizedBox(width: 8),
-        Expanded(
-          child: ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(widget.title),
-            subtitle: widget.subscribers != null
-                ? Text('${widget.subscribers} subscribers')
-                : null,
-          ),
+        if (widget.thumbnail != null) avatar,
+        if (widget.thumbnail != null) SizedBox(width: 8),
+        Column(
+          children: [
+            title,
+            if (widget.subscribers != null) subtitle,
+          ],
         ),
+        SizedBox(width: 8),
         if (widget.showSubscribeButton) Expanded(child: button)
       ],
+    );
+  }
+
+  Widget get title {
+    return Text(
+      widget.title,
+      style: TextStyle(
+        fontSize: Theme.of(context).textTheme.subtitle1.fontSize,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget get subtitle {
+    return Text(
+      '${widget.subscribers} subscribers',
+      style: TextStyle(color: Colors.white54),
     );
   }
 
@@ -121,5 +127,71 @@ class _ChannelThumbnailState extends State<ChannelThumbnail> {
     if (widget.onSubscribed != null && widget.onSubscribed.call(!subscribed)) {
       setState(() => subscribed = true);
     }
+  }
+}
+
+class VideoThumbnail extends StatelessWidget {
+  final Thumbnail thumbnail;
+  final String title;
+  final String channelTitle;
+  final int viewCount;
+  final DateTime publishedAt;
+
+  const VideoThumbnail({
+    Key key,
+    this.thumbnail,
+    this.title,
+    this.channelTitle,
+    this.viewCount,
+    this.publishedAt,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class PlaylistThumbnail extends StatelessWidget {
+  final Thumbnail thumbnail;
+  final String title;
+  final String channelTitle;
+  final Thumbnail channelThumbnail;
+  final int videoCount;
+
+  const PlaylistThumbnail({
+    Key key,
+    this.thumbnail,
+    this.title,
+    this.channelTitle,
+    this.channelThumbnail,
+    this.videoCount,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        ClipRect(
+          child: Align(
+            heightFactor: 0.76,
+            child: Image.network(
+              thumbnail.url,
+            ),
+          ),
+        ),
+        SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: styles.title(context)),
+              Text(channelTitle, style: styles.subtitle(context)),
+              if (videoCount != null)
+                Text('${videoCount} videos', style: styles.subtitle(context))
+            ],
+          ),
+        )
+      ],
+    );
   }
 }

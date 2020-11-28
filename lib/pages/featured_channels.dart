@@ -1,4 +1,4 @@
-import 'package:SingularSight/components/channel.dart';
+import 'package:SingularSight/components/thumbnails.dart';
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
