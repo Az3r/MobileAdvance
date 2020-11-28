@@ -31,6 +31,7 @@ class _FeaturedChannelsState extends State<FeaturedChannels> with AutomaticKeepA
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SizedBox(
       child: AnimatedList(
         key: _list,
@@ -41,7 +42,7 @@ class _FeaturedChannelsState extends State<FeaturedChannels> with AutomaticKeepA
                 .chain(CurveTween(curve: Curves.easeOut))
                 .animate(animation),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 64),
+              padding: const EdgeInsets.symmetric(vertical: 48),
               child: Container(
                 child: videos[index],
               ),

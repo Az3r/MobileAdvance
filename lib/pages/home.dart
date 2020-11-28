@@ -33,6 +33,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return AnimatedList(
       key: _list,
       scrollDirection: Axis.vertical,
@@ -53,7 +54,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       child: Column(
         children: [
           Container(
-            height: model.thumbnails.high.height.toDouble(),
+            height: model.thumbnails.high.height.toDouble() - 64,
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -77,7 +78,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
           Row(
             children: [
               CircleAvatar(
-                radius: 32,
+                radius: 24,
                 backgroundImage: NetworkImage(
                   model.channelThumbnails.default_.url,
                 ),
@@ -85,6 +86,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               SizedBox(width: 8),
               Expanded(
                 child: ListTile(
+                  contentPadding: EdgeInsets.zero,
                   isThreeLine: true,
                   title: Text(
                     model.title,

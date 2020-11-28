@@ -14,6 +14,7 @@ class PlaylistModel {
   final int videoCount;
   final ThumbnailDetails thumbnails;
   final ThumbnailDetails channelThumbnails;
+  final int channelSubscribers;
 
   PlaylistModel({
     this.id,
@@ -23,6 +24,7 @@ class PlaylistModel {
     this.videoCount,
     this.thumbnails,
     this.channelThumbnails,
+    this.channelSubscribers,
   });
 
   factory PlaylistModel.fromJson(Map<String, dynamic> json) =>

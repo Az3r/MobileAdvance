@@ -45,7 +45,11 @@ class _DashboardState extends State<Dashboard> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
-        onTap: (i) => _controller.jumpToPage(i),
+        onTap: (i) => _controller.animateToPage(
+          i,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        ),
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -67,7 +71,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  List<String> get pages => const ['Home', 'Browse', 'Search'];
+  List<String> get pages => const ['Home', 'Featured channels', 'Search'];
 
   @override
   void dispose() {

@@ -153,10 +153,13 @@ class VideoService {
   Stream<ChannelModel> findFeaturedChannels(String channelId) async* {}
 
   Stream<PlaylistModel> getPlaylistDetails(List<String> playlistIds) async* {
-    Future<ThumbnailDetails> getChannelThumbnails(String channelId) async {
-      final res = await _youtube.channels
-          .list(partSnippet, id: channelId, maxResults: 1);
-      return res.items.first.snippet.thumbnails;
+    Future<Channel> getChannelThumbnails(String channelId) async {
+      final res = await _youtube.channels.list(
+        '$partSnippet,$partStatistics',
+        id: channelId,
+        maxResults: 1,
+      );
+      return res.items.first;
     }
 
     final res = await _youtube.playlists.list(
@@ -165,14 +168,16 @@ class VideoService {
       maxResults: playlistIds.length,
     );
     for (final item in res.items) {
+      final channel = await getChannelThumbnails(item.snippet.channelId);
       final playlist = PlaylistModel(
         channelId: item.snippet.channelId,
         channelTitle: item.snippet.channelTitle,
         id: item.id,
-        channelThumbnails: await getChannelThumbnails(item.snippet.channelId),
+        channelThumbnails: channel.snippet.thumbnails,
         thumbnails: item.snippet.thumbnails,
         title: item.snippet.title,
         videoCount: item.contentDetails.itemCount,
+        channelSubscribers: int.parse(channel.statistics.subscriberCount),
       );
       log.v(playlist.toJson());
       yield playlist;
