@@ -171,6 +171,10 @@ class PlaylistThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return vertical ? _buildVertical(context) : _buildHorizontal(context);
+  }
+
+  Widget _buildHorizontal(BuildContext context) {
     return Row(
       children: [
         image,
