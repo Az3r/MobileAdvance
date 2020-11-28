@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:SingularSight/mocks/stub_video_serivce.dart';
 import 'package:SingularSight/models/user_model.dart';
 import 'package:SingularSight/models/video_model.dart';
 import 'package:flutter/foundation.dart';

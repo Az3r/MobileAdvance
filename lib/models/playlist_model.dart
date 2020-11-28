@@ -13,12 +13,7 @@ class PlaylistModel {
   final String channelTitle;
   final int videoCount;
   final ThumbnailDetails thumbnails;
-
-  List<VideoModel> _videos;
-  @JsonKey(ignore: true)
-  List<VideoModel> get videos {
-    return _videos;
-  }
+  final ThumbnailDetails channelThumbnails;
 
   PlaylistModel({
     this.id,
@@ -27,6 +22,7 @@ class PlaylistModel {
     this.channelTitle,
     this.videoCount,
     this.thumbnails,
+    this.channelThumbnails,
   });
 
   factory PlaylistModel.fromJson(Map<String, dynamic> json) =>

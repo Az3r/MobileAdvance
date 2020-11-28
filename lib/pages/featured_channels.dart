@@ -9,7 +9,7 @@ class FeaturedChannels extends StatefulWidget {
   _FeaturedChannelsState createState() => _FeaturedChannelsState();
 }
 
-class _FeaturedChannelsState extends State<FeaturedChannels> {
+class _FeaturedChannelsState extends State<FeaturedChannels> with AutomaticKeepAliveClientMixin {
   final youtube = LocatorService().youtube;
   final users = LocatorService().users;
 
@@ -51,4 +51,7 @@ class _FeaturedChannelsState extends State<FeaturedChannels> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
