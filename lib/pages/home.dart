@@ -25,7 +25,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   Future<void> load() async {
-    youtube.searchPlaylists('ignored').forEach((value) {
+    youtube.searchPlaylists(pageSize: 10).forEach((value) {
       widgets.add(_buildItem(value));
       _list.currentState.insertItem(widgets.length - 1);
     });
@@ -61,25 +61,31 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       padding: EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Container(
-            height: playlist.thumbnails.high.height.toDouble() - 64,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.network(
-                  playlist.thumbnails.high.url,
-                  fit: BoxFit.cover,
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: 128,
-                    color: Colors.black.withOpacity(0.5),
-                    child: Text('${playlist.videoCount} videos'),
+          InkWell(
+            onTap: () => Navigator.of(context).pushNamed(
+              RouteNames.watch,
+              arguments: playlist,
+            ),
+            child: Container(
+              height: playlist.thumbnails.high.height.toDouble() - 64,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.network(
+                    playlist.thumbnails.high.url,
+                    fit: BoxFit.cover,
                   ),
-                )
-              ],
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 128,
+                      color: Colors.black.withOpacity(0.5),
+                      child: Text('${playlist.videoCount} videos'),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           SizedBox(height: 8),
@@ -112,7 +118,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     subtitle: Text(playlist.channel.title +
                         (playlist.channel.subscriberCount == null
                             ? ''
-                            : '${playlist.channel.subscriberCount} subscribers')),
+                            : '\n${playlist.channel.subscriberCount} subscribers')),
                   ),
                 ),
               ],

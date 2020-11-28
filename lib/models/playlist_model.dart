@@ -2,6 +2,7 @@ import 'package:googleapis/youtube/v3.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'channel_model.dart';
+import 'video_model.dart';
 
 part '../generated/playlist_model.g.dart';
 
@@ -12,6 +13,9 @@ class PlaylistModel {
   final ThumbnailDetails thumbnails;
   final int videoCount;
   final ChannelModel channel;
+
+  @JsonKey(ignore: true)
+  List<String> videoIds = [];
 
   PlaylistModel({
     this.id,

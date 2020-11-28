@@ -64,7 +64,7 @@ class _MainAppState extends State<MainApp> {
         ),
       ),
       themeMode: ThemeMode.dark,
-      initialRoute: RouteNames.dashboard,
+      initialRoute: RouteNames.watch,
       routes: {
         '/': (context) => const Splash(),
         RouteNames.dashboard: (context) => const Dashboard(),
@@ -75,9 +75,9 @@ class _MainAppState extends State<MainApp> {
             return Routings.login();
           case RouteNames.channelDetails:
             return Routings.channelDetails(settings.arguments);
+            case RouteNames.watch:
+            return Routings.watch(settings.arguments);
         }
-
-        if (settings.name == RouteNames.login) return Routings.login();
         throw ArgumentError.value(
           settings.name,
           'settings',

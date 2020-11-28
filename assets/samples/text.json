@@ -1,0 +1,546 @@
+ [{
+   "id": null,
+   "title": null,
+   "description": "This course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain experience with React and its paradigms, app architecture, and user interfaces. The course culminates in a final project for which students implement an app entirely of their own design.\n\nhttps://www.youtube.com/playlist?list=PLhQjrBD2T382gdfveyad09Ierl_3Jh_wR\n\n***\n\nThis is CS50, Harvard University's introduction to the intellectual enterprises of computer science and the art of programming.\n\n***\n\nHOW TO SUBSCRIBE\n\nhttp://www.youtube.com/subscription_center?add_user=cs50tv\n\nHOW TO TAKE CS50\n\nedX: https://cs50.edx.org/\nHarvard E",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/_P7wHN_kOv4/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/_P7wHN_kOv4/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/_P7wHN_kOv4/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/_P7wHN_kOv4/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/_P7wHN_kOv4/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:04:31 - Course Information\n00:06:00 - JavaScript\n00:07:45 - JavaScript Syntax\n00:12:42 - Types\n00:13:54 - Typecasting\n00:16:05 - Types Demo\n00:22:50 - Objects\n00:24:49 - Objects Demo\n00:34:42 - Object Mutation\n00:48:37 - Prototypal Inheritance\n00:57:55 - Scope\n01:13:25 - The JavaScript Engine\n01:18:44 - The Global Object\n01:23:29 - Closures\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain experience with React and its paradigms, app architecture, and user interfaces. The course culminates in a final project for which students implement an app entire",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/X52b-8y2Hf4/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/X52b-8y2Hf4/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/X52b-8y2Hf4/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/X52b-8y2Hf4/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/X52b-8y2Hf4/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - ECMAScript\n00:03:35 - Closures\n00:13:47 - Immediately Invoked Function Expression\n00:22:53 - First-Class Functions\n00:34:19 - Synchronous? Async? Single-Threaded?\n00:40:07 - Asynchronous JavaScript\n00:40:18 - Execution Stack\n01:00:18 - Overflow\n01:01:47 - Asynchronous Functions\n01:03:05 - Callbacks\n01:09:41 - Promises\n01:20:57 - Async/Await\n01:26:32 - this\n01:43:48 - Browsers and the DOM\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain experience with React and its paradigms, app architecture, and user interfaces. The course culminates in a final project for which s",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/3Ay2lS6tm4M/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/3Ay2lS6tm4M/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/3Ay2lS6tm4M/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/3Ay2lS6tm4M/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/3Ay2lS6tm4M/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:00:56 - Classes\n00:04:25 - Set.js\n00:11:49 - extends\n00:14:22 - React\n00:15:12 - Imperative vs. Declarative\n00:21:14 - React is Declarative\n00:24:10 - React Components\n00:29:38 - React Performance\n00:31:07 - Writing React\n00:32:56 - Props\n00:34:12 - codesandbox.io\n00:40:43 - State\n00:56:04 - todoApp0.js\n00:58:27 - todoApp1.js\n00:59:23 - todoApp2.js\n01:00:53 - todoApp3.js\n01:04:32 - Todo List in React\n01:11:46 - addTodo\n01:18:26 - removeTodo\n01:26:10 - toggleTodo\n01:36:35 - React Native Teaser\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain e",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/7O43VDOlQ_o/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/7O43VDOlQ_o/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/7O43VDOlQ_o/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/7O43VDOlQ_o/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/7O43VDOlQ_o/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:00:56 - React Native\n00:02:38 - UI/JS Bridge\n00:04:04 - snack.expo.io\n00:07:52 - Differences Between React Native and the Web\n00:09:09 - React Native Components\n00:10:41 - todoApp4.js\n00:15:47 - Style\n00:21:17 - StyleSheet\n00:24:51 - Event Handling\n00:32:05 - Components\n00:33:15 - Stateless Functional Component (SFC)\n00:34:12 - React.Component\n00:36:42 - Component Lifecycle\n00:38:06 - Mount\n00:49:55 - Update\n00:58:20 - Unmount\n01:09:14 - Expo\n01:14:26 - Import/Export\n01:27:07 - PropTypes\n01:34:49 - How to Read Docs\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on pro",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/Gk6RF5k3C2M/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/Gk6RF5k3C2M/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/Gk6RF5k3C2M/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/Gk6RF5k3C2M/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/Gk6RF5k3C2M/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:01:36 - Lists\n00:02:29 - ScrollView\n00:03:01 - contacts.js\n00:12:01 - App.js\n00:18:04 - map\n00:27:06 - Row\n00:41:01 - FlatList\n01:04:11 - SectionList\n01:32:31 - User Input\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain experience with React and its paradigms, app architecture, and user interfaces. The course culminates in a final project for which students implement an app entirely of their own design.\n\nhttps://www.youtube.com/playlist?list=PLhQjrBD2T382gdfveyad09Ierl_3Jh_wR\n\n***\n\nThis is CS50, Harvard University's introduction to the intellectua",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/-E1tQPQSAxc/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/-E1tQPQSAxc/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/-E1tQPQSAxc/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/-E1tQPQSAxc/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/-E1tQPQSAxc/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:01:25 - User Input\n00:04:34 - Handling Multiple Inputs\n00:11:16 - Validating Input\n00:36:18 - KeyboardAvoidingView\n00:47:03 - Debugging\n00:47:44 - React Errors and Warnings\n00:51:38 - Chrome Devtools\n01:13:43 - React Native Inspector\n01:17:56 - react-devtools\n01:24:22 - External Libraries\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain experience with React and its paradigms, app architecture, and user interfaces. The course culminates in a final project for which students implement an app entirely of their own design.\n\nhttps://www.youtube.com/playli",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/sv71JMZEpYY/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/sv71JMZEpYY/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/sv71JMZEpYY/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/sv71JMZEpYY/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/sv71JMZEpYY/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:01:30 - What Is Navigation?\n00:05:09 - React Navigation and Alternatives\n00:06:47 - Install React Navigation\n00:07:47 - Navigators, Routes, and Screen Components\n00:09:56 - Switch Navigator\n00:10:43 - Creating a Navigator\n00:11:01 - Rendering a Navigator\n00:11:29 - Higher Order Components\n00:12:31 - Navigating to Another Route\n00:13:01 - The Navigation Prop\n00:13:36 - Switch Navigator Example\n00:27:48 - screenProps\n00:30:44 - Stack Navigator\n00:33:17 - Creating a StackNavigator\n00:33:37 - Returning to the Previously Active Route\n00:33:55 - StackNavigator Example\n00:35:36 - Configuring navigationOptions\n00:38:18 - Passing Around State\n00:48:24 - Using the StackNavigator\n00:51:19 - Adding a Button\n01:05:55 - push\n01:06:40 - Stack-specific Navigation Options\n01:07:07 - Composing Navigators\n01:13:09 - Tab Navigators\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile ap",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/QHorNUuEXc0/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/QHorNUuEXc0/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/QHorNUuEXc0/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/QHorNUuEXc0/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/QHorNUuEXc0/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:01:34 - Data\n00:04:44 - APIs\n00:06:47 - randomuser.me\n00:10:26 - Making Network Requests\n00:11:58 - Promises\n00:15:18 - Async/Await\n00:20:09 - Contacts with an API\n00:31:33 - Transforming Data\n00:46:49 - Authentication\n00:50:59 - HTTP Methods\n01:07:56 - HTTP Response Codes\n01:26:20 - React API\n01:39:00 - In Conclusion\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain experience with React and its paradigms, app architecture, and user interfaces. The course culminates in a final project for which students implement an app entirely of their own design.",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/jWwOTg35COs/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/jWwOTg35COs/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/jWwOTg35COs/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/jWwOTg35COs/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/jWwOTg35COs/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:00:47 - Expo\n00:03:54 - Maps and Location\n00:26:10 - Text or Delete\n00:39:16 - A Compass\n00:54:37 - A Multimedia Board\n01:20:36 - A Photo Editor\n01:45:42 - Other APIs\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain experience with React and its paradigms, app architecture, and user interfaces. The course culminates in a final project for which students implement an app entirely of their own design.\n\nhttps://www.youtube.com/playlist?list=PLhQjrBD2T382gdfveyad09Ierl_3Jh_wR\n\n***\n\nThis is CS50, Harvard University's introduction to the intellectual enter",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/01FuE1RnajY/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/01FuE1RnajY/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/01FuE1RnajY/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/01FuE1RnajY/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/01FuE1RnajY/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:01:25 - Scaling Complexity\n00:02:28 - Facebook and MVC\n00:05:44 - Flux\n00:09:48 - Redux\n00:13:07 - simpleRedux\n00:13:26 - Reducer\n00:20:28 - Store\n00:35:44 - Action\n01:10:10 - From simpleRedux to Redux\n01:38:45 - Higher-Order Components\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain experience with React and its paradigms, app architecture, and user interfaces. The course culminates in a final project for which students implement an app entirely of their own design.\n\nhttps://www.youtube.com/playlist?list=PLhQjrBD2T382gdfveyad09Ierl_3Jh_wR\n\n***\n\n",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/_zT8K6R_P7I/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/_zT8K6R_P7I/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/_zT8K6R_P7I/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/_zT8K6R_P7I/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/_zT8K6R_P7I/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:01:13 - react-redux Review\n00:07:48 - Supporting Async Requests\n00:33:26 - Redux Middleware\n01:15:21 - Persisting State\n01:16:34 - redux-persist\n01:23:14 - Container vs. Presentational Components\n01:25:45 - Do I Need Redux?\n01:29:15 - JavaScript Tools\n01:31:50 - ESLint\n01:38:44 - Prettier\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain experience with React and its paradigms, app architecture, and user interfaces. The course culminates in a final project for which students implement an app entirely of their own design.\n\nhttps://www.youtube.com/playli",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/T0elp5K9lLg/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/T0elp5K9lLg/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/T0elp5K9lLg/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/T0elp5K9lLg/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/T0elp5K9lLg/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:01:32 - Performance\n00:02:03 - Trade-Offs\n00:02:52 - Measuring Performance\n00:18:24 - Common Inefficiencies\n00:18:41 - Rerendering Too Often\n00:46:11 - Unnecessarily Changing Props\n01:00:40 - Unnecessary Logic in Mount/Update\n01:04:05 - Reminder: Trade-Offs\n01:04:59 - Animations\n01:26:01 - Animated\n01:43:46 - In Conclusion\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain experience with React and its paradigms, app architecture, and user interfaces. The course culminates in a final project for which students implement an app entirely of their own desig",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/39W5Llg2orM/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/39W5Llg2orM/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/39W5Llg2orM/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/39W5Llg2orM/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/39W5Llg2orM/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ },
+ {
+   "id": null,
+   "title": null,
+   "description": "00:00:00 - Introduction\n00:01:13 - Deploying\n00:04:03 - Testing\n00:05:11 - Test Pyramid\n00:06:06 - Unit Tests\n00:13:00 - Jest\n00:22:08 - Jest: Testing Redux Actions\n00:39:35 - Jest: Testing Async Redux Actions\n01:08:46 - Testing Explained\n01:14:45 - Jest: Testing Redux Reducers\n01:22:40 - Integration Tests\n01:35:36 - Code Coverage\n01:38:29 - End-To-End Tests\n01:39:53 - In Conclusion\n\nThis course picks up where Harvard University's CS50 leaves off, transitioning from web development to mobile app development with React Native, a popular open-source framework maintained by Facebook that enables cross-platform native apps using JavaScript without Java or Swift. The course introduces students to modern JavaScript (including ES6 and ES7) as well as to JSX, a JavaScript extension. Through hands-on projects, students gain experience with React and its paradigms, app architecture, and user interfaces. The course culminates in a final project for which students implemen",
+   "duration": null,
+   "channel_id": "UCcabW7890RKJzL968QWEykA",
+   "thumbnails": {
+     "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/VUV00jJ45nU/default.jpg",
+       "width": 120
+     },
+     "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/VUV00jJ45nU/hqdefault.jpg",
+       "width": 480
+     },
+     "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/VUV00jJ45nU/maxresdefault.jpg",
+       "width": 1280
+     },
+     "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/VUV00jJ45nU/mqdefault.jpg",
+       "width": 320
+     },
+     "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/VUV00jJ45nU/sddefault.jpg",
+       "width": 640
+     }
+   },
+   "published_at": null,
+   "view_count": null,
+   "channel_title": "CS50",
+   "like_count": null,
+   "dislike_count": null
+ }]

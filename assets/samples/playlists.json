@@ -1,0 +1,567 @@
+[
+  {
+    "id": "PLYxzS__5yYQlHANFLwcsSzt3elIbYTG1h",
+    "title": "React Native Tutorials",
+    "videoCount": 34,
+    "thumbnails": {
+      "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/EMoXvr0Q9LE/default.jpg",
+        "width": 120
+      },
+      "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/EMoXvr0Q9LE/hqdefault.jpg",
+        "width": 480
+      },
+      "maxres": {
+        "height": 720,
+        "url": "https://i.ytimg.com/vi/EMoXvr0Q9LE/maxresdefault.jpg",
+        "width": 1280
+      },
+      "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/EMoXvr0Q9LE/mqdefault.jpg",
+        "width": 320
+      },
+      "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/EMoXvr0Q9LE/sddefault.jpg",
+        "width": 640
+      }
+    },
+    "channel": {
+      "id": "UCJUmE61LxhbhudzUugHL2wQ",
+      "title": "codedamn",
+      "description": "Hi! I create videos mostly related to programming, and sometimes simple hacks and tricks to survive on internet! You'll find me covering a variety of topics I love to learn in my free time, mostly revolving around JavaScript.\n\nMilestones\n\nMarch 18, 2015 - First Video\nJune 18, 2016 - 10K subscribers!\nJuly 3, 2016 - 1 million views!\nDecember 1, 2017 - 50K Subscribers!\nDecember 4, 2018 - 10 million views!\nJuly 3, 2019 - 100K Subscribers!",
+      "subscriberCount": 136000,
+      "thumbnails": {
+        "default": {
+          "height": 88,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwnjJzxp8COuChc2Iccn41G1sBr9DRbFpR3jeo9shvw=s88-c-k-c0x00ffffff-no-rj",
+          "width": 88
+        },
+        "high": {
+          "height": 800,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwnjJzxp8COuChc2Iccn41G1sBr9DRbFpR3jeo9shvw=s800-c-k-c0x00ffffff-no-rj",
+          "width": 800
+        },
+        "medium": {
+          "height": 240,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwnjJzxp8COuChc2Iccn41G1sBr9DRbFpR3jeo9shvw=s240-c-k-c0x00ffffff-no-rj",
+          "width": 240
+        }
+      },
+      "profileColor": "#000000",
+      "unsubscribedTrailer": "S99sQLravYo"
+    }
+  },
+  {
+    "id": "PL4cUxeGkcC9ixPU-QkScoRBVxtPPzVjrQ",
+    "title": "React Native Tutorial for Beginners",
+    "videoCount": 35,
+    "thumbnails": {
+      "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/ur6I5m2nTvk/default.jpg",
+        "width": 120
+      },
+      "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/ur6I5m2nTvk/hqdefault.jpg",
+        "width": 480
+      },
+      "maxres": {
+        "height": 720,
+        "url": "https://i.ytimg.com/vi/ur6I5m2nTvk/maxresdefault.jpg",
+        "width": 1280
+      },
+      "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/ur6I5m2nTvk/mqdefault.jpg",
+        "width": 320
+      },
+      "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/ur6I5m2nTvk/sddefault.jpg",
+        "width": 640
+      }
+    },
+    "channel": {
+      "id": "UCW5YeuERMmlnqo4oq8vwUpg",
+      "title": "The Net Ninja",
+      "description": "Black-belt your development skills. Tutorials on:\n\n- Modern JavaScript (beginner to advanced)\n- Node.js\n- React\n- Vue.js\n- Firebase\n- MongoDB\n- HTML & CSS\n- Plus loads more...",
+      "subscriberCount": 605000,
+      "thumbnails": {
+        "default": {
+          "height": 88,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwni-Wm0ZBDYJYFwySP2esxgc8s9mKiwmI3yJrmjlHQ=s88-c-k-c0x00ffffff-no-rj",
+          "width": 88
+        },
+        "high": {
+          "height": 800,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwni-Wm0ZBDYJYFwySP2esxgc8s9mKiwmI3yJrmjlHQ=s800-c-k-c0x00ffffff-no-rj",
+          "width": 800
+        },
+        "medium": {
+          "height": 240,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwni-Wm0ZBDYJYFwySP2esxgc8s9mKiwmI3yJrmjlHQ=s240-c-k-c0x00ffffff-no-rj",
+          "width": 240
+        }
+      },
+      "profileColor": "#000000",
+      "unsubscribedTrailer": "AVxjl_Nsqa8"
+    }
+  },
+  {
+    "id": "PLth6QPteH5guFUwQj1iCdu-SOZ7O5KCz4",
+    "title": "React Native - Уроки - Для начинающих",
+    "videoCount": 34,
+    "thumbnails": {
+      "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/o8H-jcFtm5Q/default.jpg",
+        "width": 120
+      },
+      "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/o8H-jcFtm5Q/hqdefault.jpg",
+        "width": 480
+      },
+      "maxres": {
+        "height": 720,
+        "url": "https://i.ytimg.com/vi/o8H-jcFtm5Q/maxresdefault.jpg",
+        "width": 1280
+      },
+      "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/o8H-jcFtm5Q/mqdefault.jpg",
+        "width": 320
+      },
+      "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/o8H-jcFtm5Q/sddefault.jpg",
+        "width": 640
+      }
+    },
+    "channel": {
+      "id": "UCOxewePwIQATdHTD3yZ2UZw",
+      "title": "Sumerian School [RU]",
+      "description": "Программа разностороннего развития, содержащая интеллектуальную деятельность (развитие логики, пространственного мышления и моторики), изучение английского языка, физические занятия для здоровья, творчество.\n۞ Для взрослых и старших детей, которые умеют собирать кубик Рубика:\n\n💛 Первый класс Java Script, учитель Fiona Miller.\n💚 Второй класс школы React Native - разработка и верстка системы атомарных компонентов в мобильных приложениях iOS, Android, а также в системах AR/VR дополненной и виртуальной реальностью с библиотекой от Facebook. Учитель Grace Willie.\n💙 �",
+      "subscriberCount": 2390,
+      "thumbnails": {
+        "default": {
+          "height": 88,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwni5Uxek-pXrnnD-cM856fUOfI-0Pp_IEFpgR0C3Tw=s88-c-k-c0x00ffffff-no-rj",
+          "width": 88
+        },
+        "high": {
+          "height": 800,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwni5Uxek-pXrnnD-cM856fUOfI-0Pp_IEFpgR0C3Tw=s800-c-k-c0x00ffffff-no-rj",
+          "width": 800
+        },
+        "medium": {
+          "height": 240,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwni5Uxek-pXrnnD-cM856fUOfI-0Pp_IEFpgR0C3Tw=s240-c-k-c0x00ffffff-no-rj",
+          "width": 240
+        }
+      },
+      "profileColor": "#000000",
+      "unsubscribedTrailer": "GAbsjQF9i0c"
+    }
+  },
+  {
+    "id": "PLkyGuIcLcmx2abvUMewDtJf_jHjrX__0C",
+    "title": "React Tutorial Bangla  | React Js React Native Tutorial Bangla",
+    "videoCount": 104,
+    "thumbnails": {
+      "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/G5DrB3mjRPw/default.jpg",
+        "width": 120
+      },
+      "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/G5DrB3mjRPw/hqdefault.jpg",
+        "width": 480
+      },
+      "maxres": {
+        "height": 720,
+        "url": "https://i.ytimg.com/vi/G5DrB3mjRPw/maxresdefault.jpg",
+        "width": 1280
+      },
+      "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/G5DrB3mjRPw/mqdefault.jpg",
+        "width": 320
+      },
+      "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/G5DrB3mjRPw/sddefault.jpg",
+        "width": 640
+      }
+    },
+    "channel": {
+      "id": "UCSMFY8_rooijS-Zv43tKCrQ",
+      "title": "Rabbil Hasan",
+      "description": "Android App Tutorial Web Development Tutorial Web Design Tutorial is The Main Topics of Rabbil Hasan. Moreover programming tutorial like Java Kotlin tutorial are also made by rabbil hasan.Like Anisul islam tutorial you will also really found here some helpful tutorial in Bengali language.  The Computer Science Student's of Bangladesh and India are Most Welcome to my channel.",
+      "subscriberCount": 18100,
+      "thumbnails": {
+        "default": {
+          "height": 88,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwngurxMpswvW_5sJVNwMWIUyxo_hR2k-PFk1cXaR=s88-c-k-c0x00ffffff-no-rj",
+          "width": 88
+        },
+        "high": {
+          "height": 800,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwngurxMpswvW_5sJVNwMWIUyxo_hR2k-PFk1cXaR=s800-c-k-c0x00ffffff-no-rj",
+          "width": 800
+        },
+        "medium": {
+          "height": 240,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwngurxMpswvW_5sJVNwMWIUyxo_hR2k-PFk1cXaR=s240-c-k-c0x00ffffff-no-rj",
+          "width": 240
+        }
+      },
+      "profileColor": "#000000",
+      "unsubscribedTrailer": "ztVyTzpyJTk"
+    }
+  },
+  {
+    "id": "PLOeFnOV9YBa7dnrjpOG6lMpcyd7Wn7E8V",
+    "title": "ASP.NET Core - Authentication & Authorization Tutorial  (Claims/Identity/oAuth/oidc/IdentityServer4)",
+    "videoCount": 26,
+    "thumbnails": {
+      "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/Fhfvbl_KbWo/default.jpg",
+        "width": 120
+      },
+      "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/Fhfvbl_KbWo/hqdefault.jpg",
+        "width": 480
+      },
+      "maxres": {
+        "height": 720,
+        "url": "https://i.ytimg.com/vi/Fhfvbl_KbWo/maxresdefault.jpg",
+        "width": 1280
+      },
+      "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/Fhfvbl_KbWo/mqdefault.jpg",
+        "width": 320
+      },
+      "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/Fhfvbl_KbWo/sddefault.jpg",
+        "width": 640
+      }
+    },
+    "channel": {
+      "id": "UCP_jWxjn__YXmo4iU7Low0g",
+      "title": "Raw Coding",
+      "description": "Welcome to Raw Coding\n\nMy name is Anton, and I am here to share my programming knowledge.\n\nI release 2 videos a week, these will ether be about a specific topic or a project series.\n\nI tend to explain stuff from scratch in a step by step process bringing analogies and taking deep dives in code with practical examples.\n\nDO NOT email me with programming questions I will ignore them, ask them in the comment section or on my discord channel.",
+      "subscriberCount": 24200,
+      "thumbnails": {
+        "default": {
+          "height": 88,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwniYhZZB_EUfnku8jXzmKDQ-3yAuhemtITMoE2SZ=s88-c-k-c0x00ffffff-no-rj",
+          "width": 88
+        },
+        "high": {
+          "height": 800,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwniYhZZB_EUfnku8jXzmKDQ-3yAuhemtITMoE2SZ=s800-c-k-c0x00ffffff-no-rj",
+          "width": 800
+        },
+        "medium": {
+          "height": 240,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwniYhZZB_EUfnku8jXzmKDQ-3yAuhemtITMoE2SZ=s240-c-k-c0x00ffffff-no-rj",
+          "width": 240
+        }
+      },
+      "profileColor": "#000000",
+      "unsubscribedTrailer": null
+    }
+  },
+  {
+    "id": "PLhQjrBD2T382gdfveyad09Ierl_3Jh_wR",
+    "title": "CS50's Mobile App Development with React Native 2018",
+    "videoCount": 14,
+    "thumbnails": {
+      "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/_P7wHN_kOv4/default.jpg",
+        "width": 120
+      },
+      "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/_P7wHN_kOv4/hqdefault.jpg",
+        "width": 480
+      },
+      "maxres": {
+        "height": 720,
+        "url": "https://i.ytimg.com/vi/_P7wHN_kOv4/maxresdefault.jpg",
+        "width": 1280
+      },
+      "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/_P7wHN_kOv4/mqdefault.jpg",
+        "width": 320
+      },
+      "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/_P7wHN_kOv4/sddefault.jpg",
+        "width": 640
+      }
+    },
+    "channel": {
+      "id": "UCcabW7890RKJzL968QWEykA",
+      "title": "CS50",
+      "description": "This is CS50, Harvard University's introduction to the intellectual enterprises of computer science and the art of programming. Demanding, but definitely doable. Social, but educational. A focused topic, but broadly applicable skills. CS50 is the quintessential Harvard (and Yale!) course.",
+      "subscriberCount": 597000,
+      "thumbnails": {
+        "default": {
+          "height": 88,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwnjo89LMRtwUAmOGuunMTbJTrIDby7FWPECLm799hA=s88-c-k-c0x00ffffff-no-rj",
+          "width": 88
+        },
+        "high": {
+          "height": 800,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwnjo89LMRtwUAmOGuunMTbJTrIDby7FWPECLm799hA=s800-c-k-c0x00ffffff-no-rj",
+          "width": 800
+        },
+        "medium": {
+          "height": 240,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwnjo89LMRtwUAmOGuunMTbJTrIDby7FWPECLm799hA=s240-c-k-c0x00ffffff-no-rj",
+          "width": 240
+        }
+      },
+      "profileColor": "#000000",
+      "unsubscribedTrailer": "3oFAJtFE8YU"
+    }
+  },
+  {
+    "id": "PLN3n1USn4xlnfJIQBa6bBjjiECnk6zL6s",
+    "title": "Fullstack Airbnb Clone",
+    "videoCount": 84,
+    "thumbnails": {
+      "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/kuswGIH-Xj8/default.jpg",
+        "width": 120
+      },
+      "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/kuswGIH-Xj8/hqdefault.jpg",
+        "width": 480
+      },
+      "maxres": {
+        "height": 720,
+        "url": "https://i.ytimg.com/vi/kuswGIH-Xj8/maxresdefault.jpg",
+        "width": 1280
+      },
+      "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/kuswGIH-Xj8/mqdefault.jpg",
+        "width": 320
+      },
+      "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/kuswGIH-Xj8/sddefault.jpg",
+        "width": 640
+      }
+    },
+    "channel": {
+      "id": "UC-8QAzbLcRglXeN_MY9blyw",
+      "title": "Ben Awad",
+      "description": "I'm a software developer who makes videos about React, React Native, GraphQL, Typescript, Node.js, PostgreSQL, Python, and all things coding.",
+      "subscriberCount": 187000,
+      "thumbnails": {
+        "default": {
+          "height": 88,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwng8pSXOY4YZbcXPT7oLVpHDdUU1yOU5YQlcD6NFrg=s88-c-k-c0x00ffffff-no-rj",
+          "width": 88
+        },
+        "high": {
+          "height": 800,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwng8pSXOY4YZbcXPT7oLVpHDdUU1yOU5YQlcD6NFrg=s800-c-k-c0x00ffffff-no-rj",
+          "width": 800
+        },
+        "medium": {
+          "height": 240,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwng8pSXOY4YZbcXPT7oLVpHDdUU1yOU5YQlcD6NFrg=s240-c-k-c0x00ffffff-no-rj",
+          "width": 240
+        }
+      },
+      "profileColor": "#000000",
+      "unsubscribedTrailer": "bx3--22D4E4"
+    }
+  },
+  {
+    "id": "PLlxQJeQRaKDR94iHzoKL4D1hjVySbbDSd",
+    "title": "Formation React & React Native",
+    "videoCount": 41,
+    "thumbnails": {
+      "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/5ZG0cNo6lgE/default.jpg",
+        "width": 120
+      },
+      "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/5ZG0cNo6lgE/hqdefault.jpg",
+        "width": 480
+      },
+      "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/5ZG0cNo6lgE/mqdefault.jpg",
+        "width": 320
+      },
+      "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/5ZG0cNo6lgE/sddefault.jpg",
+        "width": 640
+      }
+    },
+    "channel": {
+      "id": "UCzuaB4F2znrMggxcwUuVhAw",
+      "title": "LES TEACHERS DU NET",
+      "description": "Découvrez des tutoriels de catégories diverses (informatique, physique, télécommunications...) expliqués de manière simple et chirurgicale !!",
+      "subscriberCount": null,
+      "thumbnails": {
+        "default": {
+          "height": 88,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwnhEQijQYS-U1A2tnFgJr9TnCTE1d_nT3zA5SQXt=s88-c-k-c0x00ffffff-no-rj",
+          "width": 88
+        },
+        "high": {
+          "height": 800,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwnhEQijQYS-U1A2tnFgJr9TnCTE1d_nT3zA5SQXt=s800-c-k-c0x00ffffff-no-rj",
+          "width": 800
+        },
+        "medium": {
+          "height": 240,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwnhEQijQYS-U1A2tnFgJr9TnCTE1d_nT3zA5SQXt=s240-c-k-c0x00ffffff-no-rj",
+          "width": 240
+        }
+      },
+      "profileColor": "#000000",
+      "unsubscribedTrailer": "gl2iZFKrDvc"
+    }
+  },
+  {
+    "id": "PLiYPP1v1hM958PlxbdnuNaplEucdiBntE",
+    "title": "React Native Dersleri",
+    "videoCount": 29,
+    "thumbnails": {
+      "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/zMHf5ccChoU/default.jpg",
+        "width": 120
+      },
+      "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/zMHf5ccChoU/hqdefault.jpg",
+        "width": 480
+      },
+      "maxres": {
+        "height": 720,
+        "url": "https://i.ytimg.com/vi/zMHf5ccChoU/maxresdefault.jpg",
+        "width": 1280
+      },
+      "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/zMHf5ccChoU/mqdefault.jpg",
+        "width": 320
+      },
+      "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/zMHf5ccChoU/sddefault.jpg",
+        "width": 640
+      }
+    },
+    "channel": {
+      "id": "UCLR1815BrF78UoTnFFaLZOw",
+      "title": "React Native Dersleri",
+      "description": "",
+      "subscriberCount": 1980,
+      "thumbnails": {
+        "default": {
+          "height": 88,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwngIMGj4kbQAcJzKZxEGkq8JTV2kkM_EO2Fuy7gM=s88-c-k-c0x00ffffff-no-rj",
+          "width": 88
+        },
+        "high": {
+          "height": 800,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwngIMGj4kbQAcJzKZxEGkq8JTV2kkM_EO2Fuy7gM=s800-c-k-c0x00ffffff-no-rj",
+          "width": 800
+        },
+        "medium": {
+          "height": 240,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwngIMGj4kbQAcJzKZxEGkq8JTV2kkM_EO2Fuy7gM=s240-c-k-c0x00ffffff-no-rj",
+          "width": 240
+        }
+      },
+      "profileColor": "#000000",
+      "unsubscribedTrailer": "0vhNlL_xopQ"
+    }
+  },
+  {
+    "id": "PLU4DS8KR-LJ3SP3PpRb870UoT_0_rjLpV",
+    "title": "Tutorial React Native Indonesia",
+    "videoCount": 37,
+    "thumbnails": {
+      "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/bSLGgJC0C9k/default.jpg",
+        "width": 120
+      },
+      "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/bSLGgJC0C9k/hqdefault.jpg",
+        "width": 480
+      },
+      "maxres": {
+        "height": 720,
+        "url": "https://i.ytimg.com/vi/bSLGgJC0C9k/maxresdefault.jpg",
+        "width": 1280
+      },
+      "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/bSLGgJC0C9k/mqdefault.jpg",
+        "width": 320
+      },
+      "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/bSLGgJC0C9k/sddefault.jpg",
+        "width": 640
+      }
+    },
+    "channel": {
+      "id": "UC4k3OBYU4q6MuspHVzZlkew",
+      "title": "prawito hudoro",
+      "description": "Selamat datang dan terimakasih telah mengunjungi channel ini.\nChannel ini banyak berisi tentang tutorial-tutorial programming, dimulai dari front-end sampai back-end. Untuk rekan-rekan yang tertarik dalam dunia pemrograman bisa subscribe channel ini.\n\nhttp://link.prawito.com/\n\n******** 😊 ********\n\nMore About Me:\nIG: https://www.instagram.com/prawitohudoro/\nLinkedIn: https://www.linkedin.com/in/prawito-hudoro/\nEmail: prawitohudoro@gmail.com\nBlog: http://code.prawito.com\nWeb: http://prawito.com\nHome: Cisauk, Tangerang.\n\nSaya mempunyai komunitas belajar coding bersama yang bernama \"Kabayan Coding\". Bagi rekan-rekan yang ingin bergabung silahkan masuk saja di grup discord kami di link berikut: https://discord.gg/4QpafbQ",
+      "subscriberCount": 11800,
+      "thumbnails": {
+        "default": {
+          "height": 88,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwngcDv03gEJ2peR1AG1W9BFXos-dHNztrg01syWCSiA=s88-c-k-c0x00ffffff-no-rj",
+          "width": 88
+        },
+        "high": {
+          "height": 800,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwngcDv03gEJ2peR1AG1W9BFXos-dHNztrg01syWCSiA=s800-c-k-c0x00ffffff-no-rj",
+          "width": 800
+        },
+        "medium": {
+          "height": 240,
+          "url": "https://yt3.ggpht.com/ytc/AAUvwngcDv03gEJ2peR1AG1W9BFXos-dHNztrg01syWCSiA=s240-c-k-c0x00ffffff-no-rj",
+          "width": 240
+        }
+      },
+      "profileColor": "#000000",
+      "unsubscribedTrailer": "QHvET2V_uuw"
+    }
+  }
+]
