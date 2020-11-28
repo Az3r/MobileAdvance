@@ -1,4 +1,3 @@
-import 'package:SingularSight/components/video/v_video_thumbnail.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   final users = LocatorService().users;
 
   final _list = GlobalKey<AnimatedListState>();
-  final playlists = <PlaylistModel>[];
+  final widgets = <Widget>[];
 
   @override
   void initState() {
@@ -26,29 +25,40 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
   Future<void> load() async {
     youtube.searchPlaylists('ignored').forEach((value) {
-      playlists.add(value);
-      _list.currentState.insertItem(playlists.length - 1);
+      widgets.add(_buildItem(value));
+      _list.currentState.insertItem(widgets.length - 1);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return AnimatedList(
-      key: _list,
-      scrollDirection: Axis.vertical,
-      itemBuilder: (context, index, animation) {
-        return ScaleTransition(
-          scale: Tween(begin: 0.0, end: 1.0)
-              .chain(CurveTween(curve: Curves.easeInOut))
-              .animate(animation),
-          child: _buildItem(playlists[index]),
-        );
-      },
+    return RefreshIndicator(
+      onRefresh: _refreshList,
+      child: AnimatedList(
+        key: _list,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index, animation) {
+          return FadeTransition(
+            opacity: Tween(begin: 0.0, end: 1.0)
+                .chain(CurveTween(curve: Curves.easeInOut))
+                .animate(animation),
+            child: SlideTransition(
+              position: Tween(begin: Offset(0, -0.10), end: Offset.zero)
+                  .chain(CurveTween(curve: Curves.easeOut))
+                  .animate(animation),
+              child: widgets[index],
+            ),
+          );
+        },
+      ),
     );
   }
 
   Widget _buildItem(PlaylistModel model) {
+    final subtitle = model.channelSubscribers == null
+        ? model.channelTitle
+        : '${model.channelTitle}\n${model.channelSubscribers} subscribers';
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Column(
@@ -93,7 +103,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  subtitle: Text(model.channelTitle),
+                  subtitle: Text(subtitle),
                 ),
               ),
             ],
@@ -110,4 +120,18 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
   @override
   bool get wantKeepAlive => true;
+
+  Future<void> _refreshList() async {
+    while (widgets.isNotEmpty) {
+      _list.currentState.removeItem(
+        0,
+        (context, animation) => FadeTransition(
+          opacity: Tween(begin: 0.0, end: 0.0).animate(animation),
+          child: widgets[0],
+        ),
+      );
+      widgets.removeAt(0);
+    }
+    await load();
+  }
 }

@@ -65,7 +65,7 @@ class VideoService {
   /// search all playlists using the [q] for query term
   Stream<PlaylistModel> searchPlaylists(
     String q, {
-    int pageSize = 100,
+    int pageSize = 40,
     int pageOffset = 0,
     String order = orderDate,
   }) async* {
@@ -169,6 +169,7 @@ class VideoService {
     );
     for (final item in res.items) {
       final channel = await getChannelThumbnails(item.snippet.channelId);
+      final subscriberHidden = channel.statistics.hiddenSubscriberCount;
       final playlist = PlaylistModel(
         channelId: item.snippet.channelId,
         channelTitle: item.snippet.channelTitle,
@@ -177,7 +178,9 @@ class VideoService {
         thumbnails: item.snippet.thumbnails,
         title: item.snippet.title,
         videoCount: item.contentDetails.itemCount,
-        channelSubscribers: int.parse(channel.statistics.subscriberCount),
+        channelSubscribers: subscriberHidden
+            ? null
+            : int.parse(channel.statistics.subscriberCount),
       );
       log.v(playlist.toJson());
       yield playlist;
