@@ -47,7 +47,7 @@ class _ChannelDetailsState extends State<ChannelDetails> {
                     showSubscribeButton: true,
                     subscribers: widget.channel.subscriberCount,
                     thumbnail: widget.channel.thumbnails.medium,
-                    thumbnailRadius: 40,
+                    thumbnailRadius: 32,
                     title: widget.channel.title,
                     vertical: false,
                   ),

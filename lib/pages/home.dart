@@ -1,3 +1,4 @@
+import 'package:SingularSight/components/thumbnails.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
@@ -11,12 +12,12 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
+class _HomeState extends State<Home> {
   final youtube = LocatorService().youtube;
   final users = LocatorService().users;
 
   final _list = GlobalKey<AnimatedListState>();
-  final widgets = <Widget>[];
+  final playlists = <PlaylistModel>[];
 
   @override
   void initState() {
@@ -26,14 +27,13 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
   Future<void> load() async {
     youtube.searchPlaylists(pageSize: 10).forEach((value) {
-      widgets.add(_buildItem(value));
-      _list.currentState.insertItem(widgets.length - 1);
+      playlists.add(value);
+      _list.currentState.insertItem(playlists.length - 1);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return RefreshIndicator(
       onRefresh: _refreshList,
       child: AnimatedList(
@@ -46,9 +46,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                 .animate(animation),
             child: SlideTransition(
               position: Tween(begin: Offset(0, -0.10), end: Offset.zero)
-                  .chain(CurveTween(curve: Curves.easeOut))
+                  .chain(CurveTween(curve: Curves.easeInOut))
                   .animate(animation),
-              child: widgets[index],
+              child: _buildItem(playlists[index]),
             ),
           );
         },
@@ -58,73 +58,22 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
   Widget _buildItem(PlaylistModel playlist) {
     return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          InkWell(
-            onTap: () => Navigator.of(context).pushNamed(
-              RouteNames.watch,
-              arguments: playlist,
-            ),
-            child: Container(
-              height: playlist.thumbnails.high.height.toDouble() - 64,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.network(
-                    playlist.thumbnails.high.url,
-                    fit: BoxFit.cover,
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 128,
-                      color: Colors.black.withOpacity(0.5),
-                      child: Text('${playlist.videoCount} videos'),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: 8),
-          InkWell(
-            onTap: () => Navigator.of(context).pushNamed(
-              RouteNames.channelDetails,
-              arguments: playlist.channel,
-            ),
-            child: Row(
-              children: [
-                Hero(
-                  tag: playlist.channel.id,
-                  child: CircleAvatar(
-                    radius: 24,
-                    backgroundImage: NetworkImage(
-                      playlist.channel.thumbnails.default_.url,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    isThreeLine: true,
-                    title: Text(
-                      playlist.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text(playlist.channel.title +
-                        (playlist.channel.subscriberCount == null
-                            ? ''
-                            : '\n${playlist.channel.subscriberCount} subscribers')),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+      padding: EdgeInsets.all(16.0),
+      child: PlaylistThumbnail(
+        channelThumbnail: playlist.channel.thumbnails.medium,
+        channelTitle: playlist.channel.title,
+        thumbnail: playlist.thumbnails.medium,
+        title: playlist.title,
+        vertical: true,
+        videoCount: playlist.videoCount,
+        onThumbnailTap: () => Navigator.of(context).pushNamed(
+          RouteNames.watch,
+          arguments: playlist,
+        ),
+        onChannelThumbnailTap: () => Navigator.of(context).pushNamed(
+          RouteNames.channelDetails,
+          arguments: playlist.channel,
+        ),
       ),
     );
   }
@@ -135,16 +84,16 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 
   Future<void> _refreshList() async {
-    while (widgets.isNotEmpty) {
-      final item = widgets.removeAt(0);
+    while (playlists.isNotEmpty) {
+      final item = playlists.removeAt(0);
       _list.currentState.removeItem(
         0,
         (context, animation) => FadeTransition(
           opacity: Tween(begin: 0.0, end: 0.0).animate(animation),
-          child: item,
+          child: _buildItem(item),
         ),
       );
     }

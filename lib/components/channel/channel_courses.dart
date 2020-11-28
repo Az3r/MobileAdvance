@@ -1,5 +1,6 @@
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
+import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../thumbnails.dart';
@@ -49,17 +50,23 @@ class _SliverChannelCoursesState extends State<SliverChannelCourses> {
   }
 
   Widget _buildItem(PlaylistModel playlist) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 16,
+    return InkWell(
+      onTap: () => Navigator.of(context).pushNamed(
+        RouteNames.watch,
+        arguments: playlist,
       ),
-      child: PlaylistThumbnail(
-        channelThumbnail: playlist.channel.thumbnails?.default_,
-        channelTitle: playlist.channel.title,
-        thumbnail: playlist.thumbnails.default_,
-        title: playlist.title,
-        videoCount: playlist.videoCount,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 16,
+        ),
+        child: PlaylistThumbnail(
+          channelThumbnail: playlist.channel.thumbnails?.default_,
+          channelTitle: playlist.channel.title,
+          thumbnail: playlist.thumbnails.default_,
+          title: playlist.title,
+          videoCount: playlist.videoCount,
+        ),
       ),
     );
   }

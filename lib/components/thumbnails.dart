@@ -65,13 +65,20 @@ class _ChannelThumbnailState extends State<ChannelThumbnail> {
         if (widget.thumbnail != null) avatar,
         if (widget.thumbnail != null) SizedBox(width: 8),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             title,
             if (widget.subscribers != null) subtitle,
           ],
         ),
         SizedBox(width: 8),
-        if (widget.showSubscribeButton) Expanded(child: button)
+        if (widget.showSubscribeButton)
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: button,
+            ),
+          )
       ],
     );
   }
@@ -158,6 +165,8 @@ class PlaylistThumbnail extends StatelessWidget {
   final Thumbnail channelThumbnail;
   final int videoCount;
   final bool vertical;
+  final VoidCallback onThumbnailTap;
+  final VoidCallback onChannelThumbnailTap;
 
   const PlaylistThumbnail({
     Key key,
@@ -167,6 +176,8 @@ class PlaylistThumbnail extends StatelessWidget {
     this.channelThumbnail,
     this.videoCount,
     this.vertical = false,
+    this.onThumbnailTap,
+    this.onChannelThumbnailTap,
   }) : super(key: key);
 
   @override
@@ -183,9 +194,10 @@ class PlaylistThumbnail extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              titleText(context),
-              subtitleText(context),
-              if (videoCount != null) videoText(context),
+              Text(title, style: styles.title(context)),
+              Text(channelTitle, style: styles.subtitle(context)),
+              if (videoCount != null)
+                Text('${videoCount} videos', style: styles.subtitle(context)),
             ],
           ),
         )
@@ -196,48 +208,63 @@ class PlaylistThumbnail extends StatelessWidget {
   Widget _buildVertical(BuildContext context) {
     return Column(
       children: [
-        Stack(
+        Container(
+          height: thumbnail.height.toDouble(),
+          width: thumbnail.width.toDouble(),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              image,
+              Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  alignment: Alignment.center,
+                  height: thumbnail.height.toDouble(),
+                  width: 96,
+                  child: Text(
+                    '$videoCount videos',
+                    style: styles.title(context),
+                  ),
+                  color: Colors.black.withOpacity(0.8),
+                ),
+              )
+            ],
+          ),
+        ),
+        SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            image,
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                alignment: Alignment.center,
-                width: 128,
-                color: Colors.black.withOpacity(0.5),
-                child: Text('${videoCount} videos'),
+            ClipOval(
+              child: Material(
+                child: InkWell(
+                  onTap: onChannelThumbnailTap,
+                  child: Hero(
+                    tag: channelTitle,
+                    child: CircleAvatar(
+                        backgroundImage: NetworkImage(channelThumbnail.url),
+                        radius: 24),
+                  ),
+                ),
               ),
-            )
+            ),
+            SizedBox(width: 8),
+            Text(channelTitle, style: styles.title(context)),
           ],
         ),
-        ChannelThumbnail(
-          showSubscribeButton: false,
-          vertical: false,
-          title: channelTitle,
-          thumbnail: channelThumbnail,
-        )
       ],
     );
   }
 
-  Widget titleText(BuildContext context) {
-    return Text(title, style: styles.title(context));
-  }
-
-  Widget subtitleText(BuildContext context) {
-    return Text(channelTitle, style: styles.subtitle(context));
-  }
-
-  Widget videoText(BuildContext context) {
-    return Text('${videoCount} videos', style: styles.subtitle(context));
-  }
-
   Widget get image {
-    return ClipRect(
-      child: Align(
-        heightFactor: 0.76,
-        child: Image.network(
-          thumbnail.url,
+    return InkWell(
+      onTap: onThumbnailTap,
+      child: ClipRect(
+        child: Align(
+          heightFactor: vertical ? 1 : 0.76,
+          child: Image.network(
+            thumbnail.url,
+          ),
         ),
       ),
     );
