@@ -56,9 +56,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _buildItem(PlaylistModel playlist) {
-    final subtitle = playlist.channelSubscribers == null
-        ? playlist.channelTitle
-        : '${playlist.channelTitle}\n${playlist.channelSubscribers} subscribers';
+    final subtitle = playlist.channel.subscriberCount == null
+        ? playlist.channel.title
+        : '${playlist.channel.title}\n${playlist.channel.subscriberCount} subscribers';
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Column(
@@ -90,7 +90,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               CircleAvatar(
                 radius: 24,
                 backgroundImage: NetworkImage(
-                  playlist.channelThumbnails.default_.url,
+                  playlist.channel.thumbnails.default_.url,
                 ),
               ),
               SizedBox(width: 8),

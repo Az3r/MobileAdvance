@@ -69,7 +69,7 @@ class _SliverChannelCoursesState extends State<SliverChannelCourses> {
                 overflow: TextOverflow.ellipsis,
               ),
               subtitle: Text(
-                  '${playlist.channelTitle}\n${playlist.videoCount} videos'),
+                  '${playlist.channel.title}\n${playlist.videoCount} videos'),
             ),
           ),
         ],

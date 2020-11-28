@@ -29,6 +29,18 @@ class ChannelModel {
     this.unsubscribedTrailer,
   });
 
+  factory ChannelModel.fromChannel(Channel item) {
+    return ChannelModel(
+      id: item.id,
+      description: item.snippet.description,
+      profileColor: item.brandingSettings.channel.profileColor,
+      subscriberCount: int.parse(item.statistics.subscriberCount ?? ''),
+      thumbnails: item.snippet.thumbnails,
+      title: item.brandingSettings.channel.title,
+      unsubscribedTrailer: item.brandingSettings.channel.unsubscribedTrailer,
+    );
+  }
+
   factory ChannelModel.fromJson(Map<String, dynamic> json) =>
       _$ChannelModelFromJson(json);
   Map<String, dynamic> toJson() => _$ChannelModelToJson(this);

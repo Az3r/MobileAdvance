@@ -29,9 +29,6 @@ dependencies:
   # http
   http: ^0.12.2
   
-  # staggered animations
-  flutter_staggered_animations: ^0.1.2
-
   # firebase plugins
   firebase_core: ^0.5.2
   firebase_analytics: ^6.2.0

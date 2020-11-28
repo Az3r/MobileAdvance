@@ -49,8 +49,10 @@ class VideoService {
     );
     for (final item in res.items) {
       final playlist = PlaylistModel(
-        channelId: channelId,
-        channelTitle: item.snippet.channelTitle,
+        channel: ChannelModel(
+          title: item.snippet.channelTitle,
+          id: item.snippet.channelId,
+        ),
         id: item.id,
         thumbnails: item.snippet.thumbnails,
         title: item.snippet.title,
@@ -135,15 +137,7 @@ class VideoService {
     );
 
     for (final item in res.items) {
-      final channel = ChannelModel(
-        id: item.id,
-        description: item.brandingSettings.channel.description,
-        profileColor: item.brandingSettings.channel.profileColor,
-        subscriberCount: int.parse(item.statistics.subscriberCount),
-        thumbnails: item.snippet.thumbnails,
-        title: item.brandingSettings.channel.title,
-        unsubscribedTrailer: item.brandingSettings.channel.unsubscribedTrailer,
-      );
+      final channel = ChannelModel.fromChannel(item);
       log.v(channel.toJson());
       yield channel;
     }
@@ -152,34 +146,19 @@ class VideoService {
   Stream<ChannelModel> findFeaturedChannels(String channelId) async* {}
 
   Stream<PlaylistModel> getPlaylistDetails(List<String> playlistIds) async* {
-    Future<Channel> getChannelThumbnails(String channelId) async {
-      final res = await _youtube.channels.list(
-        '$partSnippet,$partStatistics',
-        id: channelId,
-        maxResults: 1,
-      );
-      return res.items.first;
-    }
-
     final res = await _youtube.playlists.list(
       '$partSnippet, $partContentDetails',
       id: playlistIds.join(','),
       maxResults: playlistIds.length,
     );
     for (final item in res.items) {
-      final channel = await getChannelThumbnails(item.snippet.channelId);
-      final subscriberHidden = channel.statistics.hiddenSubscriberCount;
+      final channel = await findChannels([item.snippet.channelId]).first;
       final playlist = PlaylistModel(
-        channelId: item.snippet.channelId,
-        channelTitle: item.snippet.channelTitle,
+        channel: channel,
         id: item.id,
-        channelThumbnails: channel.snippet.thumbnails,
-        thumbnails: item.snippet.thumbnails,
         title: item.snippet.title,
+        thumbnails: item.snippet.thumbnails,
         videoCount: item.contentDetails.itemCount,
-        channelSubscribers: subscriberHidden
-            ? null
-            : int.parse(channel.statistics.subscriberCount),
       );
       log.v(playlist.toJson());
       yield playlist;
