@@ -118,12 +118,9 @@ class _ChannelThumbnailState extends State<ChannelThumbnail> {
   }
 
   Widget get button {
-    return RaisedButton.icon(
+    return RaisedButton(
       color: subscribed ? Colors.grey[800] : Theme.of(context).primaryColor,
-      icon: subscribed
-          ? Icon(Icons.notifications_active)
-          : Icon(Icons.notifications),
-      label: subscribed
+      child: subscribed
           ? Text('UNFOLLOW', style: TextStyle(color: Colors.black))
           : Text('FOLLOW'),
       onPressed: _onPressed,

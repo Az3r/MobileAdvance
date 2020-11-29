@@ -1,6 +1,7 @@
 import 'package:SingularSight/components/thumbnails.dart';
-import 'package:SingularSight/components/channel/channel_courses.dart';
+import 'package:SingularSight/components/channel_courses.dart';
 import 'package:SingularSight/models/channel_model.dart';
+import 'package:SingularSight/services/locator_service.dart';
 import 'package:flutter/material.dart';
 
 class ChannelDetails extends StatefulWidget {
@@ -63,7 +64,11 @@ class _ChannelDetailsState extends State<ChannelDetails> {
               color: Colors.white24,
             ),
           ),
-          SliverChannelCourses(channelId: widget.channel.id),
+          SliverChannelPlaylists(
+            stream: LocatorService()
+                .youtube
+                .findPlaylistByChannel(widget.channel.id),
+          )
         ],
       ),
     );
@@ -72,7 +77,7 @@ class _ChannelDetailsState extends State<ChannelDetails> {
   Color get profileColor {
     return widget.channel.profileColor == '#000000'
         ? null
-        : Color(
-            int.parse(widget.channel.profileColor.replaceRange(0, 1, '0xFF')));
+        : Color(int.tryParse(
+            widget.channel.profileColor.replaceRange(0, 1, '0xFF')));
   }
 }

@@ -1,4 +1,4 @@
-import 'package:SingularSight/components/widgets/logo.dart';
+import 'package:SingularSight/components/logo.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:SingularSight/utilities/globals.dart';
 import 'package:flutter/material.dart';

@@ -1,3 +1,4 @@
+import 'package:SingularSight/components/animations.dart';
 import 'package:SingularSight/components/thumbnails.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
@@ -17,7 +18,7 @@ class _HomeState extends State<Home> {
   final users = LocatorService().users;
 
   final _list = GlobalKey<AnimatedListState>();
-  final playlists = <PlaylistModel>[];
+  final _playlists = <PlaylistModel>[];
 
   @override
   void initState() {
@@ -27,8 +28,8 @@ class _HomeState extends State<Home> {
 
   Future<void> load() async {
     youtube.searchPlaylists(pageSize: 10).forEach((value) {
-      playlists.add(value);
-      _list.currentState.insertItem(playlists.length - 1);
+      _playlists.add(value);
+      _list.currentState.insertItem(_playlists.length - 1);
     });
   }
 
@@ -40,16 +41,9 @@ class _HomeState extends State<Home> {
         key: _list,
         scrollDirection: Axis.vertical,
         itemBuilder: (context, index, animation) {
-          return FadeTransition(
-            opacity: Tween(begin: 0.0, end: 1.0)
-                .chain(CurveTween(curve: Curves.easeInOut))
-                .animate(animation),
-            child: SlideTransition(
-              position: Tween(begin: Offset(0, -0.10), end: Offset.zero)
-                  .chain(CurveTween(curve: Curves.easeInOut))
-                  .animate(animation),
-              child: _buildItem(playlists[index]),
-            ),
+          return SlideDownWithFade(
+            animation: animation,
+            child: _buildItem(_playlists[index]),
           );
         },
       ),
@@ -87,8 +81,8 @@ class _HomeState extends State<Home> {
   bool get wantKeepAlive => false;
 
   Future<void> _refreshList() async {
-    while (playlists.isNotEmpty) {
-      final item = playlists.removeAt(0);
+    while (_playlists.isNotEmpty) {
+      final item = _playlists.removeAt(0);
       _list.currentState.removeItem(
         0,
         (context, animation) => FadeTransition(
