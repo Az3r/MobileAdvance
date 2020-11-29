@@ -1,4 +1,4 @@
-import 'package:SingularSight/components/widgets/logo.dart';
+import 'package:SingularSight/components/logo.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' show pi;
 

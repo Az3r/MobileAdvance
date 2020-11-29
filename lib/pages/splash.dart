@@ -2,7 +2,7 @@ import 'package:SingularSight/utilities/constants.dart';
 import 'package:SingularSight/utilities/globals.dart';
 import 'package:flutter/material.dart';
 
-import '../components/widgets/loading.dart';
+import '../components/loading.dart';
 
 class Splash extends StatelessWidget {
   const Splash();

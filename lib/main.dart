@@ -64,7 +64,7 @@ class _MainAppState extends State<MainApp> {
         ),
       ),
       themeMode: ThemeMode.dark,
-      initialRoute: RouteNames.dashboard,
+      initialRoute: RouteNames.watch,
       routes: {
         '/': (context) => const Splash(),
         RouteNames.dashboard: (context) => const Dashboard(),

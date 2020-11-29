@@ -68,6 +68,7 @@ class _ChannelThumbnailState extends State<ChannelThumbnail> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             title,
+            SizedBox(height: 4),
             if (widget.subscribers != null) subtitle,
           ],
         ),
@@ -192,6 +193,7 @@ class PlaylistThumbnail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title, style: styles.title(context)),
+              SizedBox(height: 4),
               Text(channelTitle, style: styles.subtitle(context)),
               if (videoCount != null)
                 Text('${videoCount} videos', style: styles.subtitle(context)),

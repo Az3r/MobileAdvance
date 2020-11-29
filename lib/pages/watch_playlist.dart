@@ -1,8 +1,15 @@
+import 'dart:io';
+
+import 'package:SingularSight/components/thumbnails.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
+import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../styles/texts.dart' as styles;
 import 'dart:math' show Random;
 
 class WatchPlaylist extends StatefulWidget {
@@ -82,56 +89,61 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
               Expanded(
                 child: CustomScrollView(
                   slivers: [
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          Text(_currentVideo.title),
-                          Row(
-                            children: [
-                              Text(
-                                  '${_currentVideo.viewCount.toString()} views'),
-                              Text(_currentVideo.publishedAt
-                                  .toLocal()
-                                  .toString()),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
+                    SliverPadding(
+                      padding: EdgeInsets.all(16.0),
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            Row(
                               children: [
-                                Icon(Icons.thumb_up),
-                                if (_currentVideo.likeCount != null)
-                                  Text(_currentVideo.likeCount.toString()),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 3 / 4,
+                                  child: Text(
+                                    _currentVideo.title,
+                                    style: styles.title(context),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      icon: Icon(Icons.keyboard_arrow_down),
+                                      onPressed: _openDescription,
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.thumb_down),
-                                if (_currentVideo.dislikeCount != null)
-                                  Text(_currentVideo.likeCount.toString()),
-                              ],
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 16.0),
+                              child: videoStatistic,
                             ),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Icon(Icons.bookmark),
-                                Text('Bookmark'),
-                              ],
-                            ),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.add_box),
-                                Text('Add channel'),
+                                videoAction(
+                                  icon: Icon(Icons.thumb_up),
+                                  label:
+                                      Text(_currentVideo.likeCount.toString()),
+                                ),
+                                videoAction(
+                                  icon: Icon(Icons.thumb_down),
+                                  label: Text(
+                                      _currentVideo.dislikeCount.toString()),
+                                ),
+                                videoAction(
+                                  icon: Icon(Icons.bookmark),
+                                  label: Text('Bookmark'),
+                                ),
+                                videoAction(
+                                  icon: Icon(Icons.add),
+                                  label: Text('Add'),
+                                ),
                               ],
                             ),
                           ],
@@ -139,30 +151,31 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
                       ),
                     ),
                     SliverToBoxAdapter(
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 32,
-                            backgroundImage: NetworkImage(
-                                test.channel.thumbnails.default_.url),
+                      child: Divider(color: Colors.white24, thickness: 1),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8,
+                        ),
+                        child: ChannelThumbnail(
+                          isSubscribed: false,
+                          onThumbnailTap: () => Navigator.of(context).pushNamed(
+                            RouteNames.channelDetails,
+                            arguments: test.channel,
                           ),
-                          Expanded(
-                            child: ListTile(
-                              isThreeLine: true,
-                              dense: true,
-                              title: Text(test.channel.title),
-                              subtitle: Text(
-                                test.channel.subscriberCount == null
-                                    ? ''
-                                    : '${test.channel.subscriberCount} subscribers',
-                              ),
-                              trailing: ElevatedButton(
-                                  child: Text("FOLLOW"), onPressed: () {}),
-                            ),
-                          )
-                        ],
+                          thumbnail: test.channel.thumbnails.medium,
+                          thumbnailRadius: 32,
+                          title: test.channel.title,
+                          subscribers: test.channel.subscriberCount,
+                          showSubscribeButton: true,
+                        ),
                       ),
-                    )
+                    ),
+                    SliverToBoxAdapter(
+                      child: Divider(color: Colors.white24, thickness: 1),
+                    ),
                   ],
                 ),
               ),
@@ -172,9 +185,111 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
     );
   }
 
+  Widget get videoStatistic {
+    final views = '${_currentVideo.viewCount.toString()} views';
+    final published = diffFromNow(_currentVideo.publishedAt);
+    return Text('$views - $published', style: styles.subtitle(context));
+  }
+
+  String diffFromNow(DateTime datetime) {
+    final duration = DateTime.now().difference(datetime);
+    if (duration.inDays >= 365)
+      return '${(duration.inDays / 365).ceil()} years ago';
+    else if (duration.inDays >= 30)
+      return '${(duration.inDays / 30).ceil()} months ago';
+    else if (duration.inDays > 0)
+      return '${duration.inDays} days ago';
+    else if (duration.inMinutes >= 60)
+      return '${(duration.inMinutes / 60).ceil()} hours ago';
+    else if (duration.inMinutes > 0)
+      return '${duration.inMinutes} minutes ago';
+    else
+      return '${duration.inSeconds} minutes ago';
+  }
+
+  Widget videoAction({Widget icon, Widget label, VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          icon,
+          SizedBox(height: 8),
+          label,
+        ],
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _player.dispose();
     super.dispose();
+  }
+
+  void _openDescription() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('Description'),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(_currentVideo.title, style: styles.headline(context)),
+                  SizedBox(height: 16),
+                  Text(_currentVideo.description),
+                  SizedBox(height: 32),
+                  RaisedButton.icon(
+                      color: Colors.white,
+                      textColor: Colors.red,
+                      label: Text('OPEN YOUTUBE'),
+                      icon: Icon(
+                        FontAwesomeIcons.youtube,
+                        color: Colors.red,
+                      ),
+                      onPressed: _openYoutubeApp)
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+    ;
+  }
+
+  void _openYoutubeApp() async {
+    final scheme = Platform.isIOS ? 'youtube' : 'https';
+    final url =
+        '$scheme://www.youtube.com/watch?v=${_currentVideo.id}&list=${test.id}';
+    launch(url).catchError((error) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Oopise!'),
+            content: Text('Unable to open youtube app'),
+            actions: [
+              TextButton(
+                child: Text("That's sad!"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          );
+        },
+      );
+    });
   }
 }

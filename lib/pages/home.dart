@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home>  with AutomaticKeepAliveClientMixin {
   final youtube = LocatorService().youtube;
   final users = LocatorService().users;
 
@@ -35,6 +35,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       onRefresh: _refreshList,
       child: AnimatedList(

@@ -1,4 +1,4 @@
-import 'package:SingularSight/components/widgets/drawer.dart';
+import 'package:SingularSight/components/drawer.dart';
 import 'package:SingularSight/pages/featured_channels.dart';
 import 'package:SingularSight/pages/home.dart';
 import 'package:SingularSight/pages/search.dart';
