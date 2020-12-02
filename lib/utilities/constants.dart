@@ -7,6 +7,7 @@ class RouteNames {
   static const String settings = '/settings';
   static const String channelDetails = '/channel-details';
   static const String login = '/login';
+  static const String register = '/register';
   static const String dashboard = '/dashboard';
 }
 

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'components/routings.dart';
 import 'pages/dashboard.dart';
 import 'pages/login.dart';
+import 'pages/register.dart';
 import 'pages/splash.dart';
 
 void main() async {
@@ -64,10 +65,11 @@ class _MainAppState extends State<MainApp> {
         ),
       ),
       themeMode: ThemeMode.dark,
-      initialRoute: RouteNames.watch,
+      initialRoute: RouteNames.login,
       routes: {
         '/': (context) => const Splash(),
         RouteNames.dashboard: (context) => const Dashboard(),
+        RouteNames.register: (context) => const Register(),
       },
       onGenerateRoute: (settings) {
         switch (settings.name) {

@@ -88,7 +88,9 @@ class _LoginFormState extends State<LoginForm> {
   Widget get registerButton {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(primary: Colors.grey),
-      onPressed: _submitting ? null : () {},
+      onPressed: _submitting
+          ? null
+          : () => Navigator.of(context).pushNamed(RouteNames.register),
       child: const Text('REGISTER'),
     );
   }
