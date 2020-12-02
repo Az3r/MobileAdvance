@@ -1,15 +1,15 @@
 
 import 'package:flutter/material.dart';
 
-class Username extends StatefulWidget {
+class EmailField extends StatefulWidget {
   final bool enabled;
-  const Username({Key key, this.enabled}) : super(key: key);
+  const EmailField({Key key, this.enabled}) : super(key: key);
   @override
-  UsernameState createState() => UsernameState();
+  EmailFieldState createState() => EmailFieldState();
 }
 
-class UsernameState extends State<Username> {
-  var username = '';
+class EmailFieldState extends State<EmailField> {
+  var email = '';
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -17,14 +17,14 @@ class UsernameState extends State<Username> {
       textInputAction: TextInputAction.next,
       validator: (s) {
         if (s.isEmpty) return "Field can't be empty!";
-        username = s;
+        email = s;
         return null;
       },
       decoration: InputDecoration(
           filled: true,
           prefixIcon: Icon(Icons.account_circle),
           fillColor: Colors.black54,
-          labelText: 'Username',
+          labelText: 'Email',
           hintText: 'My awesome account'),
     );
   }

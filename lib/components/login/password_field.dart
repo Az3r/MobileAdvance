@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Password extends StatefulWidget {
+class PasswordField extends StatefulWidget {
   final bool enabled;
-  const Password({Key key, this.enabled}) : super(key: key);
+  const PasswordField({Key key, this.enabled}) : super(key: key);
   @override
-  PasswordState createState() => PasswordState();
+  PasswordFieldState createState() => PasswordFieldState();
 }
 
-class PasswordState extends State<Password> {
+class PasswordFieldState extends State<PasswordField> {
   var _hide = true;
   var password = '';
   @override

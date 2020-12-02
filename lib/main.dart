@@ -4,6 +4,7 @@ import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ import 'pages/register.dart';
 import 'pages/splash.dart';
 
 void main() async {
-  await initialize(true);
+  await initialize(false);
   runApp(MainApp());
 }
 
@@ -26,15 +27,12 @@ Future<void> initialize([debug = false]) async {
   // initialize services
   await LocatorService().register();
 
-  // setup cloud firestore
   if (debug) {
     FirebaseFirestore.instance.settings = Settings(
       host: localhost(8080),
       sslEnabled: false,
       persistenceEnabled: true,
     );
-
-    // setup clould functions
     FirebaseFunctions.instance.useFunctionsEmulator(origin: localhost(5001));
   }
 }
@@ -77,7 +75,7 @@ class _MainAppState extends State<MainApp> {
             return Routings.login();
           case RouteNames.channelDetails:
             return Routings.channelDetails(settings.arguments);
-            case RouteNames.watch:
+          case RouteNames.watch:
             return Routings.watch(settings.arguments);
         }
         throw ArgumentError.value(

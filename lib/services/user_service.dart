@@ -1,48 +1,41 @@
 import 'package:SingularSight/utilities/globals.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 import '../utilities/string_utils.dart' show StringUtilities;
-import '../models/user_model.dart';
 
 class UserService {
   UserService();
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
-  final FirebaseFirestore store = FirebaseFirestore.instance;
-  String get loggedUserId => loggedUser?.id;
-  UserModel loggedUser = null;
-
-  Future<UserModel> validate({
-    String username,
-    String password,
-  }) async {
-    username = username.trim();
+  Future<User> login({
+    @required String email,
+    @required String password,
+  }) {
+    // remove whitespaces
+    email = email.trim();
     password = password.trim();
-    return store
-        .collection('users')
-        .where('name', isEqualTo: username)
-        .where('password', isEqualTo: password.hash())
-        .limit(1)
-        .get()
-        .then((value) {
-      if (value.docs.length > 0) {
-        loggedUser = UserModel.fromJson(value.docs.first.data());
-        return loggedUser;
-      }
-      return null;
-    }).catchError((error) {
-      log.e('Failed to validate user', error);
-      return null;
-    });
+
+    return auth
+        .signInWithEmailAndPassword(email: email, password: password.hash())
+        .then((credentials) => credentials.user)
+        .catchError(
+          (error) => log.e('Failed to login for user $email', error),
+          test: (e) => e is PlatformException,
+        )
+        .catchError((e) => log.e('Unknown error', e), test: (e) => false);
   }
 
-  Future<void> add() async {
-    return store
-        .collection('users')
-        .add({
-          'full_name': 'Az3r', // John Doe
-          'company': 'single player company', // Stokes and Sons
-          'age': 42 // 42
-        })
-        .then((value) => log.i('User "Az3r" added'))
-        .catchError((error) => log.e('Failed to add user: $error'));
+  Future<User> register({
+    @required String password,
+    @required String email,
+  }) {
+    return auth
+        .createUserWithEmailAndPassword(email: email, password: password.hash())
+        .then((credentials) => credentials.user)
+        .catchError(
+          (error) => log.e("Failed to resgister user", error),
+          test: (e) => e is FirebaseAuthException,
+        );
   }
 }

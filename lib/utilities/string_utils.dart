@@ -2,6 +2,7 @@ import 'dart:convert' show utf8;
 import 'package:crypto/crypto.dart' show sha512;
 
 extension StringUtilities on String {
+  /// SHA-512 hashing algorithm
   String hash() {
     return sha512.convert(utf8.encode(this)).toString();
   }

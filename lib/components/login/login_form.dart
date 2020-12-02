@@ -1,11 +1,12 @@
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
+import 'package:SingularSight/utilities/globals.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'password.dart';
-import 'remember_me.dart';
+import 'password_field.dart';
 import 'spinning_logo.dart';
-import 'username.dart';
+import 'email_field.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm();
@@ -14,9 +15,8 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final _remember = GlobalKey<RememberMeState>();
-  final _username = GlobalKey<UsernameState>();
-  final _password = GlobalKey<PasswordState>();
+  final _email = GlobalKey<EmailFieldState>();
+  final _password = GlobalKey<PasswordFieldState>();
   final _form = GlobalKey<FormState>();
   var _submitting = false;
   @override
@@ -30,11 +30,9 @@ class _LoginFormState extends State<LoginForm> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Flexible(flex: 20, child: banner),
-            username,
+            email,
             const Spacer(flex: 1),
             password,
-            const Spacer(flex: 1),
-            rememberMe,
             const Spacer(flex: 2),
             loginButton,
             const Spacer(flex: 1),
@@ -46,38 +44,36 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Future<bool> _submit({
+  Future<User> _submit({
     String username,
     String password,
-  }) async {
-    final users = await LocatorService().users;
-    final user = await users.validate(username: username, password: password);
-    return user != null;
+  }) {
+    return LocatorService().users.login(email: username, password: password);
   }
 
   Future<void> _validate() async {
-    if (_form.currentState.validate()) {
-      setState(() => _submitting = true);
-      final success = await _submit(
-        username: _username.currentState.username,
-        password: _password.currentState.password,
-      );
-      if (success) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          RouteNames.dashboard,
-          (route) => false,
-        );
-      } else {
+    final invalid = _form.currentState.validate() == false;
+    if (invalid) return null;
+    setState(() => _submitting = true);
+    return _submit(
+      username: _email.currentState.email,
+      password: _password.currentState.password,
+    ).then((value) {
+      if (value == null) {
+        snackbar('Invalid email or password');
         setState(() => _submitting = false);
-        snackbar('Invalid username or password');
       }
-    }
+      return Navigator.of(context).pushReplacementNamed(RouteNames.dashboard);
+    }).catchError(
+      (error) => Navigator.of(context).pushNamed(
+        RouteNames.error,
+        arguments: () {},
+      ),
+    );
   }
 
-  Widget get username => Username(key: _username, enabled: !_submitting);
-  Widget get password => Password(key: _password, enabled: !_submitting);
-  Widget get rememberMe => RememberMe(key: _remember);
+  Widget get email => EmailField(key: _email, enabled: !_submitting);
+  Widget get password => PasswordField(key: _password, enabled: !_submitting);
   Widget get loginButton {
     return ElevatedButton(
       onPressed: _submitting ? null : _validate,
