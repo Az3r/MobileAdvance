@@ -35,12 +35,6 @@ class RegisterForm extends StatelessWidget {
           children: [
             TextFormField(
               textInputAction: TextInputAction.next,
-              decoration: InputDecoration(
-                labelText: 'Username',
-              ),
-            ),
-            TextFormField(
-              textInputAction: TextInputAction.next,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: 'Email',

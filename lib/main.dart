@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import 'components/routings.dart';
 import 'pages/dashboard.dart';
+import 'pages/error.dart';
 import 'pages/login.dart';
 import 'pages/register.dart';
 import 'pages/splash.dart';
@@ -77,6 +78,8 @@ class _MainAppState extends State<MainApp> {
             return Routings.channelDetails(settings.arguments);
           case RouteNames.watch:
             return Routings.watch(settings.arguments);
+          case RouteNames.error:
+            return Routings.error(settings.arguments);
         }
         throw ArgumentError.value(
           settings.name,

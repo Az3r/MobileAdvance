@@ -62,13 +62,16 @@ class _LoginFormState extends State<LoginForm> {
       if (value == null) {
         snackbar('Invalid email or password');
         setState(() => _submitting = false);
-      }
-      return Navigator.of(context).pushReplacementNamed(RouteNames.dashboard);
+      } else
+        return Navigator.of(context).pushReplacementNamed(RouteNames.dashboard);
     }).catchError(
-      (error) => Navigator.of(context).pushNamed(
-        RouteNames.error,
-        arguments: () {},
-      ),
+      (error) {
+        setState(() => _submitting = false);
+        return Navigator.of(context).pushNamed(
+          RouteNames.error,
+          arguments: () {},
+        );
+      },
     );
   }
 

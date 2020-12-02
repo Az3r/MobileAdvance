@@ -3,27 +3,34 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import '../utilities/string_utils.dart' show StringUtilities;
+import 'exceptions.dart';
 
 class UserService {
   UserService();
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseAuth get auth => FirebaseAuth.instance;
 
   Future<User> login({
     @required String email,
     @required String password,
-  }) {
+  }) async {
     // remove whitespaces
     email = email.trim();
     password = password.trim();
 
-    return auth
-        .signInWithEmailAndPassword(email: email, password: password.hash())
-        .then((credentials) => credentials.user)
-        .catchError(
-          (error) => log.e('Failed to login for user $email', error),
-          test: (e) => e is PlatformException,
-        )
-        .catchError((e) => log.e('Unknown error', e), test: (e) => false);
+    try {
+      final credentials = await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password.hash(),
+      );
+      return credentials.user;
+    } on FirebaseAuthException catch (authException) {
+      if (authException.code == 'unknown') throw NetworkException();
+      log.i('Failed to login, email is $email');
+      return null;
+    } catch (e) {
+      log.e('Unknown exception', e);
+      rethrow;
+    }
   }
 
   Future<User> register({
@@ -38,4 +45,6 @@ class UserService {
           test: (e) => e is FirebaseAuthException,
         );
   }
+
+  Future<void> logout() => auth.signOut();
 }
