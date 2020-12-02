@@ -26,7 +26,7 @@ class UserService {
     } on FirebaseAuthException catch (authException) {
       if (authException.code == 'unknown') throw NetworkException();
       log.i('Failed to login, email is $email');
-      return null;
+      rethrow;
     } catch (e) {
       log.e('Unknown exception', e);
       rethrow;

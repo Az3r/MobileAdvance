@@ -69,6 +69,7 @@ class _MainAppState extends State<MainApp> {
         '/': (context) => const Splash(),
         RouteNames.dashboard: (context) => const Dashboard(),
         RouteNames.register: (context) => const Register(),
+        RouteNames.error: (context) => const NetworkError(),
       },
       onGenerateRoute: (settings) {
         switch (settings.name) {
@@ -78,8 +79,6 @@ class _MainAppState extends State<MainApp> {
             return Routings.channelDetails(settings.arguments);
           case RouteNames.watch:
             return Routings.watch(settings.arguments);
-          case RouteNames.error:
-            return Routings.error(settings.arguments);
         }
         throw ArgumentError.value(
           settings.name,

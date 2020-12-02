@@ -30,13 +30,6 @@ class Routings {
       settings: RouteSettings(name: RouteNames.watch),
     );
   }
-
-  static Route<dynamic> error(VoidCallback callback) {
-    return MaterialPageRoute(
-      builder: (context) => NetworkError(callback: callback),
-      settings: RouteSettings(name: RouteNames.error, arguments: callback),
-    );
-  }
 }
 
 class LongerMaterialPageRoute extends MaterialPageRoute {

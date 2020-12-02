@@ -1,7 +1,7 @@
 class RouteNames {
+  RouteNames._();
   static const String watch = '/watch';
   static const String error = '/error';
-  RouteNames._();
   static const String bookmarks = '/bookmarks';
   static const String channels = '/featured-channels';
   static const String settings = '/settings';

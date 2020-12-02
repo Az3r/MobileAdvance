@@ -1,6 +1,6 @@
+import 'package:SingularSight/services/exceptions.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
-import 'package:SingularSight/utilities/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -44,35 +44,38 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Future<User> _submit({
-    String username,
+  Future<void> _submit({
+    String email,
     String password,
-  }) {
-    return LocatorService().users.login(email: username, password: password);
+  }) async {
+    await LocatorService().users.login(
+          email: email,
+          password: password,
+        );
+    return Navigator.of(context).pushNamed(RouteNames.dashboard);
   }
 
   Future<void> _validate() async {
     final invalid = _form.currentState.validate() == false;
-    if (invalid) return null;
+    if (invalid) return Future<void>.value();
     setState(() => _submitting = true);
-    return _submit(
-      username: _email.currentState.email,
-      password: _password.currentState.password,
-    ).then((value) {
-      if (value == null) {
-        snackbar('Invalid email or password');
-        setState(() => _submitting = false);
-      } else
-        return Navigator.of(context).pushReplacementNamed(RouteNames.dashboard);
-    }).catchError(
-      (error) {
-        setState(() => _submitting = false);
-        return Navigator.of(context).pushNamed(
-          RouteNames.error,
-          arguments: () {},
-        );
-      },
-    );
+    try {
+      await _submit(
+        email: _email.currentState.email,
+        password: _password.currentState.password,
+      );
+    } on FirebaseAuthException {
+      showSnackBar('Invalid email or password');
+    } on NetworkException {
+      final retry = await Navigator.of(context).pushNamed(RouteNames.error);
+      if (retry) return _validate();
+    } catch (e) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => ErrorWidget(e)),
+      );
+    } finally {
+      setState(() => _submitting = false);
+    }
   }
 
   Widget get email => EmailField(key: _email, enabled: !_submitting);
@@ -120,11 +123,18 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void snackbar(String msg) {
+  void showSnackBar(String msg) {
     Future.value(Scaffold.of(context)).then((scaffold) {
       scaffold.removeCurrentSnackBar();
       scaffold.showSnackBar(SnackBar(
-        content: Text(msg),
+        content: Row(
+          children: [
+            Icon(Icons.warning, color: Colors.yellow),
+            SizedBox(width: 8),
+            Text(msg),
+          ],
+        ),
+        backgroundColor: Colors.red,
       ));
     });
   }
