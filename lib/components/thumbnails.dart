@@ -140,6 +140,7 @@ class VideoThumbnail extends StatelessWidget {
   final String title;
   final String channelTitle;
   final int viewCount;
+  final Duration duration;
   final DateTime publishedAt;
 
   const VideoThumbnail({
@@ -148,11 +149,43 @@ class VideoThumbnail extends StatelessWidget {
     this.title,
     this.channelTitle,
     this.viewCount,
+    this.duration,
     this.publishedAt,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Row(
+      children: [
+        Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.network(thumbnail.url),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                alignment: Alignment.center,
+                height: thumbnail.height.toDouble(),
+                child: Text(
+                  '${duration.toString()}',
+                  style: styles.title(context),
+                ),
+                color: Colors.black.withOpacity(0.8),
+              ),
+            )
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: styles.title(context)),
+            SizedBox(height: 4),
+            Text(channelTitle, style: styles.subtitle(context)),
+            if (viewCount != null)
+              Text('$viewCount views', style: styles.subtitle(context)),
+          ],
+        )
+      ],
+    );
   }
 }
 
