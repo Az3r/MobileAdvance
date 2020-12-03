@@ -36,14 +36,38 @@ class UserService {
   Future<User> register({
     @required String password,
     @required String email,
-  }) {
-    return auth
-        .createUserWithEmailAndPassword(email: email, password: password.hash())
-        .then((credentials) => credentials.user)
-        .catchError(
-          (error) => log.e("Failed to resgister user", error),
-          test: (e) => e is FirebaseAuthException,
-        );
+  }) async {
+    try {
+      email = email.trim();
+      password = password.trim();
+      final credentials = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password.hash(),
+      );
+      return credentials.user;
+    } on FirebaseAuthException catch (authException) {
+      if (authException.code == 'unknown') throw NetworkException();
+      log.i('Failed to register, email is $email');
+      rethrow;
+    } catch (e) {
+      log.e('Unknown exception', e);
+      rethrow;
+    }
+  }
+
+  Future<bool> ifEmailExists(String email) async {
+    try {
+      email = email.trim();
+      final list = await auth.fetchSignInMethodsForEmail(email);
+      return list.isNotEmpty;
+    } on FirebaseAuthException catch (authException) {
+      if (authException.code == 'unknown') throw NetworkException();
+      log.i('Email not found, email is $email');
+      rethrow;
+    } catch (e) {
+      log.e('Unknown exception', e);
+      rethrow;
+    }
   }
 
   Future<void> logout() => auth.signOut();
