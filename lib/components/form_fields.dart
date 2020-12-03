@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 
 class EmailField extends StatefulWidget {
   final bool enabled;
-  EmailField({Key key, this.enabled}) : super(key: key);
+  final bool readOnly;
+  EmailField({
+    Key key,
+    this.enabled = true,
+    this.readOnly = false,
+  }) : super(key: key);
   @override
   EmailFieldState createState() => EmailFieldState();
 }
@@ -14,6 +19,7 @@ class EmailFieldState extends State<EmailField> {
   Widget build(BuildContext context) {
     return TextFormField(
       enabled: widget.enabled,
+      readOnly: widget.readOnly,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       validator: (s) {
@@ -35,6 +41,7 @@ class EmailFieldState extends State<EmailField> {
 
 class PasswordField extends StatefulWidget {
   final bool enabled;
+  final bool readOnly;
   final String label;
   final TextInputAction action;
   final String Function(String s) validator;
@@ -43,7 +50,8 @@ class PasswordField extends StatefulWidget {
     this.label = 'Password',
     this.action = TextInputAction.done,
     this.validator,
-    this.enabled,
+    this.enabled = true,
+    this.readOnly = false,
   }) : super(key: key);
   @override
   PasswordFieldState createState() => PasswordFieldState();
@@ -56,6 +64,7 @@ class PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     return TextFormField(
       enabled: widget.enabled,
+      readOnly: widget.readOnly,
       textInputAction: widget.action,
       obscureText: _hide,
       validator: (s) {
@@ -80,9 +89,11 @@ class PasswordFieldState extends State<PasswordField> {
 
 class NameField extends StatefulWidget {
   final bool enabled;
+  final bool readOnly;
   const NameField({
     Key key,
-    this.enabled,
+    this.enabled = true,
+    this.readOnly = false,
   }) : super(key: key);
   @override
   NameFieldState createState() => NameFieldState();
@@ -94,6 +105,7 @@ class NameFieldState extends State<NameField> {
   Widget build(BuildContext context) {
     return TextFormField(
       enabled: widget.enabled,
+      readOnly: widget.readOnly,
       keyboardType: TextInputType.name,
       textInputAction: TextInputAction.next,
       validator: (s) {

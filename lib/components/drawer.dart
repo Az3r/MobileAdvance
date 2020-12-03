@@ -40,7 +40,6 @@ class _UserDrawerState extends State<UserDrawer> {
           StreamBuilder<User>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
-                if (snapshot.hasData) log.i(snapshot.data.toString());
                 final state = snapshot.hasData
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst;

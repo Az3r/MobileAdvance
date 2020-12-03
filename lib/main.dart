@@ -13,6 +13,7 @@ import 'pages/dashboard.dart';
 import 'pages/error.dart';
 import 'pages/login.dart';
 import 'pages/register.dart';
+import 'pages/settings.dart';
 import 'pages/splash.dart';
 
 void main() async {
@@ -70,6 +71,7 @@ class _MainAppState extends State<MainApp> {
         RouteNames.dashboard: (context) => const Dashboard(),
         RouteNames.register: (context) => const Register(),
         RouteNames.error: (context) => const NetworkError(),
+        RouteNames.settings: (context) => const UserSettings(),
       },
       onGenerateRoute: (settings) {
         switch (settings.name) {
