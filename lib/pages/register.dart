@@ -55,6 +55,7 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   final _form = GlobalKey<FormState>();
+  final _name = GlobalKey<NameFieldState>();
   final _email = GlobalKey<EmailFieldState>();
   final _password = GlobalKey<PasswordFieldState>();
   final _confirmPassword = GlobalKey<PasswordFieldState>();
@@ -71,9 +72,14 @@ class _RegisterFormState extends State<RegisterForm> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Flexible(flex: 20, child: banner),
+              NameField(
+                key: _name,
+                enabled: !_submitting,
+              ),
+              Spacer(flex: 1),
               emailField,
               Spacer(flex: 1),
-              PasswordField(key: _password, enabled: !_submitting),
+              passwordField,
               Spacer(flex: 1),
               confirmPasswordField,
               Spacer(flex: 2),
@@ -109,6 +115,14 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
+  Widget get passwordField {
+    return PasswordField(
+      key: _password,
+      enabled: !_submitting,
+      action: TextInputAction.next,
+    );
+  }
+
   Widget get confirmPasswordField {
     return PasswordField(
       key: _confirmPassword,
@@ -138,8 +152,10 @@ class _RegisterFormState extends State<RegisterForm> {
 
   Future<void> _submit() async {
     final email = _email.currentState.email;
+    final name = _name.currentState.name;
     final password = _password.currentState.password;
     await LocatorService().users.register(
+          name: name,
           email: email,
           password: password,
         );

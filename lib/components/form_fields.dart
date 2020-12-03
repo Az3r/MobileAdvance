@@ -3,12 +3,7 @@ import 'package:flutter/material.dart';
 
 class EmailField extends StatefulWidget {
   final bool enabled;
-  final String Function(String s) validator;
-  EmailField({
-    Key key,
-    this.enabled,
-    this.validator,
-  }) : super(key: key);
+  EmailField({Key key, this.enabled}) : super(key: key);
   @override
   EmailFieldState createState() => EmailFieldState();
 }
@@ -30,7 +25,7 @@ class EmailFieldState extends State<EmailField> {
       },
       decoration: InputDecoration(
           filled: true,
-          prefixIcon: Icon(Icons.account_circle),
+          prefixIcon: Icon(Icons.email),
           fillColor: Colors.black54,
           labelText: 'Email',
           hintText: 'My awesome account'),
@@ -79,6 +74,39 @@ class PasswordFieldState extends State<PasswordField> {
           fillColor: Colors.black54,
           labelText: widget.label,
           hintText: 'My sercret awesome password'),
+    );
+  }
+}
+
+class NameField extends StatefulWidget {
+  final bool enabled;
+  const NameField({
+    Key key,
+    this.enabled,
+  }) : super(key: key);
+  @override
+  NameFieldState createState() => NameFieldState();
+}
+
+class NameFieldState extends State<NameField> {
+  var name = '';
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      enabled: widget.enabled,
+      keyboardType: TextInputType.name,
+      textInputAction: TextInputAction.next,
+      validator: (s) {
+        if (s.isEmpty) return "Field can't be empty!";
+        name = s;
+        return null;
+      },
+      decoration: InputDecoration(
+          filled: true,
+          prefixIcon: Icon(Icons.account_circle),
+          fillColor: Colors.black54,
+          labelText: "Username",
+          hintText: 'My awesome name'),
     );
   }
 }

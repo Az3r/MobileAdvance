@@ -1,6 +1,7 @@
 import 'package:SingularSight/components/logo.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:SingularSight/utilities/globals.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,14 +37,34 @@ class _UserDrawerState extends State<UserDrawer> {
     return Drawer(
       child: ListView(
         children: [
-          UserAccountsDrawerHeader(
-            accountName: Text('Az3r'),
-            accountEmail: Text('myemail@gmail.com'),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://avatarfiles.alphacoders.com/261/261533.jpg'),
-            ),
-          ),
+          StreamBuilder<User>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) log.i(snapshot.data.toString());
+                final state = snapshot.hasData
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst;
+                return AnimatedCrossFade(
+                  firstChild: SizedBox(
+                    height: 128,
+                    width: 128,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  secondChild: UserAccountsDrawerHeader(
+                    accountName: Text(snapshot.data?.displayName ?? 'Guest'),
+                    accountEmail:
+                        Text(snapshot.data?.email ?? 'Anonymous user'),
+                    currentAccountPicture: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        snapshot.data?.photoURL ??
+                            'https://avatarfiles.alphacoders.com/261/261533.jpg',
+                      ),
+                    ),
+                  ),
+                  crossFadeState: state,
+                  duration: const Duration(milliseconds: 300),
+                );
+              }),
           ListTile(
             leading: Icon(Icons.bookmarks),
             title: Text('Saved bookmarks'),

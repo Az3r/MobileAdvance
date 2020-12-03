@@ -34,6 +34,7 @@ class UserService {
   }
 
   Future<User> register({
+    @required String name,
     @required String password,
     @required String email,
   }) async {
@@ -45,7 +46,10 @@ class UserService {
         password: password.hash(),
       );
       log.i('Login successfully, email $email');
-      return credentials.user;
+      return credentials.user..updateProfile(
+        displayName: name,
+        photoURL: 'https://avatarfiles.alphacoders.com/261/261533.jpg'
+      );
     } on FirebaseAuthException catch (authException) {
       if (authException.code == 'unknown') throw NetworkException();
       log.i('Failed to register, email is $email');
