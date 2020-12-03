@@ -44,6 +44,7 @@ class UserService {
         email: email,
         password: password.hash(),
       );
+      log.i('Login successfully, email $email');
       return credentials.user;
     } on FirebaseAuthException catch (authException) {
       if (authException.code == 'unknown') throw NetworkException();

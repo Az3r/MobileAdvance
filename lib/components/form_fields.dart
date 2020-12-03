@@ -22,16 +22,11 @@ class EmailFieldState extends State<EmailField> {
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       validator: (s) {
-        final validator = widget.validator ??
-            (s) {
-              if (s.isEmpty)
-                return "Field can't be empty!";
-              else if (!s.isEmail()) return 'Incorrect email format';
-              return null;
-            };
-        final result = validator(s);
-        if (result != null) email = s;
-        return result;
+        if (s.isEmpty)
+          return "Field can't be empty!";
+        else if (!s.isEmail()) return 'Incorrect email format';
+        email = s;
+        return null;
       },
       decoration: InputDecoration(
           filled: true,
@@ -84,39 +79,6 @@ class PasswordFieldState extends State<PasswordField> {
           fillColor: Colors.black54,
           labelText: widget.label,
           hintText: 'My sercret awesome password'),
-    );
-  }
-}
-
-class NumberField extends StatefulWidget {
-  final bool enabled;
-  final bool Function(String code) onVerify;
-  const NumberField({
-    Key key,
-    this.enabled,
-    this.onVerify,
-  }) : super(key: key);
-  @override
-  NumberFieldState createState() => NumberFieldState();
-}
-
-class NumberFieldState extends State<NumberField> {
-  var number = '';
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      enabled: widget.enabled,
-      validator: (s) {
-        if (s.isEmpty) return 'Please check your email';
-        number = s;
-        return null;
-      },
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: InputDecoration(
-          suffixIcon: Icon(Icons.close),
-          filled: true,
-          fillColor: Colors.black54,
-          hintText: '123456'),
     );
   }
 }

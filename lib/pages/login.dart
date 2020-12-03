@@ -1,5 +1,8 @@
 import 'package:SingularSight/components/form_fields.dart';
+import '../utilities/string_utils.dart';
+import '../utilities/snack_bar_utils.dart';
 import 'package:SingularSight/components/logo.dart';
+import 'package:SingularSight/components/snack_bar.dart';
 import 'package:SingularSight/services/exceptions.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
@@ -48,7 +51,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _email = GlobalKey<EmailFieldState>();
-  final _password = GlobalKey<NumberFieldState>();
+  final _password = GlobalKey<PasswordFieldState>();
   final _form = GlobalKey<FormState>();
   var _submitting = false;
   @override
@@ -94,10 +97,14 @@ class _LoginFormState extends State<LoginForm> {
     try {
       await _submit(
         email: _email.currentState.email,
-        password: _password.currentState.number,
+        password: _password.currentState.password,
       );
-    } on FirebaseAuthException {
-      showSnackBar('Invalid email or password');
+    } on FirebaseAuthException catch (authException) {
+      final error = authException.code.capitalize().replaceAll(
+            new RegExp(r'-'),
+            ' ',
+          );
+      ErrorSnackBar(label: error).show(context);
     } on NetworkException {
       final retry = await Navigator.of(context).pushNamed(RouteNames.error);
       if (retry) return _validate();
@@ -153,21 +160,5 @@ class _LoginFormState extends State<LoginForm> {
         )
       ],
     );
-  }
-
-  void showSnackBar(String msg) {
-    Future.value(Scaffold.of(context)).then((scaffold) {
-      scaffold.removeCurrentSnackBar();
-      scaffold.showSnackBar(SnackBar(
-        content: Row(
-          children: [
-            Icon(Icons.warning, color: Colors.yellow),
-            SizedBox(width: 8),
-            Text(msg),
-          ],
-        ),
-        backgroundColor: Colors.red,
-      ));
-    });
   }
 }

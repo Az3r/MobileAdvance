@@ -1,5 +1,8 @@
 import 'package:SingularSight/components/form_fields.dart';
+import '../utilities/snack_bar_utils.dart';
 import 'package:SingularSight/components/logo.dart';
+import '../utilities/string_utils.dart';
+import 'package:SingularSight/components/snack_bar.dart';
 import 'package:SingularSight/services/exceptions.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
@@ -61,7 +64,6 @@ class _RegisterFormState extends State<RegisterForm> {
     return AbsorbPointer(
       absorbing: _submitting,
       child: Form(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
         key: _form,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -69,7 +71,7 @@ class _RegisterFormState extends State<RegisterForm> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Flexible(flex: 20, child: banner),
-              EmailField(enabled: !_submitting, key: _email),
+              emailField,
               Spacer(flex: 1),
               PasswordField(key: _password, enabled: !_submitting),
               Spacer(flex: 1),
@@ -82,6 +84,10 @@ class _RegisterFormState extends State<RegisterForm> {
         ),
       ),
     );
+  }
+
+  Widget get emailField {
+    return EmailField(enabled: !_submitting, key: _email);
   }
 
   Widget get banner {
@@ -117,11 +123,9 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   Widget get registerButton {
-    return SizedBox(
-      child: ElevatedButton(
-        child: Text('REGISTER'),
-        onPressed: () {},
-      ),
+    return ElevatedButton(
+      child: Text('REGISTER'),
+      onPressed: _submitting ? null : () => _validate(),
     );
   }
 
@@ -148,8 +152,12 @@ class _RegisterFormState extends State<RegisterForm> {
     setState(() => _submitting = true);
     try {
       await _submit();
-    } on FirebaseAuthException {
-      showSnackBar('');
+    } on FirebaseAuthException catch (authException) {
+      final error = authException.code.capitalize().replaceAll(
+            new RegExp(r'-'),
+            ' ',
+          );
+      ErrorSnackBar(label: error).show(context);
     } on NetworkException {
       final retry = await Navigator.of(context).pushNamed(RouteNames.error);
       if (retry) return _validate();
@@ -160,21 +168,5 @@ class _RegisterFormState extends State<RegisterForm> {
     } finally {
       setState(() => _submitting = false);
     }
-  }
-
-  void showSnackBar(String msg) {
-    Future.value(Scaffold.of(context)).then((scaffold) {
-      scaffold.removeCurrentSnackBar();
-      scaffold.showSnackBar(SnackBar(
-        content: Row(
-          children: [
-            Icon(Icons.warning, color: Colors.yellow),
-            SizedBox(width: 8),
-            Text(msg),
-          ],
-        ),
-        backgroundColor: Colors.red,
-      ));
-    });
   }
 }

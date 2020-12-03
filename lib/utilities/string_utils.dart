@@ -35,6 +35,9 @@ extension StringUtilities on String {
     if (this.isEmpty) return false;
     return regex.hasMatch(this);
   }
+  String capitalize() {
+    return this[0].toUpperCase() + this.substring(1);
+  }
 }
 
 int _parseTime(String duration, String timeUnit) {
