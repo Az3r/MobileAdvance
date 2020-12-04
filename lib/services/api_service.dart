@@ -119,6 +119,45 @@ class ApiService {
     }
   }
 
+  Future<ApiResult<PlaylistModel>> searchPlaylists_future(
+    String q, {
+    int n = 10,
+    String order = orderViewCount,
+    String nextToken,
+  }) async {
+    final res = await _youtube.search.list(
+      partId,
+      q: q,
+      pageToken: nextToken,
+      maxResults: n,
+      type: typePlaylist,
+      regionCode: regionVN,
+    );
+
+    final playlistIds = res.items.map((e) => e.id.playlistId).toList();
+    final resPlaylists = await _youtube.playlists.list(
+      '$partSnippet, $partContentDetails',
+      id: playlistIds.join(','),
+      maxResults: playlistIds.length,
+    );
+    return ApiResult<PlaylistModel>(
+        nextToken: res.nextPageToken,
+        prevToken: res.prevPageToken,
+        items: resPlaylists.items
+            .map((item) => PlaylistModel(
+                  channel: ChannelModel(
+                    id: item.snippet.channelId,
+                    title: item.snippet.channelTitle,
+                    thumbnails: item.snippet.thumbnails,
+                  ),
+                  id: item.id,
+                  title: item.snippet.title,
+                  thumbnails: item.snippet.thumbnails,
+                  videoCount: item.contentDetails.itemCount,
+                ))
+            .toList());
+  }
+
   /// search all playlists using the [q] for query term
   /// [q] if null then get query from firestore
   Stream<PlaylistModel> searchPlaylists({

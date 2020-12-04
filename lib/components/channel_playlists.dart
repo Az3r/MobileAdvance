@@ -94,23 +94,26 @@ class SliverPlaylists extends StatefulWidget {
 class SliverPlaylistsState extends State<SliverPlaylists> {
   final youtube = LocatorService().youtube;
   final _list = GlobalKey<SliverAnimatedListState>();
-  final _controller = StreamController<List<PlaylistModel>>();
+  StreamController<List<PlaylistModel>> _controller;
   final _playlists = <PlaylistModel>[];
   ApiResult prev;
 
   @override
   void initState() {
     super.initState();
-    loadMore();
+    _controller = StreamController();
+    loadNext();
   }
 
-  Future<void> loadMore() async {
-    final value = await youtube.findPlaylistByChannel_future(
-      widget.channel,
-      nextToken: prev?.nextToken,
-    );
-    prev = value;
-    _controller.add(value.items);
+  Future<void> loadNext() async {
+    if (prev == null || prev.nextToken != null) {
+      final value = await youtube.findPlaylistByChannel_future(
+        widget.channel,
+        nextToken: prev?.nextToken,
+      );
+      prev = value;
+      _controller.add(value.items);
+    }
   }
 
   @override

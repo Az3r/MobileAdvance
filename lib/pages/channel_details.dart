@@ -35,7 +35,7 @@ class _ChannelDetailsState extends State<ChannelDetails> {
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       body: NotificationListener<ScrollEndNotification>(
         onNotification: (notification) {
-          _playlists.currentState.loadMore();
+          _playlists.currentState.loadNext();
           return true;
         },
         child: CustomScrollView(
