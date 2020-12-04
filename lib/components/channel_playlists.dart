@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:SingularSight/components/animations.dart';
+import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
+import 'package:SingularSight/services/api_service.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:SingularSight/utilities/globals.dart';
@@ -74,47 +77,61 @@ class _ChannelPlaylistsState extends State<ChannelPlaylists> {
   }
 }
 
-class SliverChannelPlaylists extends StatefulWidget {
+class SliverPlaylists extends StatefulWidget {
   final Stream<PlaylistModel> stream;
+  final ChannelModel channel;
 
-  const SliverChannelPlaylists({
+  const SliverPlaylists({
     Key key,
     this.stream,
+    @required this.channel,
   }) : super(key: key);
 
   @override
-  _SliverChannelPlaylistsState createState() => _SliverChannelPlaylistsState();
+  SliverPlaylistsState createState() => SliverPlaylistsState();
 }
 
-class _SliverChannelPlaylistsState extends State<SliverChannelPlaylists> {
+class SliverPlaylistsState extends State<SliverPlaylists> {
   final youtube = LocatorService().youtube;
   final _list = GlobalKey<SliverAnimatedListState>();
-
+  final _controller = StreamController<List<PlaylistModel>>();
   final _playlists = <PlaylistModel>[];
+  ApiResult prev;
 
   @override
   void initState() {
     super.initState();
-    widget.stream.handleError((error, stackTrace) {
-      log.e(
-        'Received error signal from stream',
-        error,
-        stackTrace,
-      );
-    }).forEach((value) {
-      _playlists.add(value);
-      _list.currentState.insertItem(_playlists.length - 1);
-    });
+    loadMore();
+  }
+
+  Future<void> loadMore() async {
+    final value = await youtube.findPlaylistByChannel_future(
+      widget.channel,
+      nextToken: prev?.nextToken,
+    );
+    prev = value;
+    _controller.add(value.items);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SliverAnimatedList(
-      key: _list,
-      itemBuilder: (context, index, animation) {
-        return SlideLeftWithFade(
-          animation: animation,
-          child: _buildItem(_playlists[index]),
+    return StreamBuilder<List<PlaylistModel>>(
+      stream: _controller.stream,
+      builder: (context, snapshot) {
+        if (_list.currentState != null && snapshot.hasData) {
+          for (final item in snapshot.data) {
+            _playlists.add(item);
+            _list.currentState.insertItem(_playlists.length - 1);
+          }
+        }
+        return SliverAnimatedList(
+          key: _list,
+          itemBuilder: (context, index, animation) {
+            return SlideLeftWithFade(
+              animation: animation,
+              child: _buildItem(_playlists[index]),
+            );
+          },
         );
       },
     );
@@ -140,5 +157,11 @@ class _SliverChannelPlaylistsState extends State<SliverChannelPlaylists> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.close();
+    super.dispose();
   }
 }

@@ -41,12 +41,15 @@ class ApiService {
   }
 
   Future<ApiResult<PlaylistModel>> findPlaylistByChannel_future(
-      ChannelModel channel,
-      {int n = 10}) async {
+    ChannelModel channel, {
+    int n = 10,
+    String nextToken,
+  }) async {
     final res = await _youtube.playlists.list(
       '$partId,$partSnippet,$partContentDetails',
       channelId: channel.id,
       maxResults: n,
+      pageToken: nextToken,
     );
     final result = res.items
         .map((e) => PlaylistModel(

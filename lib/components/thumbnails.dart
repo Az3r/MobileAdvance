@@ -296,6 +296,13 @@ class PlaylistThumbnail extends StatelessWidget {
           heightFactor: vertical ? 1 : 0.76,
           child: Image.network(
             thumbnail.url,
+            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+              return SizedBox(
+                width: thumbnail.width.toDouble(),
+                height: thumbnail.height.toDouble(),
+                child: child,
+              );
+            },
           ),
         ),
       ),
