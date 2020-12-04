@@ -37,17 +37,17 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
     final playlists = await LocatorService().playlists;
     test = playlists[Random().nextInt(playlists.length)];
     await youtube.findVideoIdsByPlaylist(test.id).forEach((element) {
-      test.videoIds.add(element);
+      test.videos.add(VideoModel(id: element));
     });
 
     _player = YoutubePlayerController(
-      initialVideoId: test.videoIds[_position],
+      initialVideoId: test.videos[_position].id,
       flags: YoutubePlayerFlags(
         autoPlay: false,
         forceHD: true,
       ),
     );
-    _currentVideo = await youtube.getVideoDetails(test.videoIds[_position]);
+    _currentVideo = await youtube.getVideoDetails(test.videos[_position].id);
 
     return test;
   }
