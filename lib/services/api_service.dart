@@ -9,7 +9,7 @@ import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
 import '../utilities/keys.dart' as keys;
 
-class VideoService {
+class ApiService {
   ///////////////////////////////////////////////////////////
   ///
   /// part paramaters
@@ -35,9 +35,51 @@ class VideoService {
 
   final http.Client client;
   YoutubeApi _youtube;
-  VideoService([String apiKey = keys.youtube])
+  ApiService([String apiKey = keys.youtube])
       : client = clientViaApiKey(keys.youtube) {
     _youtube = YoutubeApi(client);
+  }
+
+  Future<ApiResult<PlaylistModel>> findPlaylistByChannel_future(
+      ChannelModel channel,
+      {int n = 10}) async {
+    final res = await _youtube.playlists.list(
+      '$partId,$partSnippet,$partContentDetails',
+      channelId: channel.id,
+      maxResults: n,
+    );
+    final result = res.items
+        .map((e) => PlaylistModel(
+              channel: channel,
+              id: e.id,
+              thumbnails: e.snippet.thumbnails,
+              title: e.snippet.title,
+              videoCount: e.contentDetails.itemCount,
+            ))
+        .toList();
+    return ApiResult(
+      nextToken: res.nextPageToken,
+      prevToken: res.prevPageToken,
+      results: result,
+    );
+  }
+
+  Future<ApiResult<ChannelModel>> getFeaturedChannels() async {
+    final query = await FirebaseFirestore.instance.collection('channels').get();
+    return getChannelDetails(query.docs.map((e) => e.id).toList());
+  }
+
+  Future<ApiResult<ChannelModel>> getChannelDetails(List<String> ids,
+      {int n = 10}) async {
+    final res = await _youtube.channels.list(
+      '$partSnippet, $partBrandingSettings, $partId, $partStatistics',
+      maxResults: ids.length,
+      id: ids.join(','),
+    );
+    return ApiResult(
+        nextToken: res.nextPageToken,
+        prevToken: res.prevPageToken,
+        results: res.items.map((e) => ChannelModel.fromChannel(e)).toList());
   }
 
   Stream<PlaylistModel> findPlaylistByChannel(String channelId) async* {
@@ -198,4 +240,16 @@ class VideoService {
   void dispose() {
     client.close();
   }
+}
+
+class ApiResult<T> {
+  final String nextToken;
+  final String prevToken;
+  final List<T> results;
+
+  ApiResult({
+    this.nextToken,
+    this.prevToken,
+    this.results,
+  });
 }
