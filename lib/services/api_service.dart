@@ -60,13 +60,25 @@ class ApiService {
     return ApiResult(
       nextToken: res.nextPageToken,
       prevToken: res.prevPageToken,
-      results: result,
+      items: result,
     );
   }
 
+  /// Find all features channels stored in firebase firestore,
+  /// then get details from [YoutubeApi]
   Future<ApiResult<ChannelModel>> getFeaturedChannels() async {
     final query = await FirebaseFirestore.instance.collection('channels').get();
-    return getChannelDetails(query.docs.map((e) => e.id).toList());
+    final ids = query.docs.map((e) => e.id).toList();
+    final res = await _youtube.channels.list(
+      '$partSnippet, $partBrandingSettings, $partId, $partStatistics',
+      maxResults: ids.length,
+      id: ids.join(','),
+    );
+    return ApiResult(
+      nextToken: res.nextPageToken,
+      prevToken: res.prevPageToken,
+      items: res.items.map((e) => ChannelModel.fromChannel(e)).toList(),
+    );
   }
 
   Future<ApiResult<ChannelModel>> getChannelDetails(List<String> ids,
@@ -79,7 +91,7 @@ class ApiService {
     return ApiResult(
         nextToken: res.nextPageToken,
         prevToken: res.prevPageToken,
-        results: res.items.map((e) => ChannelModel.fromChannel(e)).toList());
+        items: res.items.map((e) => ChannelModel.fromChannel(e)).toList());
   }
 
   Stream<PlaylistModel> findPlaylistByChannel(String channelId) async* {
@@ -245,11 +257,11 @@ class ApiService {
 class ApiResult<T> {
   final String nextToken;
   final String prevToken;
-  final List<T> results;
+  final List<T> items;
 
   ApiResult({
     this.nextToken,
     this.prevToken,
-    this.results,
+    this.items,
   });
 }

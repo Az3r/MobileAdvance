@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'user_service.dart';
-import 'video_service.dart';
+import 'api_service.dart';
 
 class LocatorService {
   LocatorService._();
@@ -22,8 +22,8 @@ class LocatorService {
   /// set [samples] to true if you want to load all the sample data for testing
   Future<void> register() async {
     locator.registerSingletonAsync(() async => UserService());
-    locator.registerSingletonAsync<VideoService>(
-      () async => VideoService(),
+    locator.registerSingletonAsync<ApiService>(
+      () async => ApiService(),
       dispose: (param) => param.dispose(),
     );
 
@@ -49,7 +49,7 @@ class LocatorService {
   }
 
   UserService get users => locator.get<UserService>();
-  VideoService get youtube => locator.get<VideoService>();
+  ApiService get youtube => locator.get<ApiService>();
   Future<List<VideoModel>> get videos => locator.getAsync<List<VideoModel>>();
   Future<List<PlaylistModel>> get playlists =>
       locator.getAsync<List<PlaylistModel>>();
