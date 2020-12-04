@@ -47,7 +47,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
   Future<void> loadNext() async {
     if (prev == null || prev.nextToken != null) {
-      final value = await youtube.searchPlaylists_future(
+      final value = await youtube.searchPlaylists(
         skills,
         nextToken: prev?.nextToken,
       );
@@ -101,10 +101,14 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
           RouteNames.watch,
           arguments: playlist,
         ),
-        onChannelThumbnailTap: () => Navigator.of(context).pushNamed(
-          RouteNames.channelDetails,
-          arguments: playlist.channel,
-        ),
+        onChannelThumbnailTap: () =>
+            youtube.getChannel(playlist.channelId).then(
+                  (value) => Navigator.pushNamed(
+                    context,
+                    RouteNames.watch,
+                    arguments: value,
+                  ),
+                ),
       ),
     );
   }

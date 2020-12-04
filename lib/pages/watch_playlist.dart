@@ -36,9 +36,6 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
   Future<PlaylistModel> load() async {
     final playlists = await LocatorService().playlists;
     test = playlists[Random().nextInt(playlists.length)];
-    await youtube.findVideoIdsByPlaylist(test.id).forEach((element) {
-      test.videos.add(VideoModel(id: element));
-    });
 
     _player = YoutubePlayerController(
       initialVideoId: test.videos[_position].id,
@@ -47,7 +44,7 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
         forceHD: true,
       ),
     );
-    _currentVideo = await youtube.getVideoDetails(test.videos[_position].id);
+    _currentVideo = await youtube.getVideo(test.videos[_position].id);
 
     return test;
   }

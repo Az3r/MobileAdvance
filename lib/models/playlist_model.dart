@@ -12,8 +12,6 @@ class PlaylistModel {
   final ThumbnailDetails thumbnails;
   final int videoCount;
   final String channelId;
-  final String channelTitle;
-  final ThumbnailDetails channelThumbnails;
 
   @JsonKey(ignore: true)
   ChannelModel channel;
@@ -23,13 +21,21 @@ class PlaylistModel {
 
   PlaylistModel({
     this.channelId,
-    this.channelTitle,
-    this.channelThumbnails,
     this.id,
     this.title,
     this.thumbnails,
     this.videoCount,
   });
+
+  factory PlaylistModel.fromPlaylist(Playlist item) {
+    return PlaylistModel(
+      id: item.id,
+      channelId: item.snippet.channelId,
+      thumbnails: item.snippet.thumbnails,
+      title: item.snippet.title,
+      videoCount: item.contentDetails.itemCount,
+    );
+  }
 
   factory PlaylistModel.fromJson(Map<String, dynamic> json) =>
       _$PlaylistModelFromJson(json);

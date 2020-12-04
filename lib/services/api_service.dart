@@ -40,7 +40,7 @@ class ApiService {
     _youtube = YoutubeApi(client);
   }
 
-  Future<ApiResult<PlaylistModel>> findPlaylistByChannel_future(
+  Future<ApiResult<PlaylistModel>> getPlaylistsOfChannel(
     ChannelModel channel, {
     int n = 10,
     String nextToken,
@@ -53,12 +53,11 @@ class ApiService {
     );
     final result = res.items
         .map((e) => PlaylistModel(
-              channel: channel,
               id: e.id,
               thumbnails: e.snippet.thumbnails,
               title: e.snippet.title,
               videoCount: e.contentDetails.itemCount,
-            ))
+            )..channel = channel)
         .toList();
     return ApiResult(
       nextToken: res.nextPageToken,
@@ -84,7 +83,7 @@ class ApiService {
     );
   }
 
-  Future<ApiResult<ChannelModel>> getChannelDetails(List<String> ids,
+  Future<ApiResult<ChannelModel>> getChannels(List<String> ids,
       {int n = 10}) async {
     final res = await _youtube.channels.list(
       '$partSnippet, $partBrandingSettings, $partId, $partStatistics',
@@ -97,29 +96,7 @@ class ApiService {
         items: res.items.map((e) => ChannelModel.fromChannel(e)).toList());
   }
 
-  Stream<PlaylistModel> findPlaylistByChannel(String channelId) async* {
-    final res = await _youtube.playlists.list(
-      '$partId,$partSnippet,$partContentDetails',
-      channelId: channelId,
-      maxResults: 50,
-    );
-    for (final item in res.items) {
-      final playlist = PlaylistModel(
-        channel: ChannelModel(
-          title: item.snippet.channelTitle,
-          id: item.snippet.channelId,
-        ),
-        id: item.id,
-        thumbnails: item.snippet.thumbnails,
-        title: item.snippet.title,
-        videoCount: item.contentDetails.itemCount,
-      );
-      log.v(playlist.toJson());
-      yield playlist;
-    }
-  }
-
-  Future<ApiResult<PlaylistModel>> searchPlaylists_future(
+  Future<ApiResult<PlaylistModel>> searchPlaylists(
     String q, {
     int n = 10,
     String order = orderViewCount,
@@ -134,80 +111,25 @@ class ApiService {
       regionCode: regionVN,
     );
 
-    final playlistIds = res.items.map((e) => e.id.playlistId).toList();
-    final resPlaylists = await _youtube.playlists.list(
-      '$partSnippet, $partContentDetails',
-      id: playlistIds.join(','),
-      maxResults: playlistIds.length,
+    final channels =
+        res.items.map((e) => getChannel(e.snippet.channelId)).toList();
+    final playlists =
+        res.items.map((e) => getPlaylist(e.id.playlistId)).toList();
+
+    final items = [];
+    for (var i = 0; i < playlists.length; ++i) {
+      final playlist = await playlists[i];
+      playlist.channel = await channels[i];
+      items.add(playlist);
+    }
+    return ApiResult(
+      nextToken: res.nextPageToken,
+      prevToken: res.prevPageToken,
+      items: items,
     );
-    return ApiResult<PlaylistModel>(
-        nextToken: res.nextPageToken,
-        prevToken: res.prevPageToken,
-        items: resPlaylists.items
-            .map((item) => PlaylistModel(
-                  channel: ChannelModel(
-                    id: item.snippet.channelId,
-                    title: item.snippet.channelTitle,
-                    thumbnails: item.snippet.thumbnails,
-                  ),
-                  id: item.id,
-                  title: item.snippet.title,
-                  thumbnails: item.snippet.thumbnails,
-                  videoCount: item.contentDetails.itemCount,
-                ))
-            .toList());
   }
 
-  /// search all playlists using the [q] for query term
-  /// [q] if null then get query from firestore
-  Stream<PlaylistModel> searchPlaylists({
-    String q,
-    int pageSize = 40,
-    int pageOffset = 0,
-    String order = orderViewCount,
-  }) async* {
-    if (q == null) {
-      // get all skills in firestore
-      final snapshot = await FirebaseFirestore.instance
-          .collection('searching')
-          .doc('qlz4pSG7qHJq8xRu9uWJ')
-          .get();
-      final skills = await snapshot.get('skills').cast<String>();
-      q = skills.join('|');
-    }
-
-    var nextPageToken = '';
-    while (pageSize > 0 && nextPageToken != null) {
-      final res = await _youtube.search.list(
-        partId,
-        q: q,
-        pageToken: nextPageToken,
-        maxResults: pageSize,
-        order: order,
-        type: typePlaylist,
-        regionCode: regionVN,
-      );
-      nextPageToken = res.nextPageToken;
-
-      final stream =
-          getPlaylistDetails(res.items.map((e) => e.id.playlistId).toList());
-      await for (final item in stream) yield item;
-
-      pageSize -= res.items.length;
-    }
-  }
-
-  /// Get all channels stored in cloud firestore
-  Stream<ChannelModel> getAllChannels() async* {
-    final query = await FirebaseFirestore.instance
-        .collection('searching')
-        .doc('qlz4pSG7qHJq8xRu9uWJ')
-        .get();
-    final ids = query.get('channels').cast<String>();
-    await for (final channel in findChannels(ids)) yield channel;
-  }
-
-  Future<ChannelModel> findChannelById(String channelId) async {
+  Future<ChannelModel> getChannel(String channelId) async {
     final res = await _youtube.channels.list(
       '$partSnippet, $partId, $partStatistics',
       maxResults: 1,
@@ -216,58 +138,18 @@ class ApiService {
 
     final item = res.items.first;
     final channel = ChannelModel.fromChannel(item);
-    log.v(channel.toJson());
     return channel;
   }
 
-  Stream<ChannelModel> findChannels(List<String> channelIds) async* {
-    final res = await _youtube.channels.list(
-      '$partSnippet, $partBrandingSettings, $partId, $partStatistics',
-      maxResults: channelIds.length,
-      id: channelIds.join(','),
-    );
-
-    for (final item in res.items) {
-      final channel = ChannelModel.fromChannel(item);
-      log.v(channel.toJson());
-      yield channel;
-    }
-  }
-
-  Stream<PlaylistModel> getPlaylistDetails(List<String> playlistIds) async* {
+  Future<PlaylistModel> getPlaylist(String id) async {
     final res = await _youtube.playlists.list(
-      '$partSnippet, $partContentDetails',
-      id: playlistIds.join(','),
-      maxResults: playlistIds.length,
+      '$partSnippet,$partContentDetails',
+      id: id,
     );
-    for (final item in res.items) {
-      final channel = await findChannels([item.snippet.channelId]).first;
-      final playlist = PlaylistModel(
-        channel: channel,
-        id: item.id,
-        title: item.snippet.title,
-        thumbnails: item.snippet.thumbnails,
-        videoCount: item.contentDetails.itemCount,
-      );
-      log.v(playlist.toJson());
-      yield playlist;
-    }
+    return PlaylistModel.fromPlaylist(res.items.first);
   }
 
-  Stream<String> findVideoIdsByPlaylist(String playlistId) async* {
-    final res = await _youtube.playlistItems.list(
-      '$partSnippet',
-      playlistId: playlistId,
-      maxResults: 50,
-    );
-
-    for (final item in res.items) {
-      final video = item.snippet.resourceId.videoId;
-      yield video;
-    }
-  }
-
-  Future<VideoModel> getVideoDetails(String videoId) async {
+  Future<VideoModel> getVideo(String videoId) async {
     final res = await _youtube.videos.list(
       '$partSnippet,$partStatistics,$partContentDetails',
       id: videoId,
