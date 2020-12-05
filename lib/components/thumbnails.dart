@@ -1,5 +1,6 @@
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
+import 'package:SingularSight/models/video_model.dart';
 import '../styles/texts.dart' as styles;
 import 'package:flutter/material.dart';
 import 'package:googleapis/youtube/v3.dart';
@@ -112,21 +113,10 @@ class _ChannelThumbnailState extends State<ChannelThumbnail> {
 }
 
 class VideoThumbnail extends StatelessWidget {
-  final Thumbnail thumbnail;
-  final String title;
-  final String channelTitle;
-  final int viewCount;
-  final Duration duration;
-  final DateTime publishedAt;
-
+  final VideoModel video;
   const VideoThumbnail({
     Key key,
-    this.thumbnail,
-    this.title,
-    this.channelTitle,
-    this.viewCount,
-    this.duration,
-    this.publishedAt,
+    this.video,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -135,14 +125,14 @@ class VideoThumbnail extends StatelessWidget {
         Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(thumbnail.url),
+            Image.network(video.thumbnails.default_.url),
             Align(
               alignment: Alignment.bottomRight,
               child: Container(
                 alignment: Alignment.center,
-                height: thumbnail.height.toDouble(),
+                height: video.thumbnails.default_.height.toDouble(),
                 child: Text(
-                  '${duration.toString()}',
+                  duration,
                   style: styles.title(context),
                 ),
                 color: Colors.black.withOpacity(0.8),
@@ -153,15 +143,51 @@ class VideoThumbnail extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: styles.title(context)),
+            Text(video.title, style: styles.title(context)),
             SizedBox(height: 4),
-            Text(channelTitle, style: styles.subtitle(context)),
-            if (viewCount != null)
-              Text('$viewCount views', style: styles.subtitle(context)),
+            Text(video.playlist.title, style: styles.subtitle(context)),
+            if (video.viewCount != null)
+              Text('$views - $publishedAt', style: styles.subtitle(context)),
           ],
         )
       ],
     );
+  }
+
+  String get duration {
+    int hours = video.duration.inHours;
+    var minutes = video.duration.inMinutes % 60;
+    var seconds = video.duration.inSeconds % 60;
+    return hours == 0
+        ? ''
+        : '$hours:' +
+            minutes.toString().padLeft(2, '0') +
+            ':' +
+            seconds.toString().padLeft(2, '0');
+  }
+
+  String get views {
+    final count = video.viewCount;
+    if (count >= 1000000)
+      return '${(count / 1000000).floor()}M views';
+    else if (count >= 1000) return '${(count / 1000).floor()}K views';
+    return count.toString() + ' views';
+  }
+
+  String get publishedAt {
+    final duration = DateTime.now().difference(video.publishedAt);
+    if (duration.inDays >= 365)
+      return '${(duration.inDays / 365).ceil()} years ago';
+    else if (duration.inDays >= 30)
+      return '${(duration.inDays / 30).ceil()} months ago';
+    else if (duration.inDays > 0)
+      return '${duration.inDays} days ago';
+    else if (duration.inHours > 0)
+      return '${duration.inHours} hours ago';
+    else if (duration.inMinutes > 0)
+      return '${duration.inMinutes} minutes ago';
+    else
+      return '${duration.inSeconds} seconds ago';
   }
 }
 

@@ -53,17 +53,10 @@ class _SliverVideoPlaylistState extends State<SliverVideoPlaylist> {
     );
   }
 
-  Widget _buildItem(VideoModel playlist) {
+  Widget _buildItem(VideoModel video) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: VideoThumbnail(
-        thumbnail: playlist.thumbnails.default_,
-        title: playlist.title,
-        viewCount: playlist.viewCount,
-        channelTitle: playlist.channelTitle,
-        duration: playlist.duration,
-        publishedAt: playlist.publishedAt,
-      ),
+      child: VideoThumbnail(video: video),
     );
   }
 }
