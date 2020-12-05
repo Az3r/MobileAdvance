@@ -288,9 +288,12 @@ class _PlaylistThumbnailState extends State<PlaylistThumbnail> {
       child: Material(
         child: InkWell(
           onTap: widget.onChannelThumbnailTap,
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(thumbnail.url),
-            radius: 24,
+          child: Hero(
+            tag: widget.playlist.channel.id,
+                      child: CircleAvatar(
+              backgroundImage: NetworkImage(thumbnail.url),
+              radius: 24,
+            ),
           ),
         ),
       ),

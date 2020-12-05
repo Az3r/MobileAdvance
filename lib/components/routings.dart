@@ -1,6 +1,7 @@
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/pages/channel_details.dart';
+import 'package:SingularSight/pages/error.dart';
 import 'package:SingularSight/pages/login.dart';
 import 'package:SingularSight/pages/watch_playlist.dart';
 import 'package:SingularSight/utilities/constants.dart';
@@ -27,6 +28,18 @@ class Routings {
     return MaterialPageRoute(
       builder: (context) => WatchPlaylist(playlist: arguments),
       settings: RouteSettings(name: RouteNames.watch),
+    );
+  }
+
+  static Route<void> exceedQuota() {
+    return MaterialPageRoute(
+      builder: (context) => NetworkError.exceedQuota(),
+    );
+  }
+
+  static Route<bool> disconnected() {
+    return MaterialPageRoute(
+      builder: (context) => NetworkError.disconnected(),
     );
   }
 }

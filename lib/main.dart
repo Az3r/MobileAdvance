@@ -70,7 +70,6 @@ class _MainAppState extends State<MainApp> {
         '/': (context) => const Splash(),
         RouteNames.dashboard: (context) => const Dashboard(),
         RouteNames.register: (context) => const Register(),
-        RouteNames.error: (context) => const NetworkError(),
         RouteNames.settings: (context) => const UserSettings(),
       },
       onGenerateRoute: (settings) {

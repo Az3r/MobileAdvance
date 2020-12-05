@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:SingularSight/components/routings.dart';
+import 'package:googleapis/youtube/v3.dart';
 import 'package:SingularSight/components/animations.dart';
 import 'package:SingularSight/components/thumbnails.dart';
 import 'package:SingularSight/models/playlist_model.dart';
@@ -10,6 +13,7 @@ import 'package:SingularSight/utilities/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../services/locator_service.dart';
+import 'error.dart';
 
 class Home extends StatefulWidget {
   const Home();
@@ -52,12 +56,25 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
   Future<void> loadNext() async {
     if (prev == null || prev.nextToken != null) {
-      final value = await youtube.searchPlaylists(
-        skills,
-        nextToken: prev?.nextToken,
-      );
-      prev = value;
-      _controller.add(value.items);
+      var retry = true;
+      while (retry) {
+        try {
+          final result = await youtube.searchPlaylists(
+            skills,
+            nextToken: prev?.nextToken,
+          );
+          retry = false;
+          prev = result;
+          _controller.add(result.items);
+        } on DetailedApiRequestError {
+          Navigator.of(context).push(Routings.exceedQuota());
+          retry = false;
+        } on SocketException {
+          retry = await Navigator.of(context).push(Routings.disconnected());
+        } catch (e) {
+          rethrow;
+        }
+      }
     }
   }
 
@@ -79,7 +96,10 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                 _playlists.add(item);
                 _list.currentState.insertItem(_playlists.length - 1);
               }
-            }
+            } else if (snapshot.hasError) {
+              ErrorWidget(snapshot.error);
+            } else
+              return Center(child: CircularProgressIndicator());
             return AnimatedList(
               key: _list,
               itemBuilder: (context, index, animation) {

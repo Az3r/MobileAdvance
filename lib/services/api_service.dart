@@ -186,6 +186,6 @@ class ApiResult<T> {
   ApiResult({
     this.nextToken,
     this.prevToken,
-    this.items,
+    this.items = const [],
   });
 }
