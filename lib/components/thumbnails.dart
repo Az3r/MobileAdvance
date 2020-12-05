@@ -145,7 +145,7 @@ class VideoThumbnail extends StatelessWidget {
           children: [
             Text(video.title, style: styles.title(context)),
             SizedBox(height: 4),
-            Text(video.playlist.title, style: styles.subtitle(context)),
+            Text(video.channelTitle, style: styles.subtitle(context)),
             if (video.viewCount != null)
               Text('$views - $publishedAt', style: styles.subtitle(context)),
           ],

@@ -1,5 +1,4 @@
 import 'package:SingularSight/models/channel_model.dart';
-import '../utilities/string_utils.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/utilities/globals.dart';
@@ -83,19 +82,6 @@ class ApiService {
     );
   }
 
-  Future<ApiResult<ChannelModel>> getChannels(List<String> ids,
-      {int n = 10}) async {
-    final res = await _youtube.channels.list(
-      '$partSnippet, $partBrandingSettings, $partId, $partStatistics',
-      maxResults: ids.length,
-      id: ids.join(','),
-    );
-    return ApiResult(
-        nextToken: res.nextPageToken,
-        prevToken: res.prevPageToken,
-        items: res.items.map((e) => ChannelModel.fromChannel(e)).toList());
-  }
-
   Future<ApiResult<PlaylistModel>> searchPlaylists(
     String q, {
     int n = 10,
@@ -156,21 +142,40 @@ class ApiService {
       maxResults: 1,
     );
     final item = res.items.first;
-    final video = VideoModel(
-      channelId: item.snippet.channelId,
-      channelTitle: item.snippet.channelTitle,
-      description: item.snippet.description,
-      title: item.snippet.title,
-      id: videoId,
-      thumbnails: item.snippet.thumbnails,
-      dislikeCount: int.tryParse(item.statistics.dislikeCount ?? ''),
-      likeCount: int.tryParse(item.statistics.likeCount ?? ''),
-      duration: item.contentDetails.duration.toISO8601(),
-      publishedAt: item.snippet.publishedAt,
-      viewCount: int.tryParse(item.statistics.viewCount),
-    );
+    final video = VideoModel.fromVideo(item);
     log.v(video);
     return video;
+  }
+
+  Future<List<VideoModel>> getVideos(Iterable<String> ids) async {
+    final res = await _youtube.videos.list(
+      '$partSnippet,$partStatistics,$partContentDetails',
+      id: ids.join(','),
+      maxResults: ids.length,
+    );
+    return res.items.map((e) => VideoModel.fromVideo(e)).toList();
+  }
+
+  Future<ApiResult<VideoModel>> getVideosFromPlaylist(
+    PlaylistModel playlist, {
+    int n = 10,
+    String nextToken,
+  }) async {
+    final res = await _youtube.playlistItems.list(
+      partSnippet,
+      $fields: 'items(snippet(resourceId))',
+      playlistId: playlist.id,
+      maxResults: n,
+    );
+
+    playlist.videos =
+        await getVideos(res.items.map((e) => e.snippet.resourceId.videoId));
+
+    return ApiResult(
+      nextToken: res.nextPageToken,
+      prevToken: res.prevPageToken,
+      items: playlist.videos,
+    );
   }
 
   void dispose() {

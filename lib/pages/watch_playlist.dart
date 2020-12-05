@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:SingularSight/components/thumbnails.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
+import 'package:SingularSight/services/api_service.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../styles/texts.dart' as styles;
-import 'dart:math' show Random;
 
 class WatchPlaylist extends StatefulWidget {
   final PlaylistModel playlist;
@@ -23,52 +24,69 @@ class WatchPlaylist extends StatefulWidget {
 
 class _WatchPlaylistState extends State<WatchPlaylist> {
   final youtube = LocatorService().youtube;
-  PlaylistModel test;
+
   YoutubePlayerController _player;
-  int _position = 0;
-  VideoModel _currentVideo;
+  StreamController<List<VideoModel>> _videoList;
+
+  ApiResult<VideoModel> _prev;
+  int _current = 0;
+
   @override
   void initState() {
     super.initState();
-    load();
+    _videoList = StreamController();
+    loadPlayer();
   }
 
-  Future<PlaylistModel> load() async {
-    final playlists = await LocatorService().playlists;
-    test = playlists[Random().nextInt(playlists.length)];
-
+  Future<void> loadPlayer() async {
+    // get all videos of a playlist
+    await loadNext();
     _player = YoutubePlayerController(
-      initialVideoId: test.videos[_position].id,
+      initialVideoId: video.id,
       flags: YoutubePlayerFlags(
         autoPlay: false,
         forceHD: true,
       ),
     );
-    _currentVideo = await youtube.getVideo(test.videos[_position].id);
+    return widget.playlist;
+  }
 
-    return test;
+  Future<void> loadNext() async {
+    if (_prev == null || _prev.nextToken != null) {
+      final result = await youtube.getVideosFromPlaylist(
+        widget.playlist,
+        nextToken: _prev?.nextToken,
+      );
+      _prev = result;
+      _videoList.add(result.items);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: FutureBuilder(
-          future: load(),
-          builder: (context, snapshot) {
-            Widget child;
-            if (snapshot.hasData) {
-              child = _buildWidget(snapshot.data);
-            } else if (snapshot.hasError)
-              child = ErrorWidget(snapshot.error);
-            else {
-              child = Center(child: CircularProgressIndicator());
-            }
-            return AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              switchInCurve: Curves.easeInOut,
-              switchOutCurve: Curves.easeInOut,
-              child: child,
+        child: OrientationBuilder(
+          builder: (context, orientation) {
+            if (orientation == Orientation.landscape) return player;
+            return Column(
+              children: [
+                player,
+                Expanded(
+                  child: CustomScrollView(
+                    slivers: [
+                      videoDetails,
+                      SliverToBoxAdapter(
+                        child: Divider(color: Colors.white24, thickness: 1),
+                      ),
+                      channelThumbnail,
+                      SliverToBoxAdapter(
+                        child: Divider(color: Colors.white24, thickness: 1),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             );
           },
         ),
@@ -76,141 +94,154 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
     );
   }
 
-  Widget _buildWidget(PlaylistModel test) {
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        return Column(
-          children: [
-            YoutubePlayer(controller: _player),
-            if (orientation == Orientation.portrait)
-              Expanded(
-                child: CustomScrollView(
-                  slivers: [
-                    SliverPadding(
-                      padding: EdgeInsets.all(16.0),
-                      sliver: SliverList(
-                        delegate: SliverChildListDelegate(
-                          [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 3 / 4,
-                                  child: Text(
-                                    _currentVideo.title,
-                                    style: styles.title(context),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Align(
-                                    alignment: Alignment.topRight,
-                                    child: IconButton(
-                                      padding: EdgeInsets.zero,
-                                      icon: Icon(Icons.keyboard_arrow_down),
-                                      onPressed: _openDescription,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 16.0),
-                              child: videoStatistic,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                videoAction(
-                                  icon: Icon(Icons.thumb_up),
-                                  label:
-                                      Text(_currentVideo.likeCount.toString()),
-                                ),
-                                videoAction(
-                                  icon: Icon(Icons.thumb_down),
-                                  label: Text(
-                                      _currentVideo.dislikeCount.toString()),
-                                ),
-                                videoAction(
-                                  icon: Icon(Icons.bookmark),
-                                  label: Text('Bookmark'),
-                                ),
-                                videoAction(
-                                  icon: Icon(Icons.add),
-                                  label: Text('Add'),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Divider(color: Colors.white24, thickness: 1),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 8,
-                        ),
-                        child: ChannelThumbnail.horizontal(
-                          onThumbnailTap: () => Navigator.of(context).pushNamed(
-                            RouteNames.channelDetails,
-                            arguments: test.channel,
-                          ),
-                          thumbnailRadius: 32,
-                          channel: test.channel,
-                        ),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Divider(color: Colors.white24, thickness: 1),
-                    ),
-                  ],
-                ),
-              ),
+  Widget get player {
+    return StreamBuilder<VideoModel>(
+      stream: null,
+      builder: (context, snapshot) => YoutubePlayer(controller: _player),
+    );
+  }
+
+  Widget get videoDetails {
+    return SliverPadding(
+      padding: EdgeInsets.all(16.0),
+      sliver: SliverList(
+        delegate: SliverChildListDelegate(
+          [
+            Row(
+              children: [
+                Expanded(child: videoTitle),
+                descButton,
+              ],
+            ),
+            videoStatistic,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                like,
+                dislike,
+                bookmark,
+                addChannel,
+              ],
+            ),
           ],
-        );
-      },
+        ),
+      ),
+    );
+  }
+
+  Widget get channelThumbnail {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 8,
+        ),
+        child: ChannelThumbnail.horizontal(
+          onThumbnailTap: () => Navigator.of(context).pushNamed(
+            RouteNames.channelDetails,
+            arguments: widget.playlist.channel,
+          ),
+          thumbnailRadius: 32,
+          channel: widget.playlist.channel,
+        ),
+      ),
+    );
+  }
+
+  Widget get playlists {}
+
+  Widget get videoTitle {
+    return Text(
+      video.title,
+      style: styles.title(context),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget get descButton {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      icon: Icon(Icons.keyboard_arrow_down),
+      onPressed: _openDescription,
     );
   }
 
   Widget get videoStatistic {
-    final views = '${_currentVideo.viewCount.toString()} views';
-    final published = diffFromNow(_currentVideo.publishedAt);
-    return Text('$views - $published', style: styles.subtitle(context));
+    return Text('$views - $publishedAt', style: styles.subtitle(context));
   }
 
-  String diffFromNow(DateTime datetime) {
-    final duration = DateTime.now().difference(datetime);
+  String get views => count(video.viewCount) + ' views';
+
+  String get publishedAt {
+    final duration = DateTime.now().difference(video.publishedAt);
     if (duration.inDays >= 365)
       return '${(duration.inDays / 365).ceil()} years ago';
     else if (duration.inDays >= 30)
       return '${(duration.inDays / 30).ceil()} months ago';
     else if (duration.inDays > 0)
       return '${duration.inDays} days ago';
-    else if (duration.inMinutes >= 60)
-      return '${(duration.inMinutes / 60).ceil()} hours ago';
+    else if (duration.inHours > 0)
+      return '${duration.inHours} hours ago';
     else if (duration.inMinutes > 0)
       return '${duration.inMinutes} minutes ago';
     else
-      return '${duration.inSeconds} minutes ago';
+      return '${duration.inSeconds} seconds ago';
   }
 
-  Widget videoAction({Widget icon, Widget label, VoidCallback onTap}) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          icon,
-          SizedBox(height: 8),
-          label,
-        ],
-      ),
+  Widget get like {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.thumb_up),
+        SizedBox(height: 8),
+        Text(
+          '${count(video.likeCount)}',
+          style: styles.subtitle(context),
+        )
+      ],
+    );
+  }
+
+  Widget get dislike {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.thumb_down),
+        SizedBox(height: 8),
+        Text(
+          '${count(video.dislikeCount)}',
+          style: styles.subtitle(context),
+        )
+      ],
+    );
+  }
+
+  Widget get addChannel {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.add),
+        SizedBox(height: 8),
+        Text(
+          'Add channel',
+          style: styles.subtitle(context),
+        )
+      ],
+    );
+  }
+
+  Widget get bookmark {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.bookmark),
+        SizedBox(height: 8),
+        Text(
+          'bookmark',
+          style: styles.subtitle(context),
+        )
+      ],
     );
   }
 
@@ -240,9 +271,9 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Text(_currentVideo.title, style: styles.headline(context)),
+                  Text(video.title, style: styles.headline(context)),
                   SizedBox(height: 16),
-                  Text(_currentVideo.description),
+                  Text(video.description),
                   SizedBox(height: 32),
                   RaisedButton.icon(
                       color: Colors.white,
@@ -266,7 +297,7 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
   void _openYoutubeApp() async {
     final scheme = Platform.isIOS ? 'youtube' : 'https';
     final url =
-        '$scheme://www.youtube.com/watch?v=${_currentVideo.id}&list=${test.id}';
+        '$scheme://www.youtube.com/watch?v=${video.id}&list=${widget.playlist.id}';
     launch(url).catchError((error) {
       showDialog(
         context: context,
@@ -285,4 +316,13 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
       );
     });
   }
+
+  String count(int n) {
+    if (n >= 1000000)
+      return '${(n / 1000000).floor()}M';
+    else if (n >= 1000) return '${(n / 1000).floor()}K';
+    return n.toString();
+  }
+
+  VideoModel get video => widget.playlist.videos[_current];
 }
