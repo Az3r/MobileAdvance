@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 import 'components/routings.dart';
 import 'pages/dashboard.dart';
-import 'pages/error.dart';
+import 'pages/network_error.dart';
 import 'pages/login.dart';
 import 'pages/register.dart';
 import 'pages/settings.dart';

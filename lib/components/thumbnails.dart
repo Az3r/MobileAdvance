@@ -202,7 +202,7 @@ class _PlaylistThumbnailState extends State<PlaylistThumbnail> {
   Widget _buildHorizontal(BuildContext context) {
     return Row(
       children: [
-        thumbnail,
+        playlistThumbnail,
         SizedBox(width: 8),
         Expanded(
           child: Column(
@@ -214,26 +214,28 @@ class _PlaylistThumbnailState extends State<PlaylistThumbnail> {
               if (widget.playlist.videoCount != null) videoCount
             ],
           ),
-        )
+        ),
+        actionButton,
       ],
     );
   }
 
   Widget _buildVertical(BuildContext context) {
+    final thumbnail = widget.playlist.thumbnails.medium;
     return Column(
       children: [
         Container(
-          height: widget.playlist.thumbnails.medium.height.toDouble(),
-          width: widget.playlist.thumbnails.medium.width.toDouble(),
+          height: thumbnail.height.toDouble(),
+          width: thumbnail.width.toDouble(),
           child: Stack(
             fit: StackFit.expand,
             children: [
-              thumbnail,
+              playlistThumbnail,
               Align(
                 alignment: Alignment.topRight,
                 child: Container(
                   alignment: Alignment.center,
-                  height: widget.playlist.thumbnails.medium.height.toDouble(),
+                  height: thumbnail.height.toDouble(),
                   width: 96,
                   child: videoCount,
                   color: Colors.black.withOpacity(0.8),
@@ -243,15 +245,26 @@ class _PlaylistThumbnailState extends State<PlaylistThumbnail> {
           ),
         ),
         SizedBox(height: 8),
-        title,
-        SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            channelThumbnail,
-            SizedBox(width: 8),
-            channelTitle,
-          ],
+        SizedBox(
+          width: thumbnail.width.toDouble(),
+          child: Row(
+            children: [
+              Expanded(child: title),
+              SizedBox(width: 8),
+              actionButton,
+            ],
+          ),
+        ),
+        SizedBox(
+          width: thumbnail.width.toDouble(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              channelThumbnail,
+              SizedBox(width: 8),
+              channelTitle,
+            ],
+          ),
         ),
       ],
     );
@@ -261,9 +274,18 @@ class _PlaylistThumbnailState extends State<PlaylistThumbnail> {
     return widget.vertical ? styles.title(context) : styles.subtitle(context);
   }
 
+  Widget get actionButton {
+    return IconButton(
+      icon: Icon(Icons.more_vert),
+      onPressed: () {},
+    );
+  }
+
   Widget get title {
     return Text(
       widget.playlist.title,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
       style: style.copyWith(color: Colors.white),
     );
   }
@@ -290,9 +312,9 @@ class _PlaylistThumbnailState extends State<PlaylistThumbnail> {
           onTap: widget.onChannelThumbnailTap,
           child: Hero(
             tag: widget.playlist.channel.id,
-                      child: CircleAvatar(
+            child: CircleAvatar(
               backgroundImage: NetworkImage(thumbnail.url),
-              radius: 24,
+              radius: 16,
             ),
           ),
         ),
@@ -300,7 +322,7 @@ class _PlaylistThumbnailState extends State<PlaylistThumbnail> {
     );
   }
 
-  Widget get thumbnail {
+  Widget get playlistThumbnail {
     final thumbnail = widget.vertical
         ? widget.playlist.thumbnails.medium
         : widget.playlist.thumbnails.default_;
@@ -311,6 +333,7 @@ class _PlaylistThumbnailState extends State<PlaylistThumbnail> {
           heightFactor: widget.vertical ? 1 : 0.76,
           child: Image.network(
             thumbnail.url,
+            fit: BoxFit.fill,
             frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
               return SizedBox(
                 width: thumbnail.width.toDouble(),

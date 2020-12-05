@@ -12,65 +12,6 @@ import 'package:flutter/material.dart';
 
 import 'thumbnails.dart';
 
-class ChannelPlaylists extends StatefulWidget {
-  final Stream<PlaylistModel> stream;
-
-  ChannelPlaylists({
-    Key key,
-    this.stream,
-  }) : super(key: key);
-
-  @override
-  _ChannelPlaylistsState createState() => _ChannelPlaylistsState();
-}
-
-class _ChannelPlaylistsState extends State<ChannelPlaylists> {
-  final _list = GlobalKey<AnimatedListState>();
-  final _playlists = <PlaylistModel>[];
-
-  @override
-  void initState() {
-    super.initState();
-    widget.stream.handleError((error, stackTrace) {
-      log.e(
-        'Received error signal from stream',
-        error,
-        stackTrace,
-      );
-    }).forEach((value) {
-      _playlists.add(value);
-      _list.currentState.insertItem(_playlists.length - 1);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedList(
-      key: _list,
-      itemBuilder: (context, index, animation) => SlideLeftWithFade(
-        animation: animation,
-        child: _buildItem(_playlists[index]),
-      ),
-    );
-  }
-
-  Widget _buildItem(PlaylistModel playlist) {
-    return InkWell(
-      onTap: () => Navigator.of(context).pushNamed(
-        RouteNames.watch,
-        arguments: playlist,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: 16,
-        ),
-        child: PlaylistThumbnail.horizontal(playlist: playlist),
-      ),
-    );
-  }
-}
-
 class SliverPlaylists extends StatefulWidget {
   final Stream<PlaylistModel> stream;
   final ChannelModel channel;

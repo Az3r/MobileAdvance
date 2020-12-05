@@ -4,7 +4,7 @@ import 'package:SingularSight/components/animations.dart';
 import 'package:SingularSight/components/routings.dart';
 import 'package:SingularSight/components/thumbnails.dart';
 import 'package:SingularSight/models/channel_model.dart';
-import 'package:SingularSight/pages/error.dart';
+import 'package:SingularSight/pages/network_error.dart';
 import 'package:SingularSight/services/api_service.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';

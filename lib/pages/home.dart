@@ -13,7 +13,7 @@ import 'package:SingularSight/utilities/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../services/locator_service.dart';
-import 'error.dart';
+import 'network_error.dart';
 
 class Home extends StatefulWidget {
   const Home();
@@ -97,8 +97,8 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                 _list.currentState.insertItem(_playlists.length - 1);
               }
             } else if (snapshot.hasError) {
-              ErrorWidget(snapshot.error);
-            } else
+              return ErrorWidget(snapshot.error);
+            } else if(!snapshot.hasData)
               return Center(child: CircularProgressIndicator());
             return AnimatedList(
               key: _list,
@@ -142,7 +142,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       _list.currentState.removeItem(
         0,
         (context, animation) => FadeTransition(
-          opacity: Tween(begin: 0.0, end: 0.0).animate(animation),
+          opacity: Tween(begin: 1.0, end: 0.0).animate(animation),
           child: _buildItem(item),
         ),
       );
