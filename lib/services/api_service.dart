@@ -99,11 +99,11 @@ class ApiService {
   Future<ApiResult<PlaylistModel>> searchPlaylists(
     String q, {
     int n = 10,
-    String order = orderViewCount,
+    String order = orderRelevance,
     String nextToken,
   }) async {
     final res = await _youtube.search.list(
-      partId,
+      '$partId,$partSnippet',
       q: q,
       pageToken: nextToken,
       maxResults: n,
@@ -116,13 +116,13 @@ class ApiService {
     final playlists =
         res.items.map((e) => getPlaylist(e.id.playlistId)).toList();
 
-    final items = [];
+    final items = <PlaylistModel>[];
     for (var i = 0; i < playlists.length; ++i) {
       final playlist = await playlists[i];
       playlist.channel = await channels[i];
       items.add(playlist);
     }
-    return ApiResult(
+    return ApiResult<PlaylistModel>(
       nextToken: res.nextPageToken,
       prevToken: res.prevPageToken,
       items: items,
@@ -131,7 +131,7 @@ class ApiService {
 
   Future<ChannelModel> getChannel(String channelId) async {
     final res = await _youtube.channels.list(
-      '$partSnippet, $partId, $partStatistics',
+      '$partSnippet, $partId, $partStatistics, $partBrandingSettings',
       maxResults: 1,
       id: channelId,
     );

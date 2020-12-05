@@ -45,6 +45,11 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     return snapshot.docs.map((e) => e.id).toList();
   }
 
+  Future<void> reload() {
+    prev = null;
+    return loadNext();
+  }
+
   Future<void> loadNext() async {
     if (prev == null || prev.nextToken != null) {
       final value = await youtube.searchPlaylists(
@@ -64,25 +69,28 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         loadNext();
         return true;
       },
-      child: StreamBuilder<List<PlaylistModel>>(
-        stream: _controller.stream,
-        builder: (context, snapshot) {
-          if (_list.currentState != null && snapshot.hasData) {
-            for (final item in snapshot.data) {
-              _playlists.add(item);
-              _list.currentState.insertItem(_playlists.length - 1);
+      child: RefreshIndicator(
+        onRefresh: _refreshList,
+        child: StreamBuilder<List<PlaylistModel>>(
+          stream: _controller.stream,
+          builder: (context, snapshot) {
+            if (_list.currentState != null && snapshot.hasData) {
+              for (final item in snapshot.data) {
+                _playlists.add(item);
+                _list.currentState.insertItem(_playlists.length - 1);
+              }
             }
-          }
-          return AnimatedList(
-            key: _list,
-            itemBuilder: (context, index, animation) {
-              return SlideDownWithFade(
-                animation: animation,
-                child: _buildItem(_playlists[index]),
-              );
-            },
-          );
-        },
+            return AnimatedList(
+              key: _list,
+              itemBuilder: (context, index, animation) {
+                return SlideDownWithFade(
+                  animation: animation,
+                  child: _buildItem(_playlists[index]),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -90,31 +98,23 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   Widget _buildItem(PlaylistModel playlist) {
     return Padding(
       padding: EdgeInsets.all(16.0),
-      child: PlaylistThumbnail(
-        channelThumbnail: playlist.channel.thumbnails.medium,
-        channelTitle: playlist.channel.title,
-        thumbnail: playlist.thumbnails.medium,
-        title: playlist.title,
-        vertical: true,
-        videoCount: playlist.videoCount,
+      child: PlaylistThumbnail.vertical(
+        playlist: playlist,
         onThumbnailTap: () => Navigator.of(context).pushNamed(
           RouteNames.watch,
           arguments: playlist,
         ),
-        onChannelThumbnailTap: () =>
-            youtube.getChannel(playlist.channelId).then(
-                  (value) => Navigator.pushNamed(
-                    context,
-                    RouteNames.watch,
-                    arguments: value,
-                  ),
-                ),
+        onChannelThumbnailTap: () => Navigator.pushNamed(
+          context,
+          RouteNames.channelDetails,
+          arguments: playlist.channel,
+        ),
       ),
     );
   }
 
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 
   Future<void> _refreshList() async {
     while (_playlists.isNotEmpty) {
@@ -127,7 +127,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         ),
       );
     }
-    await loadNext();
+    await reload();
   }
 
   @override

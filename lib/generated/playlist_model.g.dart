@@ -9,11 +9,6 @@ part of '../models/playlist_model.dart';
 PlaylistModel _$PlaylistModelFromJson(Map<String, dynamic> json) {
   return PlaylistModel(
     channelId: json['channelId'] as String,
-    channelTitle: json['channelTitle'] as String,
-    channelThumbnails: json['channelThumbnails'] == null
-        ? null
-        : ThumbnailDetails.fromJson(
-            json['channelThumbnails'] as Map<String, dynamic>),
     id: json['id'] as String,
     title: json['title'] as String,
     thumbnails: json['thumbnails'] == null
@@ -30,6 +25,4 @@ Map<String, dynamic> _$PlaylistModelToJson(PlaylistModel instance) =>
       'thumbnails': instance.thumbnails,
       'videoCount': instance.videoCount,
       'channelId': instance.channelId,
-      'channelTitle': instance.channelTitle,
-      'channelThumbnails': instance.channelThumbnails,
     };

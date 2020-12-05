@@ -51,12 +51,8 @@ class _FeaturedChannelsState extends State<FeaturedChannels>
   Widget _buildItem(ChannelModel value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 32.0),
-      child: ChannelThumbnail(
-        showSubscribeButton: true,
-        vertical: true,
-        title: value.title,
-        subscribers: value.subscriberCount,
-        thumbnail: value.thumbnails.medium,
+      child: ChannelThumbnail.vertical(
+        channel: value,
         onThumbnailTap: () => Navigator.of(context).pushNamed(
           RouteNames.channelDetails,
           arguments: value,

@@ -156,17 +156,13 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
                           horizontal: 16.0,
                           vertical: 8,
                         ),
-                        child: ChannelThumbnail(
-                          isSubscribed: false,
+                        child: ChannelThumbnail.horizontal(
                           onThumbnailTap: () => Navigator.of(context).pushNamed(
                             RouteNames.channelDetails,
                             arguments: test.channel,
                           ),
-                          thumbnail: test.channel.thumbnails.medium,
                           thumbnailRadius: 32,
-                          title: test.channel.title,
-                          subscribers: test.channel.subscriberCount,
-                          showSubscribeButton: true,
+                          channel: test.channel,
                         ),
                       ),
                     ),

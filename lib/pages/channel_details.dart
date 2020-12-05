@@ -48,16 +48,7 @@ class _ChannelDetailsState extends State<ChannelDetails> {
               sliver: SliverList(
                 delegate: SliverChildListDelegate(
                   [
-                    ChannelThumbnail(
-                      isSubscribed: false,
-                      onSubscribed: null,
-                      showSubscribeButton: true,
-                      subscribers: widget.channel.subscriberCount,
-                      thumbnail: widget.channel.thumbnails.medium,
-                      thumbnailRadius: 32,
-                      title: widget.channel.title,
-                      vertical: false,
-                    ),
+                    ChannelThumbnail.horizontal(channel: widget.channel),
                     SizedBox(height: 16),
                     Text(widget.channel.description),
                   ],

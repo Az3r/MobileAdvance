@@ -65,13 +65,7 @@ class _ChannelPlaylistsState extends State<ChannelPlaylists> {
           horizontal: 16.0,
           vertical: 16,
         ),
-        child: PlaylistThumbnail(
-          channelThumbnail: playlist.channel.thumbnails?.default_,
-          channelTitle: playlist.channel.title,
-          thumbnail: playlist.thumbnails.default_,
-          title: playlist.title,
-          videoCount: playlist.videoCount,
-        ),
+        child: PlaylistThumbnail.horizontal(playlist: playlist),
       ),
     );
   }
@@ -107,7 +101,7 @@ class SliverPlaylistsState extends State<SliverPlaylists> {
 
   Future<void> loadNext() async {
     if (prev == null || prev.nextToken != null) {
-      final value = await youtube.findPlaylistByChannel_future(
+      final value = await youtube.getPlaylistsOfChannel(
         widget.channel,
         nextToken: prev?.nextToken,
       );
@@ -151,13 +145,7 @@ class SliverPlaylistsState extends State<SliverPlaylists> {
           horizontal: 16.0,
           vertical: 16,
         ),
-        child: PlaylistThumbnail(
-          channelThumbnail: playlist.channel.thumbnails?.default_,
-          channelTitle: playlist.channel.title,
-          thumbnail: playlist.thumbnails.default_,
-          title: playlist.title,
-          videoCount: playlist.videoCount,
-        ),
+        child: PlaylistThumbnail.horizontal(playlist: playlist),
       ),
     );
   }
