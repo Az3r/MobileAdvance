@@ -192,13 +192,12 @@ class VideoThumbnail extends StatelessWidget {
   }
 
   String get duration {
-    log.wtf(video.duration);
     int hours = video.duration.inHours;
     var minutes = video.duration.inMinutes % 60;
     var seconds = video.duration.inSeconds % 60;
-    return hours == 0
+    return(hours == 0
         ? ''
-        : '$hours:' +
+        : '$hours:') +
             minutes.toString().padLeft(2, '0') +
             ':' +
             seconds.toString().padLeft(2, '0');

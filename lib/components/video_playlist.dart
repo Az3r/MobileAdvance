@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:SingularSight/utilities/globals.dart';
 import 'package:googleapis/youtube/v3.dart';
 import 'package:SingularSight/components/thumbnails.dart';
 import 'package:SingularSight/models/playlist_model.dart';
@@ -47,6 +48,7 @@ class SliverVideoPlaylistState extends State<SliverVideoPlaylist>
   }
 
   Future<void> loadNext() async {
+    if (_videos.length >= widget.playlist.videoCount) return;
     if (prev == null || prev.nextToken != null) {
       var retry = true;
       while (retry) {
@@ -57,6 +59,7 @@ class SliverVideoPlaylistState extends State<SliverVideoPlaylist>
           );
           prev = value;
           _videoList.add(value.items);
+          retry = false;
         } on DetailedApiRequestError {
           Navigator.of(context).push(Routings.exceedQuota());
           retry = false;
