@@ -79,7 +79,8 @@ class _MainAppState extends State<MainApp> {
           case RouteNames.channelDetails:
             return Routings.channelDetails(settings.arguments);
           case RouteNames.watch:
-            return Routings.watch(settings.arguments);
+            final args = settings.arguments as List<dynamic>;
+            return Routings.watch(args[0], args[1]);
         }
         throw ArgumentError.value(
           settings.name,

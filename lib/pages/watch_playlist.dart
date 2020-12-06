@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:SingularSight/components/animations.dart';
 import 'package:SingularSight/components/thumbnails.dart';
+import 'package:SingularSight/components/video_playlist.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/services/api_service.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
+import 'package:SingularSight/utilities/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -15,8 +19,13 @@ import '../styles/texts.dart' as styles;
 
 class WatchPlaylist extends StatefulWidget {
   final PlaylistModel playlist;
+  final VideoModel initialVideo;
 
-  const WatchPlaylist({Key key, this.playlist}) : super(key: key);
+  const WatchPlaylist({
+    Key key,
+    this.playlist,
+    this.initialVideo,
+  }) : super(key: key);
 
   @override
   _WatchPlaylistState createState() => _WatchPlaylistState();
@@ -24,42 +33,23 @@ class WatchPlaylist extends StatefulWidget {
 
 class _WatchPlaylistState extends State<WatchPlaylist> {
   final youtube = LocatorService().youtube;
+  final _list = GlobalKey<SliverVideoPlaylistState>();
 
   YoutubePlayerController _player;
-  StreamController<List<VideoModel>> _videoList;
-
-  ApiResult<VideoModel> _prev;
-  int _current = 0;
+  VideoModel _video;
 
   @override
   void initState() {
     super.initState();
-    _videoList = StreamController();
-    loadPlayer();
-  }
-
-  Future<void> loadPlayer() async {
-    // get all videos of a playlist
-    await loadNext();
+    _video = widget.initialVideo;
     _player = YoutubePlayerController(
-      initialVideoId: video.id,
+      initialVideoId: _video.id,
       flags: YoutubePlayerFlags(
-        autoPlay: false,
+        autoPlay: true,
         forceHD: true,
+        controlsVisibleAtStart: true,
       ),
     );
-    return widget.playlist;
-  }
-
-  Future<void> loadNext() async {
-    if (_prev == null || _prev.nextToken != null) {
-      final result = await youtube.getVideosFromPlaylist(
-        widget.playlist,
-        nextToken: _prev?.nextToken,
-      );
-      _prev = result;
-      _videoList.add(result.items);
-    }
   }
 
   @override
@@ -68,22 +58,83 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
       body: SafeArea(
         child: OrientationBuilder(
           builder: (context, orientation) {
-            if (orientation == Orientation.landscape) return player;
+            if (orientation == Orientation.landscape) {
+              // enter full screen mode
+              SystemChrome.setEnabledSystemUIOverlays([]);
+              return YoutubePlayer(controller: _player);
+            }
+            // exit full screen mode
+            SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
             return Column(
               children: [
-                player,
+                YoutubePlayer(controller: _player),
                 Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      videoDetails,
-                      SliverToBoxAdapter(
-                        child: Divider(color: Colors.white24, thickness: 1),
-                      ),
-                      channelThumbnail,
-                      SliverToBoxAdapter(
-                        child: Divider(color: Colors.white24, thickness: 1),
-                      ),
-                    ],
+                  child: NotificationListener<ScrollEndNotification>(
+                    onNotification: (notification) {
+                      _list.currentState.loadNext();
+                      return true;
+                    },
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverList(
+                          delegate: SliverChildListDelegate.fixed(
+                            [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 8.0,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(child: videoTitle),
+                                    descButton,
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                ),
+                                child: videoStatistic,
+                              ),
+                              SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  like,
+                                  dislike,
+                                  bookmark,
+                                  addChannel,
+                                ],
+                              ),
+                              SizedBox(height: 8),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                child: youtubeButton,
+                                width: 480,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 16.0,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(child: channelThumbnail),
+                                    ElevatedButton(
+                                      child: Text('SUBSCRIBE'),
+                                      onPressed: _openYoutubeChannel,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        playlists,
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -94,68 +145,46 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
     );
   }
 
-  Widget get player {
-    return StreamBuilder<VideoModel>(
-      stream: null,
-      builder: (context, snapshot) => YoutubePlayer(controller: _player),
-    );
-  }
-
-  Widget get videoDetails {
-    return SliverPadding(
-      padding: EdgeInsets.all(16.0),
-      sliver: SliverList(
-        delegate: SliverChildListDelegate(
-          [
-            Row(
-              children: [
-                Expanded(child: videoTitle),
-                descButton,
-              ],
-            ),
-            videoStatistic,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                like,
-                dislike,
-                bookmark,
-                addChannel,
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget get channelThumbnail {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: 8,
-        ),
-        child: ChannelThumbnail.horizontal(
-          onThumbnailTap: () => Navigator.of(context).pushNamed(
-            RouteNames.channelDetails,
-            arguments: widget.playlist.channel,
-          ),
-          thumbnailRadius: 32,
-          channel: widget.playlist.channel,
-        ),
+    return ChannelThumbnail.horizontal(
+      onThumbnailTap: () => Navigator.of(context).pushNamed(
+        RouteNames.channelDetails,
+        arguments: widget.playlist.channel,
       ),
+      thumbnailRadius: 24,
+      channel: widget.playlist.channel,
     );
   }
 
-  Widget get playlists {}
+  Widget get playlists {
+    return SliverVideoPlaylist(
+      playlist: widget.playlist,
+      key: _list,
+      onSelected: (i, video) => setState(() {
+        _video = video;
+        _player.load(video.id);
+      }),
+    );
+  }
 
   Widget get videoTitle {
     return Text(
-      video.title,
+      _video.title,
       style: styles.title(context),
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget get youtubeButton {
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        primary: Colors.red,
+        onPrimary: Colors.white,
+      ),
+      label: Text('WATCH ON YOUTUBE'),
+      icon: Icon(FontAwesomeIcons.youtube),
+      onPressed: _openYoutubeVideo,
     );
   }
 
@@ -171,10 +200,10 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
     return Text('$views - $publishedAt', style: styles.subtitle(context));
   }
 
-  String get views => count(video.viewCount) + ' views';
+  String get views => count(_video.viewCount) + ' views';
 
   String get publishedAt {
-    final duration = DateTime.now().difference(video.publishedAt);
+    final duration = DateTime.now().difference(_video.publishedAt);
     if (duration.inDays >= 365)
       return '${(duration.inDays / 365).ceil()} years ago';
     else if (duration.inDays >= 30)
@@ -196,7 +225,7 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
         Icon(Icons.thumb_up),
         SizedBox(height: 8),
         Text(
-          '${count(video.likeCount)}',
+          '${count(_video.likeCount)}',
           style: styles.subtitle(context),
         )
       ],
@@ -210,7 +239,7 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
         Icon(Icons.thumb_down),
         SizedBox(height: 8),
         Text(
-          '${count(video.dislikeCount)}',
+          '${count(_video.dislikeCount)}',
           style: styles.subtitle(context),
         )
       ],
@@ -256,34 +285,15 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
       context: context,
       builder: (context) {
         return Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Description'),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-            ],
-          ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Text(video.title, style: styles.headline(context)),
+                  Text(_video.title, style: styles.headline(context)),
                   SizedBox(height: 16),
-                  Text(video.description),
+                  Text(_video.description),
                   SizedBox(height: 32),
-                  RaisedButton.icon(
-                      color: Colors.white,
-                      textColor: Colors.red,
-                      label: Text('OPEN YOUTUBE'),
-                      icon: Icon(
-                        FontAwesomeIcons.youtube,
-                        color: Colors.red,
-                      ),
-                      onPressed: _openYoutubeApp)
                 ],
               ),
             ),
@@ -294,10 +304,33 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
     ;
   }
 
-  void _openYoutubeApp() async {
+  void _openYoutubeVideo() async {
     final scheme = Platform.isIOS ? 'youtube' : 'https';
     final url =
-        '$scheme://www.youtube.com/watch?v=${video.id}&list=${widget.playlist.id}';
+        '$scheme://www.youtube.com/watch?v=${_video.id}&list=${widget.playlist.id}';
+    launch(url).catchError((error) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Oopise!'),
+            content: Text('Unable to open youtube app'),
+            actions: [
+              TextButton(
+                child: Text("That's sad!"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          );
+        },
+      );
+    });
+  }
+
+  void _openYoutubeChannel() async {
+    final scheme = Platform.isIOS ? 'youtube' : 'https';
+    final url =
+        '$scheme://www.youtube.com/channel/${widget.playlist.channel.id}';
     launch(url).catchError((error) {
       showDialog(
         context: context,
@@ -323,6 +356,4 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
     else if (n >= 1000) return '${(n / 1000).floor()}K';
     return n.toString();
   }
-
-  VideoModel get video => widget.playlist.videos[_current];
 }

@@ -98,7 +98,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               }
             } else if (snapshot.hasError) {
               return ErrorWidget(snapshot.error);
-            } else if(!snapshot.hasData)
+            } else if (!snapshot.hasData)
               return Center(child: CircularProgressIndicator());
             return AnimatedList(
               key: _list,
@@ -120,10 +120,13 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       padding: EdgeInsets.all(16.0),
       child: PlaylistThumbnail.vertical(
         playlist: playlist,
-        onThumbnailTap: () => Navigator.of(context).pushNamed(
-          RouteNames.watch,
-          arguments: playlist,
-        ),
+        onThumbnailTap: () async {
+          final first = await youtube.getFirstVideoOfPlaylist(playlist);
+          return Navigator.of(context).pushNamed(
+            RouteNames.watch,
+            arguments: [playlist, first],
+          );
+        },
         onChannelThumbnailTap: () => Navigator.pushNamed(
           context,
           RouteNames.channelDetails,

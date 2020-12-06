@@ -1,9 +1,11 @@
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
+import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/pages/channel_details.dart';
 import 'package:SingularSight/pages/network_error.dart';
 import 'package:SingularSight/pages/login.dart';
 import 'package:SingularSight/pages/watch_playlist.dart';
+import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -24,9 +26,12 @@ class Routings {
     );
   }
 
-  static Route<void> watch(PlaylistModel arguments) {
+  static Route<void> watch(PlaylistModel playlist, VideoModel first) {
     return MaterialPageRoute(
-      builder: (context) => WatchPlaylist(playlist: arguments),
+      builder: (context) => WatchPlaylist(
+        playlist: playlist,
+        initialVideo: first,
+      ),
       settings: RouteSettings(name: RouteNames.watch),
     );
   }

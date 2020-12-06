@@ -168,14 +168,24 @@ class ApiService {
       maxResults: n,
     );
 
-    playlist.videos =
+    final videos =
         await getVideos(res.items.map((e) => e.snippet.resourceId.videoId));
 
     return ApiResult(
       nextToken: res.nextPageToken,
       prevToken: res.prevPageToken,
-      items: playlist.videos,
+      items: videos,
     );
+  }
+
+  Future<VideoModel> getFirstVideoOfPlaylist(PlaylistModel playlist) async {
+    final res = await _youtube.playlistItems.list(
+      partSnippet,
+      $fields: 'items(snippet(resourceId))',
+      playlistId: playlist.id,
+      maxResults: 1,
+    );
+    return getVideo(res.items.first.snippet.resourceId.videoId);
   }
 
   void dispose() {

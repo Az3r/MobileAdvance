@@ -1,6 +1,7 @@
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
+import 'package:SingularSight/utilities/globals.dart';
 import '../styles/texts.dart' as styles;
 import 'package:flutter/material.dart';
 import 'package:googleapis/youtube/v3.dart';
@@ -114,47 +115,84 @@ class _ChannelThumbnailState extends State<ChannelThumbnail> {
 
 class VideoThumbnail extends StatelessWidget {
   final VideoModel video;
+  final VoidCallback onTap;
+  final bool selected;
   const VideoThumbnail({
     Key key,
     this.video,
+    this.onTap,
+    this.selected,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Stack(
-          fit: StackFit.expand,
+    return Container(
+      color: selected ? Colors.white12 : null,
+      child: InkWell(
+        onTap: onTap,
+        child: Row(
           children: [
-            Image.network(video.thumbnails.default_.url),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                alignment: Alignment.center,
-                height: video.thumbnails.default_.height.toDouble(),
-                child: Text(
-                  duration,
-                  style: styles.title(context),
-                ),
-                color: Colors.black.withOpacity(0.8),
+            SizedBox(
+              width: video.thumbnails.default_.width.toDouble(),
+              height: video.thumbnails.default_.height.toDouble(),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  ClipRect(
+                    child: Align(
+                      heightFactor: 0.76,
+                      child: Image.network(
+                        video.thumbnails.default_.url,
+                        fit: BoxFit.fill,
+                        frameBuilder:
+                            (context, child, frame, wasSynchronouslyLoaded) {
+                          return SizedBox(
+                            width: video.thumbnails.default_.width.toDouble(),
+                            height: video.thumbnails.default_.height.toDouble(),
+                            child: child,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                      child: Text(
+                        duration,
+                        style: styles.title(context),
+                      ),
+                      color: Colors.black.withOpacity(0.8),
+                    ),
+                  )
+                ],
               ),
-            )
+            ),
+            Expanded(
+              child: ListTile(
+                dense: true,
+                onTap: onTap,
+                title: Text(
+                  video.title,
+                  style: styles.title(context),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(
+                  '${video.channelTitle}\n$views - $publishedAt',
+                  style: styles.subtitle(context),
+                ),
+                trailing:
+                    IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
+              ),
+            ),
           ],
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(video.title, style: styles.title(context)),
-            SizedBox(height: 4),
-            Text(video.channelTitle, style: styles.subtitle(context)),
-            if (video.viewCount != null)
-              Text('$views - $publishedAt', style: styles.subtitle(context)),
-          ],
-        )
-      ],
+      ),
     );
   }
 
   String get duration {
+    log.wtf(video.duration);
     int hours = video.duration.inHours;
     var minutes = video.duration.inMinutes % 60;
     var seconds = video.duration.inSeconds % 60;

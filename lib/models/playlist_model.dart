@@ -16,9 +16,6 @@ class PlaylistModel {
   @JsonKey(ignore: true)
   ChannelModel channel;
 
-  @JsonKey(ignore: true)
-  List<VideoModel> videos;
-
   PlaylistModel({
     this.channelId,
     this.id,

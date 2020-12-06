@@ -46,10 +46,10 @@ dependencies:
   # app permissions
   permission_handler: ^5.0.1+1
 
-  # youtube player
+  # youtube data and player
   googleapis_auth: ^0.2.12
   googleapis: ^0.53.0
-  youtube_player_flutter: ^7.0.0+7
+  youtube_player_flutter: ^6.1.0+2
 
   # html decode
   html_unescape: ^1.0.2

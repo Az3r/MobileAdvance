@@ -31,7 +31,7 @@ class SliverPlaylistsState extends State<SliverPlaylists> {
   final _list = GlobalKey<SliverAnimatedListState>();
   StreamController<List<PlaylistModel>> _controller;
   final _playlists = <PlaylistModel>[];
-  ApiResult prev;
+  ApiResult<PlaylistModel> prev;
 
   @override
   void initState() {
@@ -77,10 +77,13 @@ class SliverPlaylistsState extends State<SliverPlaylists> {
 
   Widget _buildItem(PlaylistModel playlist) {
     return InkWell(
-      onTap: () => Navigator.of(context).pushNamed(
-        RouteNames.watch,
-        arguments: playlist,
-      ),
+      onTap: () async {
+        final first = await youtube.getFirstVideoOfPlaylist(playlist);
+        return Navigator.of(context).pushNamed(
+          RouteNames.watch,
+          arguments: [playlist, first],
+        );
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 16.0,
