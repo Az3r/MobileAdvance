@@ -1,5 +1,5 @@
 import 'package:SingularSight/utilities/constants.dart';
-import 'package:SingularSight/utilities/globals.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../components/loading.dart';
@@ -18,7 +18,12 @@ class Splash extends StatelessWidget {
 
   Future<void> load(BuildContext context) async {
     await Future.delayed(Duration(seconds: 3));
-    if (ModalRoute.of(context).isCurrent)
+    final auth = FirebaseAuth.instance;
+    if (ModalRoute.of(context).isCurrent) {
+      if (auth.currentUser != null) {
+        return Navigator.of(context).pushReplacementNamed(RouteNames.dashboard);
+      }
       return Navigator.of(context).pushReplacementNamed(RouteNames.login);
+    }
   }
 }

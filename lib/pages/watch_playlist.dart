@@ -56,90 +56,79 @@ class _WatchPlaylistState extends State<WatchPlaylist> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: OrientationBuilder(
-          builder: (context, orientation) {
-            if (orientation == Orientation.landscape) {
-              // enter full screen mode
-              SystemChrome.setEnabledSystemUIOverlays([]);
-              return YoutubePlayer(controller: _player);
-            }
-            // exit full screen mode
-            SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-            return Column(
-              children: [
-                YoutubePlayer(controller: _player),
-                Expanded(
-                  child: NotificationListener<ScrollEndNotification>(
-                    onNotification: (notification) {
-                      _list.currentState.loadNext();
-                      return true;
-                    },
-                    child: CustomScrollView(
-                      slivers: [
-                        SliverList(
-                          delegate: SliverChildListDelegate.fixed(
-                            [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                  vertical: 8.0,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(child: videoTitle),
-                                    descButton,
-                                  ],
-                                ),
+        child: Column(
+          children: [
+            YoutubePlayer(controller: _player),
+            if (MediaQuery.of(context).orientation == Orientation.portrait)
+              Expanded(
+                child: NotificationListener<ScrollEndNotification>(
+                  onNotification: (notification) {
+                    _list.currentState.loadNext();
+                    return true;
+                  },
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverList(
+                        delegate: SliverChildListDelegate.fixed(
+                          [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 8.0,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                ),
-                                child: videoStatistic,
-                              ),
-                              SizedBox(height: 16),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                              child: Row(
                                 children: [
-                                  like,
-                                  dislike,
-                                  bookmark,
-                                  addChannel,
+                                  Expanded(child: videoTitle),
+                                  descButton,
                                 ],
                               ),
-                              SizedBox(height: 8),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 16),
-                                child: youtubeButton,
-                                width: 480,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                  vertical: 16.0,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(child: channelThumbnail),
-                                    ElevatedButton(
-                                      child: Text('SUBSCRIBE'),
-                                      onPressed: _openYoutubeChannel,
-                                    ),
-                                  ],
-                                ),
+                              child: videoStatistic,
+                            ),
+                            SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                like,
+                                dislike,
+                                bookmark,
+                                addChannel,
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: youtubeButton,
+                              width: 480,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 16.0,
                               ),
-                            ],
-                          ),
+                              child: Row(
+                                children: [
+                                  Expanded(child: channelThumbnail),
+                                  ElevatedButton(
+                                    child: Text('SUBSCRIBE'),
+                                    onPressed: _openYoutubeChannel,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        playlists,
-                      ],
-                    ),
+                      ),
+                      playlists,
+                    ],
                   ),
                 ),
-              ],
-            );
-          },
+              ),
+          ],
         ),
       ),
     );
