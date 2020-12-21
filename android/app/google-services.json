@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "745863976230",
+    "firebase_url": "https://singularsight.firebaseio.com",
+    "project_id": "singularsight",
+    "storage_bucket": "singularsight.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:745863976230:android:2175d4e5b62fc2b7705de7",
+        "android_client_info": {
+          "package_name": "com.example.SingularSight"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "745863976230-2qv332fn9ck8pu0tth0f2nlfhv80aosp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWOdLIZ0Dlgx5t_maXqqTUlZmxSioCaow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "745863976230-2qv332fn9ck8pu0tth0f2nlfhv80aosp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

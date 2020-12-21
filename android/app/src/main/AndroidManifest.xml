@@ -8,6 +8,9 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="SingularSight"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
