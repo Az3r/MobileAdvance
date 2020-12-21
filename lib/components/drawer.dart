@@ -1,4 +1,5 @@
 import 'package:SingularSight/components/logo.dart';
+import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:SingularSight/utilities/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -118,11 +119,13 @@ class _UserDrawerState extends State<UserDrawer> {
                     ),
                     ElevatedButton(
                       child: Text('Log me out'),
-                      onPressed: () =>
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                        RouteNames.login,
-                        (route) => false,
-                      ),
+                      onPressed: () {
+                        LocatorService().users.logout();
+                        return Navigator.of(context).pushNamedAndRemoveUntil(
+                          RouteNames.login,
+                          (route) => false,
+                        );
+                      },
                     ),
                   ],
                 ),

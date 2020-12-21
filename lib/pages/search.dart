@@ -18,7 +18,7 @@ class Search extends StatefulWidget {
   _SearchState createState() => _SearchState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   final youtube = LocatorService().youtube;
   TextEditingController _editor;
   Timer _tick;
@@ -147,4 +147,7 @@ class _SearchState extends State<Search> {
     }
     return true;
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
