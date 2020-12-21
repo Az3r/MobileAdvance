@@ -236,14 +236,14 @@ class _UserSettingsState extends State<UserSettings> {
                                           final credential =
                                               EmailAuthProvider.credential(
                                             email: snapshot.data.email,
-                                            password: _oldPassword,
+                                            password: _oldPassword.hash(),
                                           );
                                           await snapshot.data
                                               .reauthenticateWithCredential(
                                                   credential);
 
                                           await snapshot.data.updatePassword(
-                                              _oldPassword.hash());
+                                              _newPassword.hash());
                                         }
 
                                         Scaffold.of(context).showSnackBar(
