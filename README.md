@@ -13,7 +13,7 @@ Nguyễn Mạnh Tuấn - 1712875
 ## Danh sách chức năng
 
 1. Đăng nhập - Đăng ký
-1. Thay đổi avatar - tên - mật khẩu
+1. Thay đổi avatar - tên - mật khẩu, xác nhận email
 1. Màn hình Home: hiển thị các courses mới nhất
 1. Màn hình Feature channels: hiển thị các channels được đề xuất
 1. Màn hình Search: tìm kiếm courses
