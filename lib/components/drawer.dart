@@ -1,3 +1,4 @@
+import 'package:SingularSight/components/errors.dart';
 import 'package:SingularSight/components/logo.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
@@ -43,29 +44,21 @@ class _UserDrawerState extends State<UserDrawer>
           StreamBuilder<User>(
               stream: FirebaseAuth.instance.userChanges(),
               builder: (context, snapshot) {
-                final state = snapshot.hasData
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst;
-                return AnimatedCrossFade(
-                  firstChild: SizedBox(
-                    height: 128,
-                    width: 128,
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                  secondChild: UserAccountsDrawerHeader(
-                    accountName: Text(snapshot.data?.displayName ?? 'Guest'),
-                    accountEmail:
-                        Text(snapshot.data?.email ?? 'Anonymous user'),
-                    currentAccountPicture: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        snapshot.data?.photoURL ??
-                            'https://avatarfiles.alphacoders.com/261/261533.jpg',
-                      ),
-                    ),
-                  ),
-                  crossFadeState: state,
-                  duration: const Duration(milliseconds: 300),
-                );
+                if (snapshot.hasError)
+                  return ErrorMessage(message: snapshot.error.toString());
+                else if (snapshot.hasData) {
+                  return UserAccountsDrawerHeader(
+                    accountName: Text(snapshot.data.displayName),
+                    accountEmail: Text(snapshot.data.email),
+                    currentAccountPicture: snapshot.data.photoURL != null
+                        ? CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(snapshot.data.photoURL),
+                          )
+                        : Icon(Icons.image),
+                  );
+                }
+                return Center(child: SpinningLogo());
               }),
           ListTile(
             leading: Icon(Icons.settings),
@@ -105,18 +98,16 @@ class _UserDrawerState extends State<UserDrawer>
                   title: Text('Logging out'),
                   content: Text('Are you sure?'),
                   actions: [
-                    TextButton(
+                    InkWell(
                       child: Text('Not really'),
-                      onPressed: () => Navigator.of(context).pop(),
+                      onTap: () => Navigator.of(context).pop(),
                     ),
                     ElevatedButton(
                       child: Text('Log me out'),
                       onPressed: () {
                         LocatorService().users.logout();
-                        return Navigator.of(context).pushNamedAndRemoveUntil(
-                          RouteNames.login,
-                          (route) => false,
-                        );
+                        return Navigator.of(context)
+                            .pushReplacementNamed(RouteNames.login);
                       },
                     ),
                   ],
