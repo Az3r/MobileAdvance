@@ -106,7 +106,10 @@ class _UserDrawerState extends State<UserDrawer>
                       child: Text('Log me out'),
                       onPressed: () {
                         LocatorService().users.logout();
-                        return Navigator.of(context)
+                        // close drawer
+                        Navigator.of(context).pop();
+                        // now we push login screen
+                        Navigator.of(context)
                             .pushReplacementNamed(RouteNames.login);
                       },
                     ),
