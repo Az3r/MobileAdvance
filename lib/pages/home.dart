@@ -91,15 +91,14 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         child: StreamBuilder<List<PlaylistModel>>(
           stream: _controller.stream,
           builder: (context, snapshot) {
-            if (_list.currentState != null && snapshot.hasData) {
+            if (snapshot.hasError) {
+              return ErrorWidget(snapshot.error);
+            } else if (_list.currentState != null && snapshot.hasData) {
               for (final item in snapshot.data) {
                 _playlists.add(item);
                 _list.currentState.insertItem(_playlists.length - 1);
               }
-            } else if (snapshot.hasError) {
-              return ErrorWidget(snapshot.error);
-            } else if (!snapshot.hasData)
-              return Center(child: CircularProgressIndicator());
+            }
             return AnimatedList(
               key: _list,
               itemBuilder: (context, index, animation) {

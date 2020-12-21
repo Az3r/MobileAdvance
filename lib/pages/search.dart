@@ -88,12 +88,15 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   Widget _buildItem(PlaylistModel item) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: PlaylistThumbnail.horizontal(
-        playlist: item,
-        onThumbnailTap: () => Navigator.of(context).pushNamed(
-          RouteNames.watch,
-          arguments: item,
-        ),
+      child: InkWell(
+        onTap: () async {
+          final first = await youtube.getFirstVideoOfPlaylist(item);
+          return Navigator.of(context).pushNamed(
+            RouteNames.watch,
+            arguments: [item, first],
+          );
+        },
+        child: PlaylistThumbnail.horizontal(playlist: item),
       ),
     );
   }
