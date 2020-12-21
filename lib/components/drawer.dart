@@ -14,7 +14,8 @@ class UserDrawer extends StatefulWidget {
   _UserDrawerState createState() => _UserDrawerState();
 }
 
-class _UserDrawerState extends State<UserDrawer> {
+class _UserDrawerState extends State<UserDrawer>
+    with AutomaticKeepAliveClientMixin {
   PackageInfo _info = PackageInfo(
     appName: 'Unknown',
     packageName: 'Unknown',
@@ -35,11 +36,12 @@ class _UserDrawerState extends State<UserDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Drawer(
       child: ListView(
         children: [
           StreamBuilder<User>(
-              stream: FirebaseAuth.instance.authStateChanges(),
+              stream: FirebaseAuth.instance.userChanges(),
               builder: (context, snapshot) {
                 final state = snapshot.hasData
                     ? CrossFadeState.showSecond
@@ -66,22 +68,12 @@ class _UserDrawerState extends State<UserDrawer> {
                 );
               }),
           ListTile(
-            leading: Icon(Icons.bookmarks),
-            title: Text('Saved bookmarks'),
-            onTap: () => Navigator.of(context).pushNamed(RouteNames.bookmarks),
-          ),
-          ListTile(
-            leading: Icon(Icons.video_library),
-            title: Text('My channels'),
-            onTap: () => Navigator.of(context).pushNamed(RouteNames.channels),
-          ),
-          ListTile(
             leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: Text('My profile'),
             onTap: () => Navigator.of(context).pushNamed(RouteNames.settings),
           ),
           AboutListTile(
-            child: Text('About me'),
+            child: Text('App info'),
             icon: Icon(Icons.info),
             applicationIcon: Logo(width: 32, height: 32),
             applicationName: _info.appName,
@@ -136,4 +128,7 @@ class _UserDrawerState extends State<UserDrawer> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
