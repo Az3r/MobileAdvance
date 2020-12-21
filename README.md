@@ -8,7 +8,7 @@ Advance mobile development - 2017_03
 
 Nguyễn Mạnh Tuấn - 1712875
 
-[Link đến video của các chức năng]()
+[Link đến video của các chức năng](https://drive.google.com/drive/folders/1jstqw9RYL9AEkEwRfioBU7d1PE1BpO_W?usp=sharing)
 
 ## Danh sách chức năng
 
