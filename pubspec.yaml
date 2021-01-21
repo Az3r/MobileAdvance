@@ -28,7 +28,7 @@ dependencies:
 
   # http
   http: ^0.12.2
-  
+
   # firebase plugins
   firebase_core: ^0.5.2+1
   firebase_analytics: ^6.2.0
@@ -63,7 +63,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
   font_awesome_flutter: ^8.10.0
-
 
 dev_dependencies:
   flutter_test:
