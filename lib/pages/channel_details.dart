@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:SingularSight/components/channel_playlists.dart';
 import 'package:SingularSight/components/errors.dart';
 import 'package:SingularSight/components/list.dart';
 import 'package:SingularSight/models/channel_model.dart';
