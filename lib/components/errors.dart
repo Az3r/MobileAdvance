@@ -33,3 +33,36 @@ class ErrorMessage extends StatelessWidget {
     );
   }
 }
+
+class NetworkImageError extends StatelessWidget {
+  final dynamic error;
+  const NetworkImageError({Key key, this.error}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            'Image Error',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          content: Text(error.toString()),
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.warning,
+            color: Colors.yellow,
+          ),
+          Text('Failed to load image',
+              style: Theme.of(context).textTheme.bodyText1),
+        ],
+      ),
+    );
+  }
+}

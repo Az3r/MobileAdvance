@@ -34,7 +34,7 @@ class SliverVideoPlaylistState extends State<SliverVideoPlaylist>
   final _list = GlobalKey<SliverAnimatedListState>();
 
   StreamController<List<VideoModel>> _videoList;
-  ApiResult<VideoModel> prev;
+  ApiToken<VideoModel> prev;
 
   final _videos = <VideoModel>[];
   int _selected;

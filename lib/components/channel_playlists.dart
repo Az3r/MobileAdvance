@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:SingularSight/components/animations.dart';
 import 'package:SingularSight/models/channel_model.dart';
@@ -31,7 +30,7 @@ class SliverPlaylistsState extends State<SliverPlaylists> {
   final _list = GlobalKey<SliverAnimatedListState>();
   StreamController<List<PlaylistModel>> _controller;
   final _playlists = <PlaylistModel>[];
-  ApiResult<PlaylistModel> prev;
+  ApiToken<PlaylistModel> prev;
 
   @override
   void initState() {

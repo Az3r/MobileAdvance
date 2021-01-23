@@ -22,7 +22,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   final youtube = LocatorService().youtube;
   TextEditingController _editor;
   Timer _tick;
-  ApiResult _prev;
+  ApiToken _prev;
   StreamController<List<PlaylistModel>> _stream;
   var _list = GlobalKey<AnimatedListState>();
   final _playlists = [];

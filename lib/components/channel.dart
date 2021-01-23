@@ -1,10 +1,11 @@
+import 'package:SingularSight/components/errors.dart';
 import 'package:SingularSight/models/channel_model.dart';
-import 'package:SingularSight/styles/texts.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/youtube/v3.dart';
 import 'package:SingularSight/utilities/type_extension.dart';
+import 'package:SingularSight/components/typography.dart' as typo;
 
 /// a Column consisting of an image and a label
 class ShortThumbnail extends StatelessWidget {
@@ -26,102 +27,69 @@ class ShortThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _v ? _vBuild(context) : _hBuild(context);
+    return InkWell(
+        onTap: () => Navigator.of(context).pushNamed(
+              RouteNames.channelDetails,
+              arguments: channel,
+            ),
+        child: _v ? _vBuild(context) : _hBuild(context));
   }
 
   Widget _vBuild(BuildContext context) {
-    return InkWell(
-      onTap: () => Navigator.of(context).pushNamed(
-        RouteNames.channelDetails,
-        arguments: channel,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            child: _ImageWidget(
-              heroId: heroId ?? channel.id,
-              thumbnail: channel.thumbnails.medium,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: _ImageWidget(
+            heroId: heroId ?? channel.id,
+            thumbnail: channel.thumbnails.medium,
           ),
-          SizedBox(
-            height: 8.0,
-          ),
-          _Title(
-            text: channel.title,
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          _Subtitle(
-            text: channel.subscriberCount.toSubscirberFormat(context),
-          ),
-        ],
-      ),
+        ),
+        SizedBox(
+          height: 8.0,
+        ),
+        typo.Title(
+          text: channel.title,
+        ),
+        SizedBox(
+          height: 8.0,
+        ),
+        typo.Subtitle(
+          text: channel.subscriberCount.toSubscirberFormat(context),
+        ),
+      ],
     );
   }
 
   Widget _hBuild(BuildContext context) {
-    return InkWell(
-      onTap: () => Navigator.of(context).pushNamed(
-        RouteNames.channelDetails,
-        arguments: channel,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _ImageWidget(
-            heroId: heroId ?? channel.id,
-            thumbnail: channel.thumbnails.medium,
-          ),
-          SizedBox(
-            width: 16.0,
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _Title(
-                text: channel.title,
-              ),
-              SizedBox(
-                height: 8.0,
-              ),
-              _Subtitle(
-                text: channel.subscriberCount.toSubscirberFormat(context),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class _Title extends StatelessWidget {
-  final String text;
-  const _Title({Key key, this.text}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(text,
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.subtitle1);
-  }
-}
-
-class _Subtitle extends StatelessWidget {
-  final String text;
-  const _Subtitle({Key key, this.text}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.subtitle2,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _ImageWidget(
+          heroId: heroId ?? channel.id,
+          thumbnail: channel.thumbnails.medium,
+        ),
+        SizedBox(
+          width: 16.0,
+        ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            typo.Title(
+              text: channel.title,
+            ),
+            SizedBox(
+              height: 8.0,
+            ),
+            typo.Subtitle(
+              text: channel.subscriberCount.toSubscirberFormat(context),
+            ),
+          ],
+        )
+      ],
     );
   }
 }
@@ -140,25 +108,13 @@ class _ImageWidget extends StatelessWidget {
     return Hero(
       tag: heroId,
       child: ClipOval(
-        child: Material(
-          child: CachedNetworkImage(
-            imageUrl: thumbnail.url,
-            placeholder: (context, url) => Icon(Icons.image),
-            errorWidget: (context, url, error) => Container(
-              decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.all(Radius.circular(16))),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.warning),
-                  Text('Unable to load image'),
-                ],
-              ),
-            ),
-            fit: BoxFit.cover,
+        child: CachedNetworkImage(
+          imageUrl: thumbnail.url,
+          placeholder: (context, url) => Icon(Icons.image),
+          errorWidget: (context, url, error) => Container(
+            child: NetworkImageError(error: error),
           ),
+          fit: BoxFit.cover,
         ),
       ),
     );

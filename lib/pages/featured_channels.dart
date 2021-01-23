@@ -1,17 +1,11 @@
 import 'dart:io';
 
-import 'package:SingularSight/components/animations.dart';
 import 'package:SingularSight/components/routings.dart';
-import 'package:SingularSight/components/thumbnails.dart';
 import 'package:SingularSight/models/channel_model.dart';
-import 'package:SingularSight/pages/network_error.dart';
 import 'package:SingularSight/services/api_service.dart';
 import 'package:SingularSight/services/locator_service.dart';
-import 'package:SingularSight/utilities/constants.dart';
-import 'package:SingularSight/utilities/globals.dart';
 import 'package:SingularSight/components/channel.dart' as ch;
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:googleapis/youtube/v3.dart';
 
 class FeaturedChannels extends StatefulWidget {
@@ -28,7 +22,7 @@ class _FeaturedChannelsState extends State<FeaturedChannels>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return FutureBuilder<ApiResult<ChannelModel>>(
+    return FutureBuilder<ApiToken<ChannelModel>>(
       future: _loadChannels(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -52,8 +46,8 @@ class _FeaturedChannelsState extends State<FeaturedChannels>
     );
   }
 
-  Future<ApiResult<ChannelModel>> _loadChannels() async {
-    var result = ApiResult<ChannelModel>();
+  Future<ApiToken<ChannelModel>> _loadChannels() async {
+    var result = ApiToken<ChannelModel>();
     var retry = true;
     while (retry) {
       try {

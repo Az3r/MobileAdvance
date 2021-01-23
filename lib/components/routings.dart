@@ -5,7 +5,6 @@ import 'package:SingularSight/pages/channel_details.dart';
 import 'package:SingularSight/pages/network_error.dart';
 import 'package:SingularSight/pages/login.dart';
 import 'package:SingularSight/pages/watch_playlist.dart';
-import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
 

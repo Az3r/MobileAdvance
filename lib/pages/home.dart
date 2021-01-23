@@ -28,7 +28,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   StreamController<List<PlaylistModel>> _controller;
   final _list = GlobalKey<AnimatedListState>();
   final _playlists = <PlaylistModel>[];
-  ApiResult prev;
+  ApiToken prev;
   String skills;
 
   @override

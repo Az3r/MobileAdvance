@@ -39,7 +39,7 @@ class ApiService {
     _youtube = YoutubeApi(client);
   }
 
-  Future<ApiResult<PlaylistModel>> getPlaylistsOfChannel(
+  Future<ApiToken<PlaylistModel>> getPlaylistsOfChannel(
     ChannelModel channel, {
     int n = 10,
     String nextToken,
@@ -58,7 +58,7 @@ class ApiService {
               videoCount: e.contentDetails.itemCount,
             )..channel = channel)
         .toList();
-    return ApiResult(
+    return ApiToken(
       nextToken: res.nextPageToken,
       prevToken: res.prevPageToken,
       items: result,
@@ -67,7 +67,7 @@ class ApiService {
 
   /// Find all features channels stored in firebase firestore,
   /// then get details from [YoutubeApi]
-  Future<ApiResult<ChannelModel>> getFeaturedChannels() async {
+  Future<ApiToken<ChannelModel>> getFeaturedChannels() async {
     final query = await FirebaseFirestore.instance.collection('channels').get();
     final ids = query.docs.map((e) => e.id).toList();
     final res = await _youtube.channels.list(
@@ -75,14 +75,14 @@ class ApiService {
       maxResults: ids.length,
       id: ids.join(','),
     );
-    return ApiResult(
+    return ApiToken(
       nextToken: res.nextPageToken,
       prevToken: res.prevPageToken,
       items: res.items.map((e) => ChannelModel.fromChannel(e)).toList(),
     );
   }
 
-  Future<ApiResult<PlaylistModel>> searchPlaylists(
+  Future<ApiToken<PlaylistModel>> searchPlaylists(
     String q, {
     int n = 10,
     String order = orderRelevance,
@@ -108,7 +108,7 @@ class ApiService {
       playlist.channel = await channels[i];
       items.add(playlist);
     }
-    return ApiResult<PlaylistModel>(
+    return ApiToken<PlaylistModel>(
       nextToken: res.nextPageToken,
       prevToken: res.prevPageToken,
       items: items,
@@ -156,7 +156,7 @@ class ApiService {
     return res.items.map((e) => VideoModel.fromVideo(e)).toList();
   }
 
-  Future<ApiResult<VideoModel>> getVideosFromPlaylist(
+  Future<ApiToken<VideoModel>> getVideosFromPlaylist(
     PlaylistModel playlist, {
     int n = 10,
     String nextToken,
@@ -171,7 +171,7 @@ class ApiService {
     final videos =
         await getVideos(res.items.map((e) => e.snippet.resourceId.videoId));
 
-    return ApiResult(
+    return ApiToken(
       nextToken: res.nextPageToken,
       prevToken: res.prevPageToken,
       items: videos,
@@ -193,12 +193,13 @@ class ApiService {
   }
 }
 
-class ApiResult<T> {
+/// a token containing results for current call to api, as well as last call token and next call token
+class ApiToken<T> {
   final String nextToken;
   final String prevToken;
   final List<T> items;
 
-  ApiResult({
+  ApiToken({
     this.nextToken,
     this.prevToken,
     this.items = const [],
