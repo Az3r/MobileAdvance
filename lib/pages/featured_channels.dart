@@ -9,6 +9,7 @@ import 'package:SingularSight/services/api_service.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:SingularSight/utilities/globals.dart';
+import 'package:SingularSight/components/channel.dart' as ch;
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:googleapis/youtube/v3.dart';
@@ -24,7 +25,41 @@ class _FeaturedChannelsState extends State<FeaturedChannels>
     with AutomaticKeepAliveClientMixin {
   final youtube = LocatorService().youtube;
 
-  Future<ApiResult<ChannelModel>> load() async {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return FutureBuilder<ApiResult<ChannelModel>>(
+      future: _loadChannels(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return ErrorWidget(snapshot.error);
+        } else if (snapshot.connectionState != ConnectionState.done) {
+          return Center(child: CircularProgressIndicator());
+        }
+        return AnimationLimiter(
+          child: ListView.builder(
+            itemCount: snapshot.data?.items?.length ?? 0,
+            itemBuilder: (context, index) {
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 300),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    child:
+                        ch.ShortThumbnail(channel: snapshot.data.items[index]),
+                    height: 112,
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<ApiResult<ChannelModel>> _loadChannels() async {
     var result = ApiResult<ChannelModel>();
     var retry = true;
     while (retry) {
@@ -41,46 +76,6 @@ class _FeaturedChannelsState extends State<FeaturedChannels>
       }
     }
     return result;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return FutureBuilder<ApiResult<ChannelModel>>(
-      future: load(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return ErrorWidget(snapshot.error);
-        } else if (snapshot.connectionState != ConnectionState.done) {
-          return Center(child: CircularProgressIndicator());
-        }
-        return AnimationLimiter(
-          child: ListView.builder(
-            itemCount: snapshot.data?.items?.length ?? 0,
-            itemBuilder: (context, index) {
-              return AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 300),
-                child: _buildItem(snapshot.data.items[index]),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildItem(ChannelModel value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 32.0),
-      child: ChannelThumbnail.vertical(
-        channel: value,
-        onThumbnailTap: () => Navigator.of(context).pushNamed(
-          RouteNames.channelDetails,
-          arguments: value,
-        ),
-      ),
-    );
   }
 
   @override

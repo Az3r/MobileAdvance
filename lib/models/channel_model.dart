@@ -11,7 +11,6 @@ class ChannelModel {
   final int subscriberCount;
   final ThumbnailDetails thumbnails;
   final String profileColor;
-  final String unsubscribedTrailer;
 
   @JsonKey(ignore: true)
   List<String> featuredChannelIds;
@@ -26,7 +25,6 @@ class ChannelModel {
     this.subscriberCount,
     this.thumbnails,
     this.profileColor,
-    this.unsubscribedTrailer,
   });
 
   factory ChannelModel.fromChannel(Channel item) {
@@ -37,7 +35,6 @@ class ChannelModel {
       subscriberCount: int.tryParse(item.statistics.subscriberCount ?? ''),
       thumbnails: item.snippet.thumbnails,
       title: item.brandingSettings.channel.title,
-      unsubscribedTrailer: item.brandingSettings.channel.unsubscribedTrailer,
     );
   }
 

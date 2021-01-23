@@ -16,7 +16,6 @@ ChannelModel _$ChannelModelFromJson(Map<String, dynamic> json) {
         ? null
         : ThumbnailDetails.fromJson(json['thumbnails'] as Map<String, dynamic>),
     profileColor: json['profileColor'] as String,
-    unsubscribedTrailer: json['unsubscribedTrailer'] as String,
   );
 }
 
@@ -28,5 +27,4 @@ Map<String, dynamic> _$ChannelModelToJson(ChannelModel instance) =>
       'subscriberCount': instance.subscriberCount,
       'thumbnails': instance.thumbnails,
       'profileColor': instance.profileColor,
-      'unsubscribedTrailer': instance.unsubscribedTrailer,
     };
