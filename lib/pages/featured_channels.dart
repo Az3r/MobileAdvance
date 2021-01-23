@@ -36,24 +36,17 @@ class _FeaturedChannelsState extends State<FeaturedChannels>
         } else if (snapshot.connectionState != ConnectionState.done) {
           return Center(child: CircularProgressIndicator());
         }
-        return AnimationLimiter(
-          child: ListView.builder(
-            itemCount: snapshot.data?.items?.length ?? 0,
-            itemBuilder: (context, index) {
-              return AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 300),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    child:
-                        ch.ShortThumbnail(channel: snapshot.data.items[index]),
-                    height: 112,
-                  ),
-                ),
-              );
-            },
-          ),
+        return ListView.builder(
+          itemCount: snapshot.data?.items?.length ?? 0,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SizedBox(
+                child: ch.ShortThumbnail.v(channel: snapshot.data.items[index]),
+                height: 112,
+              ),
+            );
+          },
         );
       },
     );

@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:SingularSight/components/thumbnails.dart';
 import 'package:SingularSight/components/channel_playlists.dart';
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:SingularSight/components/channel.dart' as ch;
 
 class ChannelDetails extends StatefulWidget {
   final ChannelModel channel;
@@ -44,9 +44,13 @@ class _ChannelDetailsState extends State<ChannelDetails> {
                 vertical: 16,
               ),
               sliver: SliverList(
-                delegate: SliverChildListDelegate(
+                delegate: SliverChildListDelegate.fixed(
                   [
-                    ChannelThumbnail.horizontal(channel: widget.channel),
+                    SizedBox(
+                      child: ch.ShortThumbnail.h(channel: widget.channel),
+                      width: 64,
+                      height: 64,
+                    ),
                     SizedBox(height: 8),
                     SizedBox(
                         width: 480,
