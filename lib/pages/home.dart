@@ -9,11 +9,8 @@ import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/services/api_service.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
-import 'package:SingularSight/utilities/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../services/locator_service.dart';
-import 'network_error.dart';
 
 class Home extends StatefulWidget {
   const Home();
