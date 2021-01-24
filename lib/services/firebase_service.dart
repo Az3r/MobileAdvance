@@ -1,7 +1,9 @@
+import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/skill_model.dart';
 import 'package:SingularSight/utilities/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:meta/meta.dart';
 
 import 'exceptions.dart';
@@ -10,6 +12,7 @@ import 'exceptions.dart';
 class FirebaseService {
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
+  final storage = FirebaseStorage.instance;
 
   static FirebaseService instance = FirebaseService._();
   FirebaseService._();
@@ -70,6 +73,7 @@ class FirebaseService {
   Stream<List<SkillModel>> skills() {
     return firestore.collection('skills').snapshots().map((query) => query.docs
         .where((doc) => doc.exists)
-        .map((doc) => SkillModel.fromJson(doc.data())));
+        .map((doc) => SkillModel.fromJson(doc.data()))
+        .toList());
   }
 }

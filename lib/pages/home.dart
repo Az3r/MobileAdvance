@@ -1,157 +1,234 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:SingularSight/components/routings.dart';
-import 'package:googleapis/youtube/v3.dart';
-import 'package:SingularSight/components/animations.dart';
-import 'package:SingularSight/components/thumbnails.dart';
+import 'package:SingularSight/components/errors.dart';
 import 'package:SingularSight/models/playlist_model.dart';
+import 'package:SingularSight/models/skill_model.dart';
 import 'package:SingularSight/services/api_service.dart';
+import 'package:SingularSight/services/firebase_service.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class Home extends StatefulWidget {
-  const Home();
+import 'package:googleapis/youtube/v3.dart';
 
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
-  final youtube = LocatorService().youtube;
-
-  StreamController<List<PlaylistModel>> _controller;
-  final _list = GlobalKey<AnimatedListState>();
-  final _playlists = <PlaylistModel>[];
-  ApiToken prev;
-  String skills;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = StreamController();
-
-    // load all skills from firestore and use them as search query
-    _getSkills().then((value) {
-      skills = value.join('|');
-      loadNext();
-    });
-  }
-
-  Future<List<String>> _getSkills() async {
-    final snapshot =
-        await FirebaseFirestore.instance.collection('skills').get();
-    return snapshot.docs.map((e) => e.id).toList();
-  }
-
-  Future<void> reload() {
-    prev = null;
-    return loadNext();
-  }
-
-  Future<void> loadNext() async {
-    if (prev == null || prev.nextToken != null) {
-      var retry = true;
-      while (retry) {
-        try {
-          final result = await youtube.searchPlaylists(
-            skills,
-            nextToken: prev?.nextToken,
-          );
-          retry = false;
-          prev = result;
-          _controller.add(result.items);
-        } on DetailedApiRequestError {
-          Navigator.of(context).push(Routings.exceedQuota());
-          retry = false;
-        } on SocketException {
-          retry = await Navigator.of(context).push(Routings.disconnected());
-        } catch (e) {
-          rethrow;
-        }
-      }
-    }
-  }
+class Home extends StatelessWidget {
+  const Home({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    return NotificationListener<ScrollEndNotification>(
-      onNotification: (notification) {
-        loadNext();
-        return true;
-      },
-      child: RefreshIndicator(
-        onRefresh: _refreshList,
-        child: StreamBuilder<List<PlaylistModel>>(
-          stream: _controller.stream,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return ErrorWidget(snapshot.error);
-            } else if (_list.currentState != null && snapshot.hasData) {
-              for (final item in snapshot.data) {
-                _playlists.add(item);
-                _list.currentState.insertItem(_playlists.length - 1);
-              }
-            }
-            return AnimatedList(
-              key: _list,
-              itemBuilder: (context, index, animation) {
-                return SlideDownWithFade(
-                  animation: animation,
-                  child: _buildItem(_playlists[index]),
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildItem(PlaylistModel playlist) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: PlaylistThumbnail.vertical(
-        playlist: playlist,
-        onThumbnailTap: () async {
-          final first = await youtube.getFirstVideoOfPlaylist(playlist);
-          return Navigator.of(context).pushNamed(
-            RouteNames.watch,
-            arguments: [playlist, first],
+    return StreamBuilder<List<SkillModel>>(
+      stream: FirebaseService().skills(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData)
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) => Container(
+              height: 320,
+              padding: const EdgeInsets.all(16.0),
+              child: _SkillWidget(
+                skill: snapshot.data[index],
+              ),
+            ),
           );
-        },
-        onChannelThumbnailTap: () => Navigator.pushNamed(
-          context,
-          RouteNames.channelDetails,
-          arguments: playlist.channel,
+        if (snapshot.hasError) return ErrorWidget(snapshot.error);
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+}
+
+class _SkillWidget extends StatefulWidget {
+  final SkillModel skill;
+  const _SkillWidget({Key key, @required this.skill})
+      : assert(skill != null),
+        super(key: key);
+
+  @override
+  _SkillWidgetState createState() => _SkillWidgetState();
+}
+
+class _SkillWidgetState extends State<_SkillWidget>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ActionChip(
+          onPressed: () {},
+          tooltip: 'Press me see more of this',
+          label: Text(widget.skill.name),
+          avatar: widget.skill.data != null
+              ? Image.memory(widget.skill.data)
+              : null,
         ),
-      ),
+        SizedBox(height: 8),
+        Expanded(
+          child: FutureBuilder<ApiToken<PlaylistModel>>(
+              future: LocatorService()
+                  .youtube
+                  .searchPlaylists(widget.skill.keyword),
+              builder: (context, snapshot) {
+                if (snapshot.hasData)
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data.items.length,
+                    itemBuilder: (context, index) => Container(
+                      margin: const EdgeInsets.only(right: 16.0),
+                      width: 256,
+                      child: _PlaylistWidget(
+                        playlist: snapshot.data.items[index],
+                      ),
+                    ),
+                  );
+                if (snapshot.hasError) return ErrorWidget(snapshot.error);
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }),
+        )
+      ],
     );
   }
 
   @override
+  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+}
 
-  Future<void> _refreshList() async {
-    while (_playlists.isNotEmpty) {
-      final item = _playlists.removeAt(0);
-      _list.currentState.removeItem(
-        0,
-        (context, animation) => FadeTransition(
-          opacity: Tween(begin: 1.0, end: 0.0).animate(animation),
-          child: _buildItem(item),
-        ),
-      );
-    }
-    await reload();
-  }
+class _PlaylistWidget extends StatelessWidget {
+  final PlaylistModel playlist;
+  const _PlaylistWidget({
+    Key key,
+    this.playlist,
+  }) : super(key: key);
 
   @override
-  void dispose() {
-    _controller.close();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: _PlaylistImage(
+              thumbnail: playlist.thumbnails.medium,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 32,
+                  child: _ChannelIcon(
+                    thumbnail: playlist.channel.thumbnails.medium,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _Title(text: playlist.title),
+                      SizedBox(height: 8),
+                      _Subtitle(text: playlist.channel.title),
+                      _Subtitle(text: '${playlist.videoCount} videos'),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  iconSize: 24,
+                  padding: EdgeInsets.zero,
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () => Navigator.of(context).pushNamed(
+                    RouteNames.channelDetails,
+                    arguments: playlist.channel,
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _Title extends StatelessWidget {
+  final String text;
+  const _Title({Key key, this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.bodyText1;
+    return Text(
+      text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: style,
+    );
+  }
+}
+
+class _Subtitle extends StatelessWidget {
+  final String text;
+  const _Subtitle({Key key, this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.bodyText2;
+    return Text(
+      text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: style.copyWith(color: style.color.withAlpha(128)),
+    );
+  }
+}
+
+class _PlaylistImage extends StatelessWidget {
+  final Thumbnail thumbnail;
+  const _PlaylistImage({
+    Key key,
+    this.thumbnail,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      imageUrl: thumbnail.url,
+      placeholder: (context, url) => Icon(Icons.image),
+      errorWidget: (context, url, error) => Container(
+        child: NetworkImageError(error: error),
+      ),
+      fit: BoxFit.cover,
+    );
+  }
+}
+
+class _ChannelIcon extends StatelessWidget {
+  final Thumbnail thumbnail;
+  const _ChannelIcon({
+    Key key,
+    this.thumbnail,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: CachedNetworkImage(
+        imageUrl: thumbnail.url,
+        placeholder: (context, url) => Icon(Icons.account_box),
+        errorWidget: (context, url, error) => Container(
+          child: NetworkImageError(error: error),
+        ),
+        fit: BoxFit.cover,
+      ),
+    );
   }
 }
