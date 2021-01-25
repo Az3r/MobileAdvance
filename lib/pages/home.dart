@@ -1,4 +1,5 @@
 import 'package:SingularSight/components/errors.dart';
+import 'package:SingularSight/components/image.dart' as img;
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/skill_model.dart';
 import 'package:SingularSight/services/api_service.dart';
@@ -9,6 +10,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:googleapis/youtube/v3.dart';
+import 'package:SingularSight/components/typography.dart' as typo;
 
 class Home extends StatelessWidget {
   const Home({Key key}) : super(key: key);
@@ -114,9 +116,7 @@ class _PlaylistWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: _PlaylistImage(
-              thumbnail: playlist.thumbnails.medium,
-            ),
+            child: img.ThumbnailImage(thumbnail: playlist.thumbnails.medium),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -134,10 +134,10 @@ class _PlaylistWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _Title(text: playlist.title),
+                      typo.Title(text: playlist.title),
                       SizedBox(height: 8),
-                      _Subtitle(text: playlist.channel.title),
-                      _Subtitle(text: '${playlist.videoCount} videos'),
+                      typo.Subtitle(text: playlist.channel.title),
+                      typo.Subtitle(text: '${playlist.videoCount} videos'),
                     ],
                   ),
                 ),
@@ -158,58 +158,6 @@ class _PlaylistWidget extends StatelessWidget {
           )
         ],
       ),
-    );
-  }
-}
-
-class _Title extends StatelessWidget {
-  final String text;
-  const _Title({Key key, this.text}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme.bodyText1;
-    return Text(
-      text,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: style,
-    );
-  }
-}
-
-class _Subtitle extends StatelessWidget {
-  final String text;
-  const _Subtitle({Key key, this.text}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme.bodyText2;
-    return Text(
-      text,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: style.copyWith(color: style.color.withAlpha(128)),
-    );
-  }
-}
-
-class _PlaylistImage extends StatelessWidget {
-  final Thumbnail thumbnail;
-  const _PlaylistImage({
-    Key key,
-    this.thumbnail,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: thumbnail.url,
-      placeholder: (context, url) => Icon(Icons.image),
-      errorWidget: (context, url, error) => Container(
-        child: NetworkImageError(error: error),
-      ),
-      fit: BoxFit.cover,
     );
   }
 }

@@ -133,7 +133,7 @@ class _PlaylistCollectionState extends State<_PlaylistCollection> {
         onTap: () {},
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: _PlaylistWidget.h(
+          child: _PlaylistWidget(
             playlist: data,
           ),
         ),
@@ -154,13 +154,7 @@ class _PlaylistCollectionState extends State<_PlaylistCollection> {
 
 class _PlaylistWidget extends StatelessWidget {
   final PlaylistModel playlist;
-  final bool _v;
-  const _PlaylistWidget.v({Key key, this.playlist})
-      : _v = true,
-        super(key: key);
-  const _PlaylistWidget.h({Key key, this.playlist})
-      : _v = false,
-        super(key: key);
+  const _PlaylistWidget({Key key, this.playlist}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

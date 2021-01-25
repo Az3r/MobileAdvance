@@ -6,7 +6,13 @@ class Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text, style: Theme.of(context).textTheme.subtitle1);
+    final style = Theme.of(context).textTheme.bodyText1;
+    return Text(
+      text,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      style: style,
+    );
   }
 }
 

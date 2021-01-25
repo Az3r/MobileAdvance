@@ -1,7 +1,6 @@
-import 'package:SingularSight/components/errors.dart';
+import 'package:SingularSight/components/image.dart';
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/utilities/constants.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/youtube/v3.dart';
 import 'package:SingularSight/utilities/type_extension.dart';
@@ -98,14 +97,7 @@ class _ImageWidget extends StatelessWidget {
     return Hero(
       tag: heroId,
       child: ClipOval(
-        child: CachedNetworkImage(
-          imageUrl: thumbnail.url,
-          placeholder: (context, url) => Icon(Icons.image),
-          errorWidget: (context, url, error) => Container(
-            child: NetworkImageError(error: error),
-          ),
-          fit: BoxFit.cover,
-        ),
+        child: ThumbnailImage(thumbnail: thumbnail),
       ),
     );
   }

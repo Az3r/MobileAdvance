@@ -1,10 +1,8 @@
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
-import 'package:SingularSight/utilities/globals.dart';
 import '../styles/texts.dart' as styles;
 import 'package:flutter/material.dart';
-import 'package:googleapis/youtube/v3.dart';
 
 typedef OnSubscribed = bool Function(bool subscribed);
 
@@ -195,12 +193,10 @@ class VideoThumbnail extends StatelessWidget {
     int hours = video.duration.inHours;
     var minutes = video.duration.inMinutes % 60;
     var seconds = video.duration.inSeconds % 60;
-    return(hours == 0
-        ? ''
-        : '$hours:') +
-            minutes.toString().padLeft(2, '0') +
-            ':' +
-            seconds.toString().padLeft(2, '0');
+    return (hours == 0 ? '' : '$hours:') +
+        minutes.toString().padLeft(2, '0') +
+        ':' +
+        seconds.toString().padLeft(2, '0');
   }
 
   String get views {
