@@ -62,23 +62,23 @@ class ShortThumbnail extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
-          child: _ImageWidget(
-            heroId: heroId ?? channel.id,
-            thumbnail: channel.thumbnails.medium,
-          ),
+        _ImageWidget(
+          heroId: heroId ?? channel.id,
+          thumbnail: channel.thumbnails.medium,
         ),
         const SizedBox(width: 16.0),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            typo.Title(text: channel.title),
-            const SizedBox(height: 8.0),
-            typo.Subtitle(
-              text: channel.subscriberCount.toCountingFormat('subscribers'),
-            ),
-          ],
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              typo.Title(text: channel.title),
+              const SizedBox(height: 8.0),
+              typo.Subtitle(
+                text: channel.subscriberCount.toCountingFormat('subscribers'),
+              ),
+            ],
+          ),
         )
       ],
     );

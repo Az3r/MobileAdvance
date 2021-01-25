@@ -91,15 +91,13 @@ class _MainWidgetState extends State<_MainWidget> {
           builder: (context, orientation) {
             return Column(
               children: [
-                KeepAlive(
-                  keepAlive: true,
-                  child: YoutubePlayer(
-                    controller: _player,
-                  ),
+                YoutubePlayer(
+                  controller: _player,
                 ),
                 if (orientation == Orientation.portrait)
                   Expanded(
                     child: _PortraitView(
+                      player: _player,
                       playlist: widget.playlist,
                       initialToken: widget.initialToken,
                     ),
@@ -123,12 +121,15 @@ class _PortraitView extends StatefulWidget {
   final PlaylistModel playlist;
   final ApiToken<VideoModel> initialToken;
   final int initialVideoIndex;
+  final YoutubePlayerController player;
   _PortraitView({
     Key key,
     @required this.playlist,
+    @required this.player,
     this.initialToken,
     this.initialVideoIndex = 0,
   })  : assert(playlist != null),
+        assert(player != null),
         assert(initialVideoIndex != null),
         super(key: key);
 
@@ -167,7 +168,7 @@ class _PortraitViewState extends State<_PortraitView>
           ),
           SliverPadding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             sliver: _SliverChannelDetail(channel: widget.playlist.channel),
           ),
           SliverPadding(
@@ -180,9 +181,13 @@ class _PortraitViewState extends State<_PortraitView>
             ),
           ),
           _VideoCollection(
+            key: _list,
             playlist: widget.playlist,
             initialToken: widget.initialToken,
-            onVideoSelected: (video) => setState(() => _currentVideo = video),
+            onVideoSelected: (video) {
+              widget.player.load(video.id);
+              setState(() => _currentVideo = video);
+            },
           ),
         ],
       ),
@@ -328,13 +333,11 @@ class _SliverChannelDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Row(children: [
-        Expanded(child: ch.ShortThumbnail.h(channel: channel)),
-        SizedBox(width: 16),
-        ElevatedButton(
-          child: Text('SUBSCRIBE'),
-          onPressed: () => _openYoutubeChannel(context),
+    return SliverList(
+      delegate: SliverChildListDelegate.fixed([
+        SizedBox(
+          child: ch.ShortThumbnail.h(channel: channel),
+          height: 64,
         ),
       ]),
     );
@@ -445,7 +448,7 @@ class _VideoWidget extends StatelessWidget {
       child: Container(
         color:
             selected ? Theme.of(context).selectedRowColor.withAlpha(64) : null,
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -459,8 +462,17 @@ class _VideoWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  typo.Title(text: video.title),
-                  typo.Subtitle(text: video.viewCount.toVideoViewFormat())
+                  Text(
+                    video.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 8.0),
+                  typo.Subtitle(text: video.viewCount.toVideoViewFormat()),
+                  typo.Subtitle(
+                      text: DateTime.now()
+                          .difference(video.publishedAt)
+                          .toVideoPublishFormat())
                 ],
               ),
             ),
