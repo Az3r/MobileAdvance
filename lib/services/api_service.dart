@@ -97,17 +97,9 @@ class ApiService {
       regionCode: regionVN,
     );
 
-    final channels =
-        res.items.map((e) => getChannel(e.snippet.channelId)).toList();
-    final playlists =
-        res.items.map((e) => getPlaylist(e.id.playlistId)).toList();
+    final ids = res.items.map((item) => item.id.playlistId).toList();
+    final items = await getPlaylists(ids, withChannel: true);
 
-    final items = <PlaylistModel>[];
-    for (var i = 0; i < playlists.length; ++i) {
-      final playlist = await playlists[i];
-      playlist.channel = await channels[i];
-      items.add(playlist);
-    }
     return ApiToken<PlaylistModel>(
       nextToken: res.nextPageToken,
       prevToken: res.prevPageToken,
@@ -133,6 +125,25 @@ class ApiService {
       id: id,
     );
     return PlaylistModel.fromPlaylist(res.items.first);
+  }
+
+  /// Get playlists as well as its associated channel (optional).
+  ///
+  /// If [withChannel] is false, [PlaylistModel.channel] is null
+  Future<List<PlaylistModel>> getPlaylists(List<String> ids,
+      {bool withChannel = false}) async {
+    final res = await _youtube.playlists.list(
+      '$partSnippet,$partContentDetails',
+      id: ids.join(','),
+    );
+    final results = [];
+    for (final item in res.items) {
+      final channel =
+          withChannel ? await getChannel(item.snippet.channelId) : null;
+      final playlist = PlaylistModel.fromPlaylist(item)..channel = channel;
+      results.add(playlist);
+    }
+    return results;
   }
 
   Future<VideoModel> getVideo(String videoId) async {

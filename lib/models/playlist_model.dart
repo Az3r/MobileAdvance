@@ -12,22 +12,26 @@ class PlaylistModel {
   final ThumbnailDetails thumbnails;
   final int videoCount;
   final String channelId;
+  final String channelTitle;
 
   @JsonKey(ignore: true)
   ChannelModel channel;
 
   PlaylistModel({
     this.channelId,
+    this.channelTitle,
     this.id,
     this.title,
     this.thumbnails,
     this.videoCount,
+    this.channel,
   });
 
   factory PlaylistModel.fromPlaylist(Playlist item) {
     return PlaylistModel(
       id: item.id,
       channelId: item.snippet.channelId,
+      channelTitle: item.snippet.channelTitle,
       thumbnails: item.snippet.thumbnails,
       title: item.snippet.title,
       videoCount: item.contentDetails.itemCount,
