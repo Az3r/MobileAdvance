@@ -61,9 +61,19 @@ class _UserDrawerState extends State<UserDrawer>
                 return Center(child: SpinningLogo());
               }),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('My profile'),
-            onTap: () => Navigator.of(context).pushNamed(RouteNames.settings),
+            leading: Icon(Icons.history),
+            title: Text('History'),
+            onTap: () => Navigator.of(context).pushNamed(RouteNames.history),
+          ),
+          ListTile(
+            leading: Icon(Icons.bookmark),
+            title: Text('Bookmarks'),
+            onTap: () => Navigator.of(context).pushNamed(RouteNames.bookmarks),
+          ),
+          ListTile(
+            leading: Icon(Icons.favorite),
+            title: Text('Favorites'),
+            onTap: () => Navigator.of(context).pushNamed(RouteNames.favorites),
           ),
           AboutListTile(
             child: Text('App info'),

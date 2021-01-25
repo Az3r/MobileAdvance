@@ -1,5 +1,7 @@
 class RouteNames {
   RouteNames._();
+  static const String history = '/history';
+  static const String favorites = '/favorites';
   static const String watch = '/watch';
   static const String error = '/error';
   static const String bookmarks = '/bookmarks';

@@ -15,6 +15,9 @@ import 'pages/login.dart';
 import 'pages/register.dart';
 import 'pages/settings.dart';
 import 'pages/splash.dart';
+import 'pages/bookmark.dart';
+import 'pages/history.dart';
+import 'pages/favorite.dart';
 
 void main() async {
   await initialize(false);
@@ -71,6 +74,9 @@ class _MainAppState extends State<MainApp> {
         RouteNames.dashboard: (context) => const Dashboard(),
         RouteNames.register: (context) => const Register(),
         RouteNames.settings: (context) => const UserSettings(),
+        RouteNames.bookmarks: (context) => const Bookmarks(),
+        RouteNames.favorites: (context) => const Favorites(),
+        RouteNames.history: (context) => const History(),
       },
       onGenerateRoute: (settings) {
         switch (settings.name) {
