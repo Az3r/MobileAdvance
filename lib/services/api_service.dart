@@ -107,26 +107,6 @@ class ApiService {
     );
   }
 
-  Future<ChannelModel> getChannel(String channelId) async {
-    final res = await _youtube.channels.list(
-      '$partSnippet, $partId, $partStatistics, $partBrandingSettings',
-      maxResults: 1,
-      id: channelId,
-    );
-
-    final item = res.items.first;
-    final channel = ChannelModel.fromChannel(item);
-    return channel;
-  }
-
-  Future<PlaylistModel> getPlaylist(String id) async {
-    final res = await _youtube.playlists.list(
-      '$partSnippet,$partContentDetails',
-      id: id,
-    );
-    return PlaylistModel.fromPlaylist(res.items.first);
-  }
-
   /// Get playlists as well as its associated channel (optional).
   ///
   /// If [withChannel] is false, [PlaylistModel.channel] is null
@@ -139,32 +119,11 @@ class ApiService {
     final results = [];
     for (final item in res.items) {
       final channel =
-          withChannel ? await getChannel(item.snippet.channelId) : null;
+          withChannel ? await _getChannel(item.snippet.channelId) : null;
       final playlist = PlaylistModel.fromPlaylist(item)..channel = channel;
       results.add(playlist);
     }
     return results;
-  }
-
-  Future<VideoModel> getVideo(String videoId) async {
-    final res = await _youtube.videos.list(
-      '$partSnippet,$partStatistics,$partContentDetails',
-      id: videoId,
-      maxResults: 1,
-    );
-    final item = res.items.first;
-    final video = VideoModel.fromVideo(item);
-    log.v(video);
-    return video;
-  }
-
-  Future<List<VideoModel>> getVideos(Iterable<String> ids) async {
-    final res = await _youtube.videos.list(
-      '$partSnippet,$partStatistics,$partContentDetails',
-      id: ids.join(','),
-      maxResults: ids.length,
-    );
-    return res.items.map((e) => VideoModel.fromVideo(e)).toList();
   }
 
   Future<ApiToken<VideoModel>> getVideosFromPlaylist(
@@ -180,7 +139,7 @@ class ApiService {
     );
 
     final videos =
-        await getVideos(res.items.map((e) => e.snippet.resourceId.videoId));
+        await _getVideos(res.items.map((e) => e.snippet.resourceId.videoId));
 
     return ApiToken(
       nextToken: res.nextPageToken,
@@ -196,7 +155,40 @@ class ApiService {
       playlistId: playlist.id,
       maxResults: 1,
     );
-    return getVideo(res.items.first.snippet.resourceId.videoId);
+    return _getVideo(res.items.first.snippet.resourceId.videoId);
+  }
+
+  Future<ChannelModel> _getChannel(String channelId) async {
+    final res = await _youtube.channels.list(
+      '$partSnippet, $partId, $partStatistics, $partBrandingSettings',
+      maxResults: 1,
+      id: channelId,
+    );
+
+    final item = res.items.first;
+    final channel = ChannelModel.fromChannel(item);
+    return channel;
+  }
+
+  Future<VideoModel> _getVideo(String videoId) async {
+    final res = await _youtube.videos.list(
+      '$partSnippet,$partStatistics,$partContentDetails',
+      id: videoId,
+      maxResults: 1,
+    );
+    final item = res.items.first;
+    final video = VideoModel.fromVideo(item);
+    log.v(video);
+    return video;
+  }
+
+  Future<List<VideoModel>> _getVideos(Iterable<String> ids) async {
+    final res = await _youtube.videos.list(
+      '$partSnippet,$partStatistics,$partContentDetails',
+      id: ids.join(','),
+      maxResults: ids.length,
+    );
+    return res.items.map((e) => VideoModel.fromVideo(e)).toList();
   }
 
   void dispose() {

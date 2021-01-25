@@ -86,14 +86,20 @@ class FirebaseService {
         .doc(auth.currentUser.uid)
         .collection('watch_laters')
         .get();
-
     final ids = favs.docs.map((doc) => doc.id).toList();
-    final pls = await firestore
-        .collection('playlists')
-        .where(FieldPath.documentId, whereIn: ids)
+    return youtube.getPlaylists(ids);
+  }
+
+  Future<List<PlaylistModel>> histories() async {
+    if (auth.currentUser == null) return Future.value(const []);
+    final favs = await firestore
+        .collection('users')
+        .doc(auth.currentUser.uid)
+        .collection('histories')
         .get();
 
-    return pls.docs.map((doc) => PlaylistModel.fromJson(doc.data())).toList();
+    final ids = favs.docs.map((doc) => doc.id).toList();
+    return youtube.getPlaylists(ids);
   }
 
   Future<List<PlaylistModel>> favorites() async {
@@ -105,12 +111,7 @@ class FirebaseService {
         .get();
 
     final ids = favs.docs.map((doc) => doc.id).toList();
-    final pls = await firestore
-        .collection('playlists')
-        .where(FieldPath.documentId, whereIn: ids)
-        .get();
-
-    return pls.docs.map((doc) => PlaylistModel.fromJson(doc.data())).toList();
+    return youtube.getPlaylists(ids);
   }
 
   Future<void> addToHistories(String id) async {
