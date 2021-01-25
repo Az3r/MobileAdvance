@@ -141,13 +141,16 @@ class _PlaylistWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                IconButton(
-                  iconSize: 24,
-                  padding: EdgeInsets.zero,
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () => Navigator.of(context).pushNamed(
-                    RouteNames.channelDetails,
-                    arguments: playlist.channel,
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    iconSize: 24,
+                    padding: EdgeInsets.zero,
+                    icon: Icon(Icons.more_vert),
+                    onPressed: () => Navigator.of(context).pushNamed(
+                      RouteNames.channelDetails,
+                      arguments: playlist.channel,
+                    ),
                   ),
                 ),
               ],

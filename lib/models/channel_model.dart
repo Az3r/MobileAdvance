@@ -12,12 +12,6 @@ class ChannelModel {
   final ThumbnailDetails thumbnails;
   final String profileColor;
 
-  @JsonKey(ignore: true)
-  List<String> featuredChannelIds;
-
-  @JsonKey(ignore: true)
-  List<ChannelModel> featuredChannels;
-
   ChannelModel({
     this.id,
     this.title,

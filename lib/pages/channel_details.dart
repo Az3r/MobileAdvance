@@ -189,9 +189,22 @@ class _PlaylistWidget extends StatelessWidget {
         SizedBox(width: 8.0),
         Align(
           alignment: Alignment.topRight,
-          child: IconButton(
+          child: PopupMenuButton<void>(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: InkWell(
+                  child: Text('Add to watch later'),
+                  onTap: () {},
+                ),
+              ),
+              PopupMenuItem(
+                child: InkWell(
+                  child: Text('Add to favorite'),
+                  onTap: () {},
+                ),
+              ),
+            ],
             icon: Icon(Icons.more_vert),
-            onPressed: () {},
           ),
         )
       ],
