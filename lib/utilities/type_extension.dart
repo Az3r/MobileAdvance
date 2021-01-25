@@ -2,13 +2,13 @@ import 'package:SingularSight/utilities/globals.dart';
 import 'package:flutter/material.dart';
 
 extension IntExtension on int {
-  String toCountingFormat([BuildContext context]) {
+  String toCountingFormat([String prefix = '']) {
     log.v('Missing mutilingual support');
     var num = this.toString();
     if (this >= 1000000)
       num = '${(this / 1000000).floor()}M';
     else if (this >= 1000) num = '${(this / 1000).floor()}K';
-    return '$num subscribers';
+    return '$num $prefix';
   }
 
   String toVideoViewFormat([BuildContext context]) {

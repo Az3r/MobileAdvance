@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:SingularSight/components/list.dart';
-import 'package:SingularSight/components/video_playlist.dart';
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
@@ -10,8 +9,6 @@ import 'package:SingularSight/services/api_service.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:googleapis/youtube/v3.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,10 +20,13 @@ import 'package:SingularSight/utilities/type_extension.dart';
 
 class WatchPlaylist extends StatelessWidget {
   final PlaylistModel playlist;
+  final int initialVideoIndex;
   const WatchPlaylist({
     Key key,
     @required this.playlist,
+    this.initialVideoIndex = 0,
   })  : assert(playlist != null),
+        assert(initialVideoIndex != null),
         super(key: key);
 
   @override
@@ -39,6 +39,7 @@ class WatchPlaylist extends StatelessWidget {
           return _MainWidget(
             playlist: playlist,
             initialToken: snapshot.data,
+            initialVideoIndex: initialVideoIndex,
           );
         return Center(child: CircularProgressIndicator());
       },
@@ -49,31 +50,31 @@ class WatchPlaylist extends StatelessWidget {
 class _MainWidget extends StatefulWidget {
   final PlaylistModel playlist;
   final ApiToken<VideoModel> initialToken;
+  final int initialVideoIndex;
 
   const _MainWidget({
     Key key,
     @required this.playlist,
     @required this.initialToken,
+    this.initialVideoIndex = 0,
   })  : assert(playlist != null),
         assert(initialToken != null),
+        assert(initialVideoIndex != null),
         super(key: key);
 
   @override
-  __MainWidgetState createState() => __MainWidgetState();
+  _MainWidgetState createState() => _MainWidgetState();
 }
 
-class __MainWidgetState extends State<_MainWidget> {
+class _MainWidgetState extends State<_MainWidget> {
   YoutubePlayerController _player;
-  VideoModel _currentVideo;
 
   @override
   void initState() {
     super.initState();
 
-    _currentVideo = widget.initialToken.items[0];
-
     _player = YoutubePlayerController(
-      initialVideoId: _currentVideo.id,
+      initialVideoId: widget.initialToken.items[widget.initialVideoIndex].id,
       flags: YoutubePlayerFlags(
         autoPlay: true,
         forceHD: false,
@@ -84,19 +85,29 @@ class __MainWidgetState extends State<_MainWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          if (orientation == Orientation.landscape) {
-            return _LandscapeView(player: _player);
-          } else {
-            return _PortraitView(
-              player: _player,
-              playlist: widget.playlist,
-              initialToken: widget.initialToken,
+    return SafeArea(
+      child: Scaffold(
+        body: OrientationBuilder(
+          builder: (context, orientation) {
+            return Column(
+              children: [
+                KeepAlive(
+                  keepAlive: true,
+                  child: YoutubePlayer(
+                    controller: _player,
+                  ),
+                ),
+                if (orientation == Orientation.portrait)
+                  Expanded(
+                    child: _PortraitView(
+                      playlist: widget.playlist,
+                      initialToken: widget.initialToken,
+                    ),
+                  )
+              ],
             );
-          }
-        },
+          },
+        ),
       ),
     );
   }
@@ -108,41 +119,17 @@ class __MainWidgetState extends State<_MainWidget> {
   }
 }
 
-class _LandscapeView extends StatefulWidget {
-  final YoutubePlayerController player;
-  const _LandscapeView({
-    Key key,
-    @required this.player,
-  })  : assert(player != null),
-        super(key: key);
-
-  @override
-  __LandscapeViewState createState() => __LandscapeViewState();
-}
-
-class __LandscapeViewState extends State<_LandscapeView>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return SafeArea(child: YoutubePlayer(controller: widget.player));
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-}
-
 class _PortraitView extends StatefulWidget {
   final PlaylistModel playlist;
   final ApiToken<VideoModel> initialToken;
-  final YoutubePlayerController player;
+  final int initialVideoIndex;
   _PortraitView({
     Key key,
-    @required this.player,
     @required this.playlist,
     this.initialToken,
-  })  : assert(player != null),
-        assert(playlist != null),
+    this.initialVideoIndex = 0,
+  })  : assert(playlist != null),
+        assert(initialVideoIndex != null),
         super(key: key);
 
   @override
@@ -151,35 +138,54 @@ class _PortraitView extends StatefulWidget {
 
 class _PortraitViewState extends State<_PortraitView>
     with AutomaticKeepAliveClientMixin {
-  final _list = GlobalKey<_VideoCollectionState>();
+  GlobalKey<_VideoCollectionState> _list;
+  VideoModel _currentVideo;
+
+  @override
+  void initState() {
+    super.initState();
+    _list = GlobalKey();
+    _currentVideo = widget.initialToken.items[widget.initialVideoIndex];
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Column(
-      children: [
-        YoutubePlayer(controller: widget.player),
-        Expanded(
-          child: NotificationListener<ScrollEndNotification>(
-            onNotification: (notification) {
-              _list.currentState.next();
-              return true;
-            },
-            child: CustomScrollView(
-              slivers: [
-                _SliverVideoDetail(
-                  video: null,
-                  onWatchOnYoutube: () => _openYoutubeVideo(null),
-                ),
-                _SliverChannelDetail(channel: widget.playlist.channel),
-                _VideoCollection(
-                  playlist: widget.playlist,
-                  initialToken: widget.initialToken,
-                ),
-              ],
+    return NotificationListener<ScrollEndNotification>(
+      onNotification: (notification) {
+        _list.currentState.next();
+        return true;
+      },
+      child: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.all(8.0),
+            sliver: _SliverVideoDetail(
+              video: _currentVideo,
+              onWatchOnYoutube: () => _openYoutubeVideo(_currentVideo.id),
             ),
           ),
-        ),
-      ],
+          SliverPadding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+            sliver: _SliverChannelDetail(channel: widget.playlist.channel),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            sliver: SliverToBoxAdapter(
+              child: Divider(
+                color: Theme.of(context).colorScheme.onSurface.withAlpha(64),
+                thickness: 0.7,
+              ),
+            ),
+          ),
+          _VideoCollection(
+            playlist: widget.playlist,
+            initialToken: widget.initialToken,
+            onVideoSelected: (video) => setState(() => _currentVideo = video),
+          ),
+        ],
+      ),
     );
   }
 
@@ -225,32 +231,21 @@ class _SliverVideoDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildListDelegate.fixed([
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 8.0,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: typo.Title(text: video.viewCount.toVideoViewFormat()),
-              ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                icon: Icon(Icons.keyboard_arrow_down),
-                onPressed: () => _openDescription(context),
-              ),
-            ],
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: typo.Title(text: video.title),
+            ),
+            IconButton(
+              padding: EdgeInsets.zero,
+              icon: Icon(Icons.keyboard_arrow_down),
+              onPressed: () => _openDescription(context),
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-          ),
-          child: typo.Subtitle(
-            text: '''${video.viewCount.toVideoViewFormat()} - 
-                ${DateTime.now().difference(video.publishedAt).toVideoPublishFormat()}''',
-          ),
+        typo.Subtitle(
+          text:
+              '${video.viewCount.toVideoViewFormat()} - ${DateTime.now().difference(video.publishedAt).toVideoPublishFormat()}',
         ),
         const SizedBox(height: 16),
         Row(
@@ -333,20 +328,15 @@ class _SliverChannelDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 16.0,
-      ),
-      sliver: SliverList(
-        delegate: SliverChildListDelegate.fixed([
-          Expanded(child: ch.ShortThumbnail.h(channel: channel)),
-          ElevatedButton(
-            child: Text('SUBSCRIBE'),
-            onPressed: () => _openYoutubeChannel(context),
-          ),
-        ]),
-      ),
+    return SliverToBoxAdapter(
+      child: Row(children: [
+        Expanded(child: ch.ShortThumbnail.h(channel: channel)),
+        SizedBox(width: 16),
+        ElevatedButton(
+          child: Text('SUBSCRIBE'),
+          onPressed: () => _openYoutubeChannel(context),
+        ),
+      ]),
     );
   }
 
@@ -374,6 +364,7 @@ class _SliverChannelDetail extends StatelessWidget {
 }
 
 class _VideoCollection extends StatefulWidget {
+  final ValueChanged<VideoModel> onVideoSelected;
   final PlaylistModel playlist;
   final ApiToken<VideoModel> initialToken;
 
@@ -381,6 +372,7 @@ class _VideoCollection extends StatefulWidget {
     Key key,
     @required this.playlist,
     this.initialToken,
+    this.onVideoSelected,
   })  : assert(playlist != null),
         super(key: key);
 
@@ -391,6 +383,7 @@ class _VideoCollection extends StatefulWidget {
 class _VideoCollectionState extends State<_VideoCollection> {
   final _list = GlobalKey<DynamicSliverListState<VideoModel>>();
   final youtube = LocatorService().youtube;
+  var _selected = 0;
   ApiToken<VideoModel> _token;
 
   @override
@@ -404,14 +397,18 @@ class _VideoCollectionState extends State<_VideoCollection> {
     return DynamicSliverList<VideoModel>(
       key: _list,
       getNext: _getNext,
+      initialItems: widget.initialToken.items,
       itemBuilder: (context, index, data) => InkWell(
         onTap: () =>
             Navigator.of(context).pushNamed(RouteNames.watch, arguments: data),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: _VideoWidget(
-            video: data,
-          ),
+        child: _VideoWidget(
+          key: Key(data.id),
+          video: data,
+          selected: index == _selected,
+          onPressed: () {
+            widget?.onVideoSelected(data);
+            setState(() => _selected = index);
+          },
         ),
       ),
     );
@@ -430,29 +427,46 @@ class _VideoCollectionState extends State<_VideoCollection> {
 
 class _VideoWidget extends StatelessWidget {
   final VideoModel video;
-  const _VideoWidget({Key key, this.video}) : super(key: key);
+  final bool selected;
+  final VoidCallback onPressed;
+  const _VideoWidget({
+    Key key,
+    @required this.video,
+    @required this.selected,
+    this.onPressed,
+  })  : assert(video != null),
+        assert(selected != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 128,
-          child: img.ThumbnailImage(thumbnail: video.thumbnails.medium),
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        color:
+            selected ? Theme.of(context).selectedRowColor.withAlpha(64) : null,
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 128,
+              child: img.ThumbnailImage(thumbnail: video.thumbnails.medium),
+            ),
+            SizedBox(width: 8.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  typo.Title(text: video.title),
+                  typo.Subtitle(text: video.viewCount.toVideoViewFormat())
+                ],
+              ),
+            ),
+          ],
         ),
-        SizedBox(width: 8.0),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              typo.Title(text: video.title),
-              typo.Subtitle(text: video.viewCount.toVideoViewFormat())
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -487,6 +501,7 @@ class _VideoSwitchAction extends StatefulWidget {
   final Icon offIcon;
   final String onLabel;
   final String offLabel;
+  final bool toggled;
   final ValueChanged<bool> onValueChanged;
   _VideoSwitchAction({
     Key key,
@@ -495,10 +510,12 @@ class _VideoSwitchAction extends StatefulWidget {
     this.onValueChanged,
     this.onLabel = '',
     this.offLabel = '',
+    this.toggled = false,
   })  : assert(onLabel != null),
         assert(offLabel != null),
         assert(onIcon != null),
         assert(offIcon != null),
+        assert(toggled != null),
         super(key: key);
 
   @override
@@ -506,8 +523,29 @@ class _VideoSwitchAction extends StatefulWidget {
 }
 
 class _VideoSwitchActionState extends State<_VideoSwitchAction> {
+  bool _toggled;
+  @override
+  void initState() {
+    super.initState();
+    _toggled = widget.toggled;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return InkWell(
+      onTap: () {
+        final value = !_toggled;
+        setState(() => _toggled = value);
+        widget.onValueChanged?.call(value);
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _toggled ? widget.onIcon : widget.offIcon,
+          const SizedBox(height: 8),
+          typo.Subtitle(text: _toggled ? widget.onLabel : widget.offLabel),
+        ],
+      ),
+    );
   }
 }

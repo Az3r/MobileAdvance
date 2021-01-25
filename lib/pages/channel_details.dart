@@ -145,8 +145,8 @@ class _PlaylistCollectionState extends State<_PlaylistCollection> {
               getNext: _getNext,
               initialItems: snapshot.data,
               itemBuilder: (context, index, data) => InkWell(
-                onTap: () => Navigator.of(context)
-                    .pushNamed(RouteNames.watch, arguments: data),
+                onTap: () => Navigator.of(context).pushNamed(RouteNames.watch,
+                    arguments: {'playlist': data, 'initialVideoIndex': 0}),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: _PlaylistWidget(

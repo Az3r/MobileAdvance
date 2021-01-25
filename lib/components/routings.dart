@@ -1,6 +1,5 @@
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
-import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/pages/channel_details.dart';
 import 'package:SingularSight/pages/network_error.dart';
 import 'package:SingularSight/pages/login.dart';
@@ -25,9 +24,11 @@ class Routings {
     );
   }
 
-  static Route<void> watch(PlaylistModel playlist) {
+  static Route<void> watch(PlaylistModel playlist,
+      [int initialVideoIndex = 0]) {
     return MaterialPageRoute(
-      builder: (context) => WatchPlaylist(playlist: playlist),
+      builder: (context) => WatchPlaylist(
+          playlist: playlist, initialVideoIndex: initialVideoIndex),
       settings: RouteSettings(name: RouteNames.watch),
     );
   }

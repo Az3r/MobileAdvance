@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,11 +21,11 @@ import 'pages/history.dart';
 import 'pages/favorite.dart';
 
 void main() async {
-  await initialize(false);
+  await _initialize(false);
   runApp(MainApp());
 }
 
-Future<void> initialize([debug = false]) async {
+Future<void> _initialize([debug = false]) async {
   // initializw firebase app
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -85,7 +86,10 @@ class _MainAppState extends State<MainApp> {
           case RouteNames.channelDetails:
             return Routings.channelDetails(settings.arguments);
           case RouteNames.watch:
-            return Routings.watch(settings.arguments);
+            final map = settings.arguments as Map<String, dynamic>;
+            final playlist = map['playlist'] as PlaylistModel;
+            final index = map['initialVideoIndex'] as int;
+            return Routings.watch(playlist, index ?? 0);
         }
         throw ArgumentError.value(
           settings.name,
