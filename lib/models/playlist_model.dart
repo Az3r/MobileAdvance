@@ -17,6 +17,9 @@ class PlaylistModel {
   @JsonKey(ignore: true)
   ChannelModel channel;
 
+  @JsonKey(ignore: true)
+  List<VideoModel> videos;
+
   PlaylistModel({
     this.channelId,
     this.channelTitle,
@@ -25,6 +28,7 @@ class PlaylistModel {
     this.thumbnails,
     this.videoCount,
     this.channel,
+    this.videos,
   });
 
   factory PlaylistModel.fromPlaylist(Playlist item) {

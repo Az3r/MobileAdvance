@@ -1,5 +1,4 @@
 import 'package:SingularSight/components/errors.dart';
-import 'package:SingularSight/components/image.dart' as img;
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/skill_model.dart';
 import 'package:SingularSight/services/api_service.dart';
@@ -8,9 +7,10 @@ import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
 import 'package:googleapis/youtube/v3.dart';
 import 'package:SingularSight/components/typography.dart' as typo;
+import 'package:SingularSight/components/image.dart' as img;
+import 'dart:math' as math;
 
 class Home extends StatelessWidget {
   const Home({Key key}) : super(key: key);
@@ -22,7 +22,7 @@ class Home extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData)
           return ListView.builder(
-            itemCount: snapshot.data.length,
+            itemCount: math.min(1, snapshot.data.length),
             itemBuilder: (context, index) => Container(
               height: 320,
               padding: const EdgeInsets.all(16.0),

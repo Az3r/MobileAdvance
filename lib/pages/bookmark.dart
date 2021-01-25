@@ -33,9 +33,9 @@ class _BookmarkCollection extends StatefulWidget {
 }
 
 class __BookmarkCollectionState extends State<_BookmarkCollection> {
-  List<int> selecteds = [];
-  bool multiSelectionMode = false;
-  List<PlaylistModel> willDelete = [];
+  List<int> _selecteds = [];
+  bool _multiSelectionMode = false;
+  List<String> _willDelete = [];
   List<PlaylistModel> list;
   @override
   void initState() {
@@ -47,15 +47,15 @@ class __BookmarkCollectionState extends State<_BookmarkCollection> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: multiSelectionMode
+        leading: _multiSelectionMode
             ? IconButton(
                 icon: Icon(Icons.close), onPressed: _disableMultiSelection)
             : null,
-        title: multiSelectionMode
-            ? Text('Select ${selecteds.length}')
+        title: _multiSelectionMode
+            ? Text('Select ${_selecteds.length}')
             : Text('Bookmarks'),
         actions: [
-          if (multiSelectionMode)
+          if (_multiSelectionMode)
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: _deleteSelectedItems,
@@ -69,10 +69,11 @@ class __BookmarkCollectionState extends State<_BookmarkCollection> {
             key: Key(list[index].id),
             index: index,
             playlist: list[index],
-            selected: multiSelectionMode ? selecteds.contains(index) : null,
+            selected: _multiSelectionMode ? _selecteds.contains(index) : null,
             onDeleted: _addToWillDelete,
-            onLongPressed: () => _enableMultiSelection(index),
-            onPressed: () => multiSelectionMode
+            onLongPressed:
+                _multiSelectionMode ? null : () => _enableMultiSelection(index),
+            onPressed: () => _multiSelectionMode
                 ? _selectPlaylist(index)
                 : _openPlaylist(index),
           ),
@@ -82,40 +83,48 @@ class __BookmarkCollectionState extends State<_BookmarkCollection> {
   }
 
   void _deleteSelectedItems() {
-    for (final index in selecteds) {
-      willDelete.add(list[index]);
+    for (final index in _selecteds) {
+      _willDelete.add(list[index].id);
     }
     setState(() {
-      for (final index in selecteds) {
+      for (final index in _selecteds) {
         list.removeAt(index);
       }
-      selecteds.clear();
-      multiSelectionMode = false;
+      _selecteds.clear();
+      _multiSelectionMode = false;
     });
   }
 
   void _addToWillDelete(int index, PlaylistModel playlist) {
-    willDelete.add(playlist);
+    _willDelete.add(playlist.id);
     setState(() => list.removeAt(index));
   }
 
   void _enableMultiSelection(int selectedIndex) {
-    selecteds
+    _selecteds
       ..clear()
       ..add(selectedIndex);
-    setState(() => multiSelectionMode = true);
+    setState(() => _multiSelectionMode = true);
   }
 
   void _disableMultiSelection() {
-    selecteds.clear();
-    setState(() => multiSelectionMode = false);
+    _selecteds.clear();
+    setState(() => _multiSelectionMode = false);
   }
 
   void _openPlaylist(int index) {}
   void _selectPlaylist(int index) {
     setState(() {
-      if (!selecteds.remove(index)) selecteds.add(index);
+      if (!_selecteds.remove(index)) _selecteds.add(index);
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    // now we actually remove deleted playlist
+    FirebaseService().removeFromWatchLater(_willDelete);
   }
 }
 
@@ -145,7 +154,10 @@ class _PlaylistItem extends StatelessWidget {
       onLongPress: onLongPressed,
       onTap: onPressed,
       child: Container(
-        color: selected == true ? Theme.of(context).selectedRowColor : null,
+        padding: EdgeInsets.all(8.0),
+        color: selected == true
+            ? Theme.of(context).selectedRowColor.withAlpha(64)
+            : null,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -175,14 +187,18 @@ class _PlaylistDetail extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        img.ThumbnailImage(thumbnail: playlist.thumbnails.medium),
+        Flexible(
+            flex: 2,
+            child: img.ThumbnailImage(thumbnail: playlist.thumbnails.medium)),
         const SizedBox(width: 8.0),
-        Expanded(
+        Flexible(
+          flex: 5,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               typo.Title(text: playlist.title),
               const SizedBox(height: 8),
-              typo.Subtitle(text: playlist.channel.title),
+              typo.Subtitle(text: playlist.channelTitle),
               typo.Subtitle(text: '${playlist.videoCount} videos')
             ],
           ),

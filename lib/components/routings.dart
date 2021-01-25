@@ -25,12 +25,9 @@ class Routings {
     );
   }
 
-  static Route<void> watch(PlaylistModel playlist, VideoModel first) {
+  static Route<void> watch(PlaylistModel playlist) {
     return MaterialPageRoute(
-      builder: (context) => WatchPlaylist(
-        playlist: playlist,
-        initialVideo: first,
-      ),
+      builder: (context) => WatchPlaylist(playlist: playlist),
       settings: RouteSettings(name: RouteNames.watch),
     );
   }

@@ -116,7 +116,7 @@ class ApiService {
       '$partSnippet,$partContentDetails',
       id: ids.join(','),
     );
-    final results = [];
+    final results = <PlaylistModel>[];
     for (final item in res.items) {
       final channel =
           withChannel ? await _getChannel(item.snippet.channelId) : null;

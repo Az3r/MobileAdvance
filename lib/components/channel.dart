@@ -13,13 +13,13 @@ class ShortThumbnail extends StatelessWidget {
   final bool _v;
   const ShortThumbnail.v({
     Key key,
-    this.channel,
+    @required this.channel,
     this.heroId,
   })  : _v = true,
         super(key: key);
   const ShortThumbnail.h({
     Key key,
-    this.channel,
+    @required this.channel,
     this.heroId,
   })  : _v = false,
         super(key: key);
@@ -51,7 +51,7 @@ class ShortThumbnail extends StatelessWidget {
         ),
         const SizedBox(height: 8.0),
         typo.Subtitle(
-          text: channel.subscriberCount.toSubscirberFormat(context),
+          text: channel.subscriberCount.toCountingFormat(context),
         ),
       ],
     );
@@ -74,7 +74,7 @@ class ShortThumbnail extends StatelessWidget {
             typo.Title(text: channel.title),
             const SizedBox(height: 8.0),
             typo.Subtitle(
-              text: channel.subscriberCount.toSubscirberFormat(context),
+              text: channel.subscriberCount.toCountingFormat(context),
             ),
           ],
         )

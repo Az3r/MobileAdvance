@@ -30,7 +30,6 @@ class DynamicSliverListState<T> extends State<DynamicSliverList<T>> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) => widget.itemBuilder(context, index, _items[index]),
-        childCount: _items.length,
       ),
     );
   }

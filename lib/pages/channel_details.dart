@@ -5,7 +5,9 @@ import 'package:SingularSight/components/list.dart';
 import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/services/api_service.dart';
+import 'package:SingularSight/services/firebase_service.dart';
 import 'package:SingularSight/services/locator_service.dart';
+import 'package:SingularSight/utilities/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/youtube/v3.dart';
@@ -120,25 +122,42 @@ class _PlaylistCollection extends StatefulWidget {
 }
 
 class _PlaylistCollectionState extends State<_PlaylistCollection> {
-  final _list = GlobalKey<DynamicSliverListState<PlaylistModel>>();
+  GlobalKey<DynamicSliverListState<PlaylistModel>> _list;
   final youtube = LocatorService().youtube;
   ApiToken<PlaylistModel> _token;
 
   @override
+  void initState() {
+    super.initState();
+    _list = GlobalKey<DynamicSliverListState<PlaylistModel>>();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DynamicSliverList<PlaylistModel>(
-      key: _list,
-      getNext: _getNext,
-      itemBuilder: (context, index, data) => InkWell(
-        onTap: () {},
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: _PlaylistWidget(
-            playlist: data,
-          ),
-        ),
-      ),
-    );
+    return FutureBuilder<List<PlaylistModel>>(
+        future: _getNext(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError)
+            return SliverToBoxAdapter(child: ErrorWidget(snapshot.error));
+          if (snapshot.hasData)
+            return DynamicSliverList<PlaylistModel>(
+              key: _list,
+              getNext: _getNext,
+              initialItems: snapshot.data,
+              itemBuilder: (context, index, data) => InkWell(
+                onTap: () => Navigator.of(context)
+                    .pushNamed(RouteNames.watch, arguments: data),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _PlaylistWidget(
+                    playlist: data,
+                  ),
+                ),
+              ),
+            );
+          return SliverToBoxAdapter(
+              child: Center(child: CircularProgressIndicator()));
+        });
   }
 
   void next() => _list.currentState.displayNext();
@@ -186,16 +205,13 @@ class _PlaylistWidget extends StatelessWidget {
           child: PopupMenuButton<void>(
             itemBuilder: (context) => [
               PopupMenuItem(
-                child: InkWell(
-                  child: Text('Add to watch later'),
-                  onTap: () {},
-                ),
-              ),
-              PopupMenuItem(
-                child: InkWell(
-                  child: Text('Add to favorite'),
-                  onTap: () {},
-                ),
+                child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Add to Bookmarks'),
+                    leading: Icon(
+                      Icons.bookmark,
+                    ),
+                    onTap: () => _addToBookmarks(context)),
               ),
             ],
             icon: Icon(Icons.more_vert),
@@ -203,6 +219,20 @@ class _PlaylistWidget extends StatelessWidget {
         )
       ],
     );
+  }
+
+  void _addToBookmarks(BuildContext context) async {
+    await FirebaseService().addToWatchLaters(playlist.id);
+    Navigator.of(context).pop();
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Row(
+        children: [
+          Icon(Icons.bookmark),
+          const SizedBox(width: 16),
+          Text('Playlist has been bookmarked'),
+        ],
+      ),
+    ));
   }
 
   Thumbnail get _thumbnail => playlist.thumbnails.medium;

@@ -80,14 +80,14 @@ class FirebaseService {
   }
 
   Future<List<PlaylistModel>> watchLaters() async {
-    if (auth.currentUser == null) return Future.value(const []);
+    if (auth.currentUser == null) return Future.value(const <PlaylistModel>[]);
     final favs = await firestore
         .collection('users')
         .doc(auth.currentUser.uid)
         .collection('watch_laters')
         .get();
     final ids = favs.docs.map((doc) => doc.id).toList();
-    return youtube.getPlaylists(ids);
+    return await youtube.getPlaylists(ids);
   }
 
   Future<List<PlaylistModel>> histories() async {

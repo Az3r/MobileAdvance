@@ -58,7 +58,7 @@ class _UserDrawerState extends State<UserDrawer>
                         : Icon(Icons.image),
                   );
                 }
-                return Center(child: SpinningLogo());
+                return Center(child: CircularProgressIndicator());
               }),
           ListTile(
             leading: Icon(Icons.history),
