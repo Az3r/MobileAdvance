@@ -120,7 +120,8 @@ class ApiService {
     for (final item in res.items) {
       final channel =
           withChannel ? await _getChannel(item.snippet.channelId) : null;
-      final playlist = PlaylistModel.fromPlaylist(item)..channel = channel;
+      final playlist = PlaylistModel.fromPlaylist(item);
+      playlist.channel = channel;
       results.add(playlist);
     }
     return results;

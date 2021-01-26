@@ -50,9 +50,10 @@ class ShortThumbnail extends StatelessWidget {
           text: channel.title,
         ),
         const SizedBox(height: 8.0),
-        typo.Subtitle(
-          text: channel.subscriberCount.toCountingFormat('subscribers'),
-        ),
+        if (channel.subscriberCount != null)
+          typo.Subtitle(
+            text: channel.subscriberCount.toCountingFormat('subscribers'),
+          ),
       ],
     );
   }
@@ -74,9 +75,10 @@ class ShortThumbnail extends StatelessWidget {
             children: [
               typo.Title(text: channel.title),
               const SizedBox(height: 8.0),
-              typo.Subtitle(
-                text: channel.subscriberCount.toCountingFormat('subscribers'),
-              ),
+              if (channel.subscriberCount != null)
+                typo.Subtitle(
+                  text: channel.subscriberCount.toCountingFormat('subscribers'),
+                ),
             ],
           ),
         )

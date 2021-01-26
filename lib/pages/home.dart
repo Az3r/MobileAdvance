@@ -81,8 +81,14 @@ class _SkillWidgetState extends State<_SkillWidget>
                     itemBuilder: (context, index) => Container(
                       margin: const EdgeInsets.only(right: 16.0),
                       width: 256,
-                      child: _PlaylistWidget(
-                        playlist: snapshot.data.items[index],
+                      child: InkWell(
+                        onTap: () => Navigator.of(context)
+                            .pushNamed(RouteNames.watch, arguments: {
+                          'playlist': snapshot.data.items[index]
+                        }),
+                        child: _PlaylistWidget(
+                          playlist: snapshot.data.items[index],
+                        ),
                       ),
                     ),
                   );
