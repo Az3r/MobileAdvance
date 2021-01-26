@@ -81,4 +81,8 @@ class DynamicListState<T> extends State<DynamicList<T>> {
     _items.addAll(more ?? []);
     setState(() {});
   }
+
+  void clear() {
+    setState(() => _items.clear());
+  }
 }

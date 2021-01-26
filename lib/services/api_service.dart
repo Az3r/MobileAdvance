@@ -166,9 +166,12 @@ class ApiService {
       id: channelId,
     );
 
-    final item = res.items.first;
-    final channel = ChannelModel.fromChannel(item);
-    return channel;
+    if (res.items != null) {
+      final item = res.items.first;
+      final channel = ChannelModel.fromChannel(item);
+      return channel;
+    }
+    return null;
   }
 
   Future<VideoModel> _getVideo(String videoId) async {
