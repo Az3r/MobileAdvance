@@ -61,11 +61,6 @@ class _UserDrawerState extends State<UserDrawer>
                 return Center(child: CircularProgressIndicator());
               }),
           ListTile(
-            leading: Icon(Icons.history),
-            title: Text('History'),
-            onTap: () => Navigator.of(context).pushNamed(RouteNames.history),
-          ),
-          ListTile(
             leading: Icon(Icons.bookmark),
             title: Text('Bookmarks'),
             onTap: () => Navigator.of(context).pushNamed(RouteNames.bookmarks),

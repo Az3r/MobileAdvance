@@ -77,7 +77,6 @@ class _MainAppState extends State<MainApp> {
         RouteNames.settings: (context) => const UserSettings(),
         RouteNames.bookmarks: (context) => const Bookmarks(),
         RouteNames.favorites: (context) => const Favorites(),
-        RouteNames.history: (context) => const History(),
       },
       onGenerateRoute: (settings) {
         switch (settings.name) {
