@@ -6,9 +6,13 @@ import 'package:SingularSight/models/channel_model.dart';
 import 'package:SingularSight/models/playlist_model.dart';
 import 'package:SingularSight/models/video_model.dart';
 import 'package:SingularSight/services/api_service.dart';
+import 'package:SingularSight/services/firebase_service.dart';
 import 'package:SingularSight/services/locator_service.dart';
 import 'package:SingularSight/utilities/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/container/v1.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -162,6 +166,7 @@ class _PortraitViewState extends State<_PortraitView>
           SliverPadding(
             padding: const EdgeInsets.all(8.0),
             sliver: _SliverVideoDetail(
+              playlistId: widget.playlist.id,
               video: _currentVideo,
               onWatchOnYoutube: () => _openYoutubeVideo(_currentVideo.id),
             ),
@@ -223,13 +228,16 @@ class _PortraitViewState extends State<_PortraitView>
 }
 
 class _SliverVideoDetail extends StatelessWidget {
+  final String playlistId;
   final VideoModel video;
   final VoidCallback onWatchOnYoutube;
   const _SliverVideoDetail({
     Key key,
     @required this.video,
     this.onWatchOnYoutube,
+    @required this.playlistId,
   })  : assert(video != null),
+        assert(playlistId != null),
         super(key: key);
 
   @override
@@ -265,19 +273,33 @@ class _SliverVideoDetail extends StatelessWidget {
               label: video.dislikeCount.toCountingFormat(),
             ),
             _VideoSwitchAction(
+              toggled: observeBookmark(playlistId),
               offIcon: Icon(Icons.bookmark_outline),
               onIcon:
-                  Icon(Icons.bookmarks, color: Theme.of(context).accentColor),
+                  Icon(Icons.bookmark, color: Theme.of(context).accentColor),
               onLabel: 'Unbookmark',
               offLabel: 'Bookmark',
+              onValueChanged: (value) {
+                if (value)
+                  FirebaseService().addToWatchLaters(playlistId);
+                else
+                  FirebaseService().removeFromWatchLater([playlistId]);
+              },
             ),
             _VideoSwitchAction(
+              toggled: observeFavorite(playlistId),
               offIcon: Icon(Icons.favorite_outline),
               onIcon:
                   Icon(Icons.favorite, color: Theme.of(context).accentColor),
               onLabel: 'Unfavorite',
               offLabel: 'Favorite',
-            ),
+              onValueChanged: (value) {
+                if (value)
+                  FirebaseService().addToFavorites(playlistId);
+                else
+                  FirebaseService().removeFromFavorites([playlistId]);
+              },
+            )
           ],
         ),
         SizedBox(height: 8),
@@ -296,6 +318,30 @@ class _SliverVideoDetail extends StatelessWidget {
         ),
       ]),
     );
+  }
+
+  Future<bool> observeFavorite(String playlistId) async {
+    final uid = FirebaseAuth.instance.currentUser.uid;
+    final query = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('favorites')
+        .where(FieldPath.documentId, isEqualTo: playlistId)
+        .limit(1)
+        .get();
+    return query.docs.isNotEmpty;
+  }
+
+  Future<bool> observeBookmark(String playlistId) async {
+    final uid = FirebaseAuth.instance.currentUser.uid;
+    final query = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('watch_laters')
+        .where(FieldPath.documentId, isEqualTo: playlistId)
+        .limit(1)
+        .get();
+    return query.docs.isNotEmpty;
   }
 
   void _openDescription(BuildContext context) async {
@@ -337,32 +383,10 @@ class _SliverChannelDetail extends StatelessWidget {
       delegate: SliverChildListDelegate.fixed([
         SizedBox(
           child: ch.ShortThumbnail.h(channel: channel),
-          height: 64,
+          height: 48,
         ),
       ]),
     );
-  }
-
-  void _openYoutubeChannel(BuildContext context) async {
-    final scheme = Platform.isIOS ? 'youtube' : 'https';
-    final url = '$scheme://www.youtube.com/channel/${channel.id}';
-    launch(url).catchError((error) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Oopise!'),
-            content: Text('Unable to open youtube app'),
-            actions: [
-              TextButton(
-                child: Text("That's sad!"),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          );
-        },
-      );
-    });
   }
 }
 
@@ -513,16 +537,16 @@ class _VideoSwitchAction extends StatefulWidget {
   final Icon offIcon;
   final String onLabel;
   final String offLabel;
-  final bool toggled;
+  final Future<bool> toggled;
   final ValueChanged<bool> onValueChanged;
   _VideoSwitchAction({
     Key key,
     @required this.onIcon,
     @required this.offIcon,
+    @required this.toggled,
     this.onValueChanged,
     this.onLabel = '',
     this.offLabel = '',
-    this.toggled = false,
   })  : assert(onLabel != null),
         assert(offLabel != null),
         assert(onIcon != null),
@@ -539,7 +563,14 @@ class _VideoSwitchActionState extends State<_VideoSwitchAction> {
   @override
   void initState() {
     super.initState();
-    _toggled = widget.toggled;
+    _toggled = false;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.toggled != null)
+      widget.toggled.then((value) => setState(() => _toggled = value));
   }
 
   @override
